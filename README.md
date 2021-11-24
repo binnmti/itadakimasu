@@ -1,0 +1,2 @@
+# itadakimasu
+いただきます。
