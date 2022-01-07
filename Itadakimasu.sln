@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itadakimasu", "Itadakimasu\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItadakimasuAPI", "ItadakimasuAPI\ItadakimasuAPI.csproj", "{F6B39014-9104-4BDD-9442-32F6C645A579}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "..\Models\Models.csproj", "{B17F5A28-9DAA-4999-AEE8-F81EE4E689D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{F6B39014-9104-4BDD-9442-32F6C645A579}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6B39014-9104-4BDD-9442-32F6C645A579}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6B39014-9104-4BDD-9442-32F6C645A579}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B17F5A28-9DAA-4999-AEE8-F81EE4E689D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B17F5A28-9DAA-4999-AEE8-F81EE4E689D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B17F5A28-9DAA-4999-AEE8-F81EE4E689D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B17F5A28-9DAA-4999-AEE8-F81EE4E689D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

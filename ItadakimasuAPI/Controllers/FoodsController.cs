@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ItadakimasuAPI.Models;
+using Models;
 
 namespace ItadakimasuAPI.Controllers
 {
