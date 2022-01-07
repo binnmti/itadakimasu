@@ -17,19 +17,18 @@ namespace itadakimasu.Controllers
             _configuration = configuration;
         }
 
-
         [HttpPost]
-        public async Task<ActionResult<Food>> PostFood(string name)
+        public async Task<ActionResult<Food>> Food(string name)
         {
             //認識できない画像の場合は不正チェックにもなるので時間がかかっても最初にやる
             if (string.IsNullOrEmpty(name)) return BadRequest();
-           
-            BingSearchUtility.GetContentUrlList(new HttpClient(), name, _configuration.GetConnectionString("BingCustomSearchSubscriptionKey"), _configuration.GetConnectionString("BingCustomSearchCustomConfigId"));
-
+            var htmlClient = new HttpClient();
+            var urlList = BingSearchUtility.GetContentUrlList(htmlClient, name, _configuration.GetConnectionString("BingCustomSearchSubscriptionKey"), _configuration.GetConnectionString("BingCustomSearchCustomConfigId"));
+            var customVisionUtility = new CustomVisionUtility(_configuration.GetConnectionString("CustomVisionTrainingKey"), _configuration.GetConnectionString("CustomVisionProjectId"));
+            customVisionUtility.Upload(htmlClient, name, urlList);
             var food = new Food() { Name = name };
             _context.Food.Add(food);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction(nameof(GetFood), new { id = food.Id }, food);
         }
 
