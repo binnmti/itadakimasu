@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace itadakimasu.Models
+namespace ItadakimasuAPI.Models
 {
     public static class BingSearchUtility
     {

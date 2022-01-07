@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace FoodNameChecker.Data
+namespace Itadakimasu.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

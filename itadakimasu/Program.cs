@@ -1,4 +1,4 @@
-using FoodNameChecker.Data;
+using Itadakimasu.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

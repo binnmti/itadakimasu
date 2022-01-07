@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace itadakimasu.Models
+namespace ItadakimasuAPI.Models
 {
     public class ItadakimasuContext : DbContext
     {

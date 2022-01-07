@@ -1,7 +1,7 @@
 ﻿using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training;
 using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training.Models;
 
-namespace itadakimasu.Models
+namespace ItadakimasuAPI.Models
 {
     public static class CustomVisionUtility
     {

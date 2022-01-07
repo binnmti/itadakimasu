@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using itadakimasu.Models;
+using ItadakimasuAPI.Models;
 
 #nullable disable
 
-namespace itadakimasu.Migrations
+namespace ItadakimasuAPI.Migrations
 {
     [DbContext(typeof(ItadakimasuContext))]
     [Migration("20220104020021_InitialCreate")]
@@ -23,7 +23,7 @@ namespace itadakimasu.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("itadakimasu.Models.Food", b =>
+            modelBuilder.Entity("ItadakimasuAPI.Models.Food", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()

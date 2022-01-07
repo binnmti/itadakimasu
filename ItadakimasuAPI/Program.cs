@@ -1,4 +1,4 @@
-using itadakimasu.Models;
+using ItadakimasuAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

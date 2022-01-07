@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using itadakimasu.Models;
+using ItadakimasuAPI.Models;
 
-namespace itadakimasu.Controllers
+namespace ItadakimasuAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

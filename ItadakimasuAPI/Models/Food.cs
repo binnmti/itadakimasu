@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace itadakimasu.Models
+namespace ItadakimasuAPI.Models
 {
     public class Food
     {

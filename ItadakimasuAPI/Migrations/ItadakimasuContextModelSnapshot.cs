@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using itadakimasu.Models;
+using ItadakimasuAPI.Models;
 
 #nullable disable
 
-namespace itadakimasu.Migrations
+namespace ItadakimasuAPI.Migrations
 {
     [DbContext(typeof(ItadakimasuContext))]
     partial class ItadakimasuContextModelSnapshot : ModelSnapshot
@@ -21,7 +21,7 @@ namespace itadakimasu.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("itadakimasu.Models.Food", b =>
+            modelBuilder.Entity("ItadakimasuAPI.Models.Food", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()

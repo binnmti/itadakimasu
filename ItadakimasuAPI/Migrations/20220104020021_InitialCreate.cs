@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace itadakimasu.Migrations
+namespace ItadakimasuAPI.Migrations
 {
     public partial class InitialCreate : Migration
     {

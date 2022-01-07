@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace FoodNameChecker.Pages
+namespace Itadakimasu.Pages
 {
     public class IndexModel : PageModel
     {
