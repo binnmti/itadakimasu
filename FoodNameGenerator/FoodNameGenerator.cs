@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 
 namespace FoodNameGenerator;
 
@@ -282,6 +283,7 @@ public static class FoodNameGenerator
             {
                 log.LogInformation($"{food.val}:{response.ReasonPhrase}:{food.idx + 1}/{FoodNameList.Count}");
             }
+            Thread.Sleep(1000);
         }
         return new OkObjectResult("OKñqèÍ!");
     }
