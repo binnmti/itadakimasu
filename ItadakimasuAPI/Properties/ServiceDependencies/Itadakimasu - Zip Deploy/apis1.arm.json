@@ -101,11 +101,11 @@
               "type": "Microsoft.ApiManagement/service/apis",
               "name": "Itadakimasu/food",
               "properties": {
-                "displayName": "Food",
+                "displayName": "ItadakimasuAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
                 "apiRevision": "1",
-                "description": "",
+                "description": null,
                 "subscriptionRequired": true,
-                "serviceUrl": null,
+                "serviceUrl": "https://itadakimasu.azurewebsites.net",
                 "path": "",
                 "protocols": [
                   "https"
