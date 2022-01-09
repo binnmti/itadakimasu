@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ItadakimasuAPI.Models;
 using Models;
+using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.Azure.KeyVault;
 
 namespace ItadakimasuAPI.Controllers
 {
@@ -11,6 +12,7 @@ namespace ItadakimasuAPI.Controllers
     {
         private readonly ItadakimasuContext _context;
         private readonly IConfiguration _configuration;
+        private static readonly HttpClient HttpClient = new();
 
         public FoodsController(ItadakimasuContext context, IConfiguration configuration)
         {
@@ -18,14 +20,23 @@ namespace ItadakimasuAPI.Controllers
             _configuration = configuration;
         }
 
+        private static async Task<string> GetSecretValueAsync(KeyVaultClient client, string key)
+            => (await client.GetSecretAsync("https://itadakimasu.vault.azure.net/", key)).Value;
+
         [HttpPost]
         public async Task<ActionResult<Food>> Food(string name)
         {
-            //認識できない画像の場合は不正チェックにもなるので時間がかかっても最初にやる
             if (string.IsNullOrEmpty(name)) return BadRequest();
-            var htmlClient = new HttpClient();
-            var urlList = BingSearchUtility.GetContentUrlList(htmlClient, name, _configuration.GetConnectionString("BingCustomSearchSubscriptionKey"), _configuration.GetConnectionString("BingCustomSearchCustomConfigId"));
-            CustomVisionUtility.Upload(_configuration.GetConnectionString("CustomVisionTrainingKey"), _configuration.GetConnectionString("CustomVisionProjectId"), name, urlList);
+
+            using var client = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(new AzureServiceTokenProvider().KeyVaultTokenCallback));
+            var bingCustomSearchSubscriptionKey = await GetSecretValueAsync(client, "BingCustomSearchSubscriptionKey");
+            var bingCustomSearchCustomConfigId = await GetSecretValueAsync(client, "BingCustomSearchCustomConfigId");
+            var customVisionTrainingKey = await GetSecretValueAsync(client, "CustomVisionTrainingKey");
+            var customVisionProjectId = await GetSecretValueAsync(client, "CustomVisionProjectId");
+
+            //認識できない画像の場合は不正チェックにもなるので時間がかかっても最初にやる
+            var urlList = BingSearchUtility.GetContentUrlList(HttpClient, name, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
+            CustomVisionUtility.Upload(customVisionTrainingKey, customVisionProjectId, name, urlList);
             var food = new Food() { Name = name };
             _context.Food.Add(food);
             await _context.SaveChangesAsync();
