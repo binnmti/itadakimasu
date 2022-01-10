@@ -18,11 +18,18 @@ namespace Itadakimasu.Models
             var tag = customVisionTrainingClient.GetTag(guid, foodName);
             imageUrlList.Chunk(ImageUrlsLimited).ToList().ForEach(x =>
             {
-                customVisionTrainingClient.CreateImagesFromUrls(guid, new ImageUrlCreateBatch
+                try
                 {
-                    TagIds = new List<Guid>() { tag.Id },
-                    Images = x.Select(x => new ImageUrlCreateEntry() { Url = x }).ToList(),
-                });
+                    var result = customVisionTrainingClient.CreateImagesFromUrls(guid, new ImageUrlCreateBatch
+                    {
+                        TagIds = new List<Guid>() { tag.Id },
+                        Images = x.Select(x => new ImageUrlCreateEntry() { Url = x }).ToList(),
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             });
         }
 
