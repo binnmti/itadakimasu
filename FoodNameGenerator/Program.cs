@@ -14,14 +14,14 @@ class Program
     private static readonly string ItadakimasuApiUrl = "https://itadakimasu.azurewebsites.net/api/";
     private static readonly List<string> FoodNameList = new()
     {
-        //"オムライス",
-        //"餃子",
-        //"肉じゃが",
-        //"カレー",
-        //"牛丼",
-        //"親子丼",
-        //"豚の生姜焼き",
-        //"グラタン",
+        "オムライス",
+        "餃子",
+        "肉じゃが",
+        "カレー",
+        "牛丼",
+        "親子丼",
+        "豚の生姜焼き",
+        "グラタン",
         "唐揚げ",
         "コロッケ",
         "シチュー",
@@ -278,16 +278,9 @@ class Program
         foreach (var food in FoodNameList.Select((val, idx) => (val, idx)))
         {
             Console.WriteLine($"{food.val}:開始");
-
             var response = await httpClient.PostAsync($"{ItadakimasuApiUrl}Foods?name={food.val}", null);
-            if (response.IsSuccessStatusCode)
-            {
-                Console.WriteLine($"成功:{food.idx + 1}/{FoodNameList.Count}");
-            }
-            else
-            {
-                Console.WriteLine($"{response.ReasonPhrase}:{food.idx + 1}/{FoodNameList.Count}");
-            }
+            var result = response.IsSuccessStatusCode ? "成功" : response.ReasonPhrase;
+            Console.WriteLine($"{food.val}:{result}:{food.idx + 1}/{FoodNameList.Count}");
             Thread.Sleep(1000);
         }
     }

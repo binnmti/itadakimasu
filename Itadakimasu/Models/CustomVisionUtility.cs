@@ -16,20 +16,10 @@ namespace Itadakimasu.Models
             };
             var guid = customVisionTrainingClient.GetProject(new Guid(projectId)).Id;
             var tag = customVisionTrainingClient.GetTag(guid, foodName);
-            imageUrlList.Chunk(ImageUrlsLimited).ToList().ForEach(x =>
+            customVisionTrainingClient.CreateImagesFromUrls(guid, new ImageUrlCreateBatch
             {
-                try
-                {
-                    var result = customVisionTrainingClient.CreateImagesFromUrls(guid, new ImageUrlCreateBatch
-                    {
-                        TagIds = new List<Guid>() { tag.Id },
-                        Images = x.Select(x => new ImageUrlCreateEntry() { Url = x }).ToList(),
-                    });
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+                TagIds = new List<Guid>() { tag.Id },
+                Images = imageUrlList.Take(ImageUrlsLimited).Select(x => new ImageUrlCreateEntry() { Url = x }).ToList(),
             });
         }
 
