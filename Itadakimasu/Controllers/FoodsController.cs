@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Itadakimasu.Models;
 using Models;
 using Microsoft.Azure.KeyVault;
 using Itadakimasu.Data;
@@ -34,8 +33,8 @@ namespace Itadakimasu.Controllers
             var customVisionProjectId = _configuration.GetConnectionString("CustomVisionProjectId");
 
             //TODO:例えばaaaで検索しても何かヒットしてしまう。画像として料理じゃないかを取れれば大分エラーチェックにはなるが、現状その料理かどうかは判断が非常に難しい。。。。
-            var urlList = BingSearchUtility.GetContentUrlList(HttpClient, name, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
-            CustomVisionUtility.Upload(customVisionTrainingKey, customVisionProjectId, name, urlList);
+            //var urlList = BingSearchUtility.GetContentUrlList(HttpClient, name, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
+            //CustomVisionUtility.Upload(customVisionTrainingKey, customVisionProjectId, name, urlList);
             var food = new Food() { Name = name };
             _context.Food.Add(food);
             await _context.SaveChangesAsync();

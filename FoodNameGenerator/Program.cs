@@ -14,24 +14,24 @@ class Program
 {
     private static readonly List<string> FoodNameList = new()
     {
-        "オムライス",
-        "餃子",
-        "肉じゃが",
-        "カレー",
-        "牛丼",
-        "親子丼",
-        "豚の生姜焼き",
-        "グラタン",
-        "唐揚げ",
-        "コロッケ",
-        "シチュー",
-        "天ぷら",
-        "ローストビーフ",
-        "豚の角煮",
-        "チキン南蛮",
-        "ピーマンの肉詰め",
-        "ロールキャベツ",
-        "スペアリブ",
+        //"オムライス",
+        //"餃子",
+        //"肉じゃが",
+        //"カレー",
+        //"牛丼",
+        //"親子丼",
+        //"豚の生姜焼き",
+        //"グラタン",
+        //"唐揚げ",
+        //"コロッケ",
+        //"シチュー",
+        //"天ぷら",
+        //"ローストビーフ",
+        //"豚の角煮",
+        //"チキン南蛮",
+        //"ピーマンの肉詰め",
+        //"ロールキャベツ",
+        //"スペアリブ",
         "ローストチキン",
         "もつ煮込み",
         "ミートボール",
@@ -284,11 +284,10 @@ class Program
 
         foreach (var food in FoodNameList.Select((val, idx) => (val, idx)))
         {
-            Console.WriteLine($"{food.val}:開始:{food.idx + 1}/{FoodNameList.Count}");
             var urlList = await BingSearchUtility.GetContentUrlListAsync(HttpClient, food.val, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
-            Console.WriteLine($"{food.val}:取得:{food.idx + 1}/{FoodNameList.Count}");
             await CustomVisionUtility.UploadAsync(customVisionTrainingKey, customVisionProjectId, food.val, urlList);
-            Console.WriteLine($"{food.val}:終了:{food.idx + 1}/{FoodNameList.Count}");
+
+            Console.WriteLine($"{food.val}:{food.idx + 1}/{FoodNameList.Count}");
             Thread.Sleep(1000);
         }
     }
