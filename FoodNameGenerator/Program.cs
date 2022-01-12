@@ -6,12 +6,12 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Utility;
 
 namespace FoodNameGenerator;
 
 class Program
 {
-    private static readonly string ItadakimasuApiUrl = "https://itadakimasu.azurewebsites.net/api/";
     private static readonly List<string> FoodNameList = new()
     {
         "オムライス",
@@ -264,23 +264,31 @@ class Program
         "ヒラヤーチー",
         "島唐辛子",
     };
-    
+    private static readonly HttpClient HttpClient = new();
+
     static async Task Main()
     {
         Console.OutputEncoding = Encoding.UTF8;
 
+        var devEnvironmentVariable = Environment.GetEnvironmentVariable("NETCORE_ENVIRONMENT");
+        var isDevelopment = string.IsNullOrEmpty(devEnvironmentVariable) || devEnvironmentVariable.ToLower() == "development";
         var builder = new ConfigurationBuilder().AddEnvironmentVariables();
+        if (isDevelopment) builder.AddUserSecrets<Program>();
+
         var configuration = builder.Build();
-        var httpClient = new HttpClient
-        {
-            Timeout = TimeSpan.FromMinutes(10)
-        };
+        var bingCustomSearchSubscriptionKey = configuration["BingCustomSearchSubscriptionKey"];
+        var bingCustomSearchCustomConfigId = configuration["BingCustomSearchCustomConfigId"];
+        var customVisionTrainingKey = configuration["CustomVisionTrainingKey"];
+        var customVisionProjectId = configuration["CustomVisionProjectId"];
+        HttpClient.Timeout = TimeSpan.FromSeconds(5000);
+
         foreach (var food in FoodNameList.Select((val, idx) => (val, idx)))
         {
-            Console.WriteLine($"{food.val}:開始");
-            var response = await httpClient.PostAsync($"{ItadakimasuApiUrl}Foods?name={food.val}", null);
-            var result = response.IsSuccessStatusCode ? "成功" : response.ReasonPhrase;
-            Console.WriteLine($"{food.val}:{result}:{food.idx + 1}/{FoodNameList.Count}");
+            Console.WriteLine($"{food.val}:開始:{food.idx + 1}/{FoodNameList.Count}");
+            var urlList = await BingSearchUtility.GetContentUrlListAsync(HttpClient, food.val, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
+            Console.WriteLine($"{food.val}:取得:{food.idx + 1}/{FoodNameList.Count}");
+            await CustomVisionUtility.UploadAsync(customVisionTrainingKey, customVisionProjectId, food.val, urlList);
+            Console.WriteLine($"{food.val}:終了:{food.idx + 1}/{FoodNameList.Count}");
             Thread.Sleep(1000);
         }
     }
