@@ -14,24 +14,24 @@ class Program
 {
     private static readonly List<string> FoodNameList = new()
     {
-        //"オムライス",
-        //"餃子",
-        //"肉じゃが",
-        //"カレー",
-        //"牛丼",
-        //"親子丼",
-        //"豚の生姜焼き",
-        //"グラタン",
-        //"唐揚げ",
-        //"コロッケ",
-        //"シチュー",
-        //"天ぷら",
-        //"ローストビーフ",
-        //"豚の角煮",
-        //"チキン南蛮",
-        //"ピーマンの肉詰め",
-        //"ロールキャベツ",
-        //"スペアリブ",
+        "オムライス",
+        "餃子",
+        "肉じゃが",
+        "カレー",
+        "牛丼",
+        "親子丼",
+        "豚の生姜焼き",
+        "グラタン",
+        "唐揚げ",
+        "コロッケ",
+        "シチュー",
+        "天ぷら",
+        "ローストビーフ",
+        "豚の角煮",
+        "チキン南蛮",
+        "ピーマンの肉詰め",
+        "ロールキャベツ",
+        "スペアリブ",
         "ローストチキン",
         "もつ煮込み",
         "ミートボール",
@@ -61,7 +61,6 @@ class Program
         "かぶら蒸し",
         "ゆで卵",
         "温泉卵",
-        "半熟卵",
         "だし巻き卵",
         "茶碗蒸し",
         "キッシュ",
@@ -84,7 +83,6 @@ class Program
         "ハヤシライス",
         "ロコモコ",
         "ピラフ",
-        "ハッシュドビーフ",
         "寿司",
         "おにぎり",
         "カルボナーラ",
@@ -110,7 +108,6 @@ class Program
         "ラーメン",
         "冷やし中華",
         "つけ麺",
-        "その他の麺",
         "お好み焼き",
         "たこ焼き",
         "味噌汁",
@@ -227,7 +224,6 @@ class Program
         "サムギョプサル",
         "クッパ",
         "タッカルビ",
-        "チーズタッカルビ",
         "カムジャタン",
         "トッポギ",
         "ケジャン",
@@ -285,7 +281,7 @@ class Program
         foreach (var food in FoodNameList.Select((val, idx) => (val, idx)))
         {
             var urlList = await BingSearchUtility.GetContentUrlListAsync(HttpClient, food.val, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
-            await CustomVisionUtility.UploadAsync(customVisionTrainingKey, customVisionProjectId, food.val, urlList);
+            await CustomVisionUtility.UploadAsync(HttpClient, customVisionTrainingKey, customVisionProjectId, food.val, urlList);
 
             Console.WriteLine($"{food.val}:{food.idx + 1}/{FoodNameList.Count}");
             Thread.Sleep(1000);
