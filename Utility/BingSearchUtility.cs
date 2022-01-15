@@ -47,7 +47,7 @@ namespace Utility
                 count = response.totalEstimatedMatches;
                 nextOffset = response.nextOffset;
                 contentUrlList.AddRange(response.value.Select(x => x.contentUrl));
-            } while (count > nextOffset && contentUrlList.Count < 64);
+            } while (count > nextOffset);
             return contentUrlList;
         }
 

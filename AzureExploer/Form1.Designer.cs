@@ -29,23 +29,31 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.PathTextBox = new System.Windows.Forms.TextBox();
             this.SearchTermTextBox = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.IdTextBox = new System.Windows.Forms.TextBox();
-            this.keyTextBox = new System.Windows.Forms.TextBox();
+            this.BingIdTextBox = new System.Windows.Forms.TextBox();
+            this.BingKeyTextBox = new System.Windows.Forms.TextBox();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.listView1 = new System.Windows.Forms.ListView();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label5);
+            this.panel1.Controls.Add(this.label6);
+            this.panel1.Controls.Add(this.textBox1);
+            this.panel1.Controls.Add(this.textBox2);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label2);
@@ -53,22 +61,40 @@
             this.panel1.Controls.Add(this.PathTextBox);
             this.panel1.Controls.Add(this.SearchTermTextBox);
             this.panel1.Controls.Add(this.button1);
-            this.panel1.Controls.Add(this.IdTextBox);
-            this.panel1.Controls.Add(this.keyTextBox);
+            this.panel1.Controls.Add(this.BingIdTextBox);
+            this.panel1.Controls.Add(this.BingKeyTextBox);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1046, 96);
+            this.panel1.Size = new System.Drawing.Size(1046, 209);
             this.panel1.TabIndex = 0;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(24, 52);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(65, 25);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "BingID";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(24, 21);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(73, 25);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Bingキー";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(467, 15);
+            this.label2.Location = new System.Drawing.Point(450, 15);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(41, 25);
+            this.label2.Size = new System.Drawing.Size(77, 25);
             this.label2.TabIndex = 6;
-            this.label2.Text = "パス";
+            this.label2.Text = "保存パス";
             // 
             // label1
             // 
@@ -86,10 +112,10 @@
             this.PathTextBox.Size = new System.Drawing.Size(483, 31);
             this.PathTextBox.TabIndex = 4;
             // 
-            // searchTextBox
+            // SearchTermTextBox
             // 
             this.SearchTermTextBox.Location = new System.Drawing.Point(532, 49);
-            this.SearchTermTextBox.Name = "searchTextBox";
+            this.SearchTermTextBox.Name = "SearchTermTextBox";
             this.SearchTermTextBox.Size = new System.Drawing.Size(355, 31);
             this.SearchTermTextBox.TabIndex = 3;
             // 
@@ -103,62 +129,76 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // IdTextBox
+            // BingIdTextBox
             // 
-            this.IdTextBox.Location = new System.Drawing.Point(83, 49);
-            this.IdTextBox.Name = "IdTextBox";
-            this.IdTextBox.Size = new System.Drawing.Size(355, 31);
-            this.IdTextBox.TabIndex = 1;
+            this.BingIdTextBox.Location = new System.Drawing.Point(103, 49);
+            this.BingIdTextBox.Name = "BingIdTextBox";
+            this.BingIdTextBox.Size = new System.Drawing.Size(335, 31);
+            this.BingIdTextBox.TabIndex = 1;
             // 
-            // keyTextBox
+            // BingKeyTextBox
             // 
-            this.keyTextBox.Location = new System.Drawing.Point(83, 15);
-            this.keyTextBox.Name = "keyTextBox";
-            this.keyTextBox.Size = new System.Drawing.Size(355, 31);
-            this.keyTextBox.TabIndex = 0;
+            this.BingKeyTextBox.Location = new System.Drawing.Point(103, 15);
+            this.BingKeyTextBox.Name = "BingKeyTextBox";
+            this.BingKeyTextBox.Size = new System.Drawing.Size(335, 31);
+            this.BingKeyTextBox.TabIndex = 0;
             // 
             // treeView1
             // 
             this.treeView1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.treeView1.Location = new System.Drawing.Point(0, 96);
+            this.treeView1.Location = new System.Drawing.Point(0, 209);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(182, 560);
+            this.treeView1.Size = new System.Drawing.Size(182, 447);
             this.treeView1.TabIndex = 1;
             // 
             // splitter1
             // 
-            this.splitter1.Location = new System.Drawing.Point(182, 96);
+            this.splitter1.Location = new System.Drawing.Point(182, 209);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(4, 560);
+            this.splitter1.Size = new System.Drawing.Size(4, 447);
             this.splitter1.TabIndex = 2;
             this.splitter1.TabStop = false;
             // 
             // listView1
             // 
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.Location = new System.Drawing.Point(186, 96);
+            this.listView1.Location = new System.Drawing.Point(186, 209);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(860, 560);
+            this.listView1.Size = new System.Drawing.Size(860, 447);
             this.listView1.TabIndex = 3;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
-            // label3
+            // label5
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(24, 21);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(38, 25);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "キー";
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(24, 123);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(66, 25);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "BlobID";
             // 
-            // label4
+            // label6
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(24, 52);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(30, 25);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "ID";
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(24, 92);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(74, 25);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "Blobキー";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(103, 120);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(335, 31);
+            this.textBox1.TabIndex = 10;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(103, 86);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(335, 31);
+            this.textBox2.TabIndex = 9;
             // 
             // Form1
             // 
@@ -183,8 +223,8 @@
 
         private Panel panel1;
         private Button button1;
-        private TextBox IdTextBox;
-        private TextBox keyTextBox;
+        private TextBox BingIdTextBox;
+        private TextBox BingKeyTextBox;
         private TreeView treeView1;
         private Splitter splitter1;
         private ListView listView1;
@@ -194,5 +234,9 @@
         private Label label2;
         private Label label4;
         private Label label3;
+        private Label label5;
+        private Label label6;
+        private TextBox textBox1;
+        private TextBox textBox2;
     }
 }

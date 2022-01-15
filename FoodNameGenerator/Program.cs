@@ -282,6 +282,9 @@ class Program
         foreach (var food in FoodNameList.Select((val, idx) => (val, idx)))
         {
             var urlList = await BingSearchUtility.GetContentUrlListAsync(HttpClient, food.val, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
+
+
+
             customVisionWarpper.CreateTrainingImages(food.val, urlList);
 
             Console.WriteLine($"{food.val}:{food.idx + 1}/{FoodNameList.Count}");
