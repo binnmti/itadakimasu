@@ -291,18 +291,16 @@ class Program
             foreach(var url in urlList)
             {
                 var fileName = Regex.Match(url, @".+/(.+?)([\?#;].*)?$").Groups[1].Value;
-                Console.WriteLine($"{food.val}:{fileName}");
-                Stream stream;
                 try
                 {
-                    stream = await HttpClient.GetStreamAsync(url);
+                    var stream = await HttpClient.GetStreamAsync(url);
+                    blobAdapter.Upload(stream, "foodimage", $"{food.val}/{fileName}");
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                     continue;
                 }
-                blobAdapter.Upload(stream, "food", $"{food.val}/{fileName}");
             };
 
             Console.WriteLine($"{food.val}:終了:{food.idx + 1}/{FoodNameList.Count}");
