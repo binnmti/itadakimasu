@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Utility;
@@ -272,22 +275,37 @@ class Program
         if (isDevelopment) builder.AddUserSecrets<Program>();
 
         var configuration = builder.Build();
+        var blobConnectionString = configuration["BlobConnectionString"]; 
         var bingCustomSearchSubscriptionKey = configuration["BingCustomSearchSubscriptionKey"];
         var bingCustomSearchCustomConfigId = configuration["BingCustomSearchCustomConfigId"];
         var customVisionTrainingKey = configuration["CustomVisionTrainingKey"];
         var customVisionProjectId = configuration["CustomVisionProjectId"];
         HttpClient.Timeout = TimeSpan.FromSeconds(5000);
 
-        var customVisionWarpper = new CustomVisionWarpper(HttpClient, customVisionTrainingKey, customVisionProjectId);
+        var blobAdapter = new BlobAdapter(blobConnectionString);
         foreach (var food in FoodNameList.Select((val, idx) => (val, idx)))
         {
+            Console.WriteLine($"{food.val}:開始");
+
             var urlList = await BingSearchUtility.GetContentUrlListAsync(HttpClient, food.val, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
+            foreach(var url in urlList)
+            {
+                var fileName = Regex.Match(url, @".+/(.+?)([\?#;].*)?$").Groups[1].Value;
+                Console.WriteLine($"{food.val}:{fileName}");
+                Stream stream;
+                try
+                {
+                    stream = await HttpClient.GetStreamAsync(url);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    continue;
+                }
+                blobAdapter.Upload(stream, "food", $"{food.val}/{fileName}");
+            };
 
-
-
-            customVisionWarpper.CreateTrainingImages(food.val, urlList);
-
-            Console.WriteLine($"{food.val}:{food.idx + 1}/{FoodNameList.Count}");
+            Console.WriteLine($"{food.val}:終了:{food.idx + 1}/{FoodNameList.Count}");
             Thread.Sleep(1000);
         }
     }
