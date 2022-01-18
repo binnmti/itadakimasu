@@ -263,7 +263,7 @@ class Program
         "ヒラヤーチー",
         "島唐辛子",
     };
-    private static readonly HttpClient HttpClient = new();
+    private static HttpClient HttpClient = new();
 
     static async Task Main()
     {
@@ -288,18 +288,22 @@ class Program
             Console.WriteLine($"{food.val}:開始");
 
             var urlList = await BingSearchUtility.GetContentUrlListAsync(HttpClient, food.val, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
-            foreach(var url in urlList)
+            foreach(var url in urlList.Select((val, idx) => (val, idx)))
             {
-                var fileName = Regex.Match(url, @".+/(.+?)([\?#;].*)?$").Groups[1].Value;
+                var fileName = $"{url.idx:0000}_{Regex.Match(url.val, @".+/(.+?)([\?#;].*)?$").Groups[1].Value}";
                 try
                 {
-                    var stream = await HttpClient.GetStreamAsync(url);
+                    var stream = await HttpClient.GetStreamAsync(url.val);
                     blobAdapter.Upload(stream, "foodimage", $"{food.val}/{fileName}");
+                    Console.WriteLine($"{food.val}:成功: {url.val}");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
-                    continue;
+                    if (ex.Message.Contains("Response status code does not indicate success: 400"))
+                    {
+                        HttpClient = new HttpClient();
+                    }
+                    Console.WriteLine($"{food.val}:失敗: {url.val} : {ex.Message}");
                 }
             };
 
