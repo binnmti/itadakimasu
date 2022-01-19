@@ -17,5 +17,8 @@ namespace Utility
 
         public Response<BlobDownloadResult> Download(string containerName, string blobName)
             => BlobServiceClient.GetBlobContainerClient(containerName).GetBlobClient(blobName).DownloadContent();
+
+        public Pageable<BlobItem> GetBlobItems(string containerName)
+            => BlobServiceClient.GetBlobContainerClient(containerName).GetBlobs();
     }
 }

@@ -70,5 +70,17 @@ namespace AzureExploer.Properties {
                 this["SearchTerm"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string BlobKey {
+            get {
+                return ((string)(this["BlobKey"]));
+            }
+            set {
+                this["BlobKey"] = value;
+            }
+        }
     }
 }

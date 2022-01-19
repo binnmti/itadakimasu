@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.BlobKeyTextBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -41,19 +43,13 @@
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.listView1 = new System.Windows.Forms.ListView();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.label6);
-            this.panel1.Controls.Add(this.textBox1);
-            this.panel1.Controls.Add(this.textBox2);
+            this.panel1.Controls.Add(this.BlobKeyTextBox);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label2);
@@ -68,6 +64,23 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1046, 209);
             this.panel1.TabIndex = 0;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(24, 92);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(74, 25);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "Blobキー";
+            // 
+            // BlobKeyTextBox
+            // 
+            this.BlobKeyTextBox.Location = new System.Drawing.Point(103, 86);
+            this.BlobKeyTextBox.Name = "BlobKeyTextBox";
+            this.BlobKeyTextBox.Size = new System.Drawing.Size(335, 31);
+            this.BlobKeyTextBox.TabIndex = 9;
+            this.BlobKeyTextBox.TextChanged += new System.EventHandler(this.BlobKeyTextBox_TextChanged);
             // 
             // label4
             // 
@@ -168,38 +181,6 @@
             this.listView1.TabIndex = 3;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(24, 123);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(66, 25);
-            this.label5.TabIndex = 12;
-            this.label5.Text = "BlobID";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(24, 92);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(74, 25);
-            this.label6.TabIndex = 11;
-            this.label6.Text = "Blobキー";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(103, 120);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(335, 31);
-            this.textBox1.TabIndex = 10;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(103, 86);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(335, 31);
-            this.textBox2.TabIndex = 9;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
@@ -234,9 +215,7 @@
         private Label label2;
         private Label label4;
         private Label label3;
-        private Label label5;
         private Label label6;
-        private TextBox textBox1;
-        private TextBox textBox2;
+        private TextBox BlobKeyTextBox;
     }
 }

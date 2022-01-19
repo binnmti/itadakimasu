@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -290,23 +289,26 @@ class Program
             var urlList = await BingSearchUtility.GetContentUrlListAsync(HttpClient, food.val, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
             foreach(var url in urlList.Select((val, idx) => (val, idx)))
             {
-                var fileName = $"{url.idx:0000}_{Regex.Match(url.val, @".+/(.+?)([\?#;].*)?$").Groups[1].Value}";
+                var fileName = $"{url.idx:0000}{Path.GetExtension(new Uri(url.val).LocalPath)}";
+                Console.WriteLine($"{food.val}:{url.idx + 1}/{urlList.Count}:{fileName}:{url.val}");
                 try
                 {
                     var stream = await HttpClient.GetStreamAsync(url.val);
-                    blobAdapter.Upload(stream, "foodimage", $"{food.val}/{fileName}");
-                    Console.WriteLine($"{food.val}:成功: {url.val}");
+                    try
+                    {
+                        blobAdapter.Upload(stream, "food", $"{food.val}/{fileName}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Upload失敗:{ex.Message}:{ex.StackTrace}");
+                    }
                 }
                 catch (Exception ex)
                 {
-                    if (ex.Message.Contains("Response status code does not indicate success: 400"))
-                    {
-                        HttpClient = new HttpClient();
-                    }
-                    Console.WriteLine($"{food.val}:失敗: {url.val} : {ex.Message}");
+                    if (ex.Message.Contains("Response status code does not indicate success: 400")) HttpClient = new HttpClient();
+                    Console.WriteLine($"GetStreamAsync失敗:{ex.Message}:{ex.StackTrace}");
                 }
             };
-
             Console.WriteLine($"{food.val}:終了:{food.idx + 1}/{FoodNameList.Count}");
             Thread.Sleep(1000);
         }

@@ -1,3 +1,5 @@
+using Azure;
+using Azure.Storage.Blobs.Models;
 using AzureExploer.Properties;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -35,6 +37,14 @@ namespace AzureExploer
         {
             button1.Enabled = false;
 
+            var blobAdapter = new BlobAdapter(BlobKeyTextBox.Text);
+            var blobItems = blobAdapter.GetBlobItems("foodimage");
+
+            foreach (var blobItem in blobItems)
+            {
+                Console.WriteLine("Blob name: {0}", blobItem.Name);
+            }
+
             var imageUrlList = await BingSearchUtility.GetContentUrlListAsync(new HttpClient(), SearchTermTextBox.Text, BingKeyTextBox.Text, BingIdTextBox.Text);
             var savePath = GetSaveDirectory(PathTextBox.Text, SearchTermTextBox.Text);
             int fileCount = 1;
@@ -66,15 +76,22 @@ namespace AzureExploer
             Settings.Default.Id = BingIdTextBox.Text;
             Settings.Default.Path = PathTextBox.Text;
             Settings.Default.SearchTerm = SearchTermTextBox.Text;
+            Settings.Default.BlobKey = BlobKeyTextBox.Text;
             Settings.Default.Save();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            BlobKeyTextBox.Text = Settings.Default.BlobKey;
             BingKeyTextBox.Text = Settings.Default.Key;
             BingIdTextBox.Text = Settings.Default.Id;
             PathTextBox.Text = Settings.Default.Path;
             SearchTermTextBox.Text = Settings.Default.SearchTerm;
+        }
+
+        private void BlobKeyTextBox_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
