@@ -6,6 +6,7 @@ namespace Utility
 {
     public class BlobAdapter
     {
+
         private BlobServiceClient BlobServiceClient { get; }
         public BlobAdapter(string blobConnectionString)
         {
@@ -18,7 +19,7 @@ namespace Utility
         public Response<BlobDownloadResult> Download(string containerName, string blobName)
             => BlobServiceClient.GetBlobContainerClient(containerName).GetBlobClient(blobName).DownloadContent();
 
-        public Pageable<BlobItem> GetBlobItems(string containerName)
-            => BlobServiceClient.GetBlobContainerClient(containerName).GetBlobs();
+        public IEnumerable<string> GetBlobNames(string containerName)
+            => BlobServiceClient.GetBlobContainerClient(containerName).GetBlobs().Select(x => x.Name);
     }
 }

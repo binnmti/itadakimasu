@@ -296,7 +296,7 @@ class Program
                     var stream = await HttpClient.GetStreamAsync(url.val);
                     try
                     {
-                        blobAdapter.Upload(stream, "food", $"{food.val}/{fileName}");
+                        blobAdapter.Upload(stream, "foodimage", $"{food.val}/{fileName}");
                     }
                     catch (Exception ex)
                     {

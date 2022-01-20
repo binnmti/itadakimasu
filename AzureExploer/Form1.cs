@@ -9,6 +9,8 @@ namespace AzureExploer
 {
     public partial class Form1 : Form
     {
+        private const string BlobUrl = "https://itadakimasu.blob.core.windows.net";
+        //https://itadakimasu.blob.core.windows.net/food/Ç†Ç≥ÇËÇÃéèˆÇµ/0000.jpg
         private static HttpClient HttpClient { get; } = new();
 
         public Form1()
@@ -37,21 +39,13 @@ namespace AzureExploer
         {
             button1.Enabled = false;
 
-            var blobAdapter = new BlobAdapter(BlobKeyTextBox.Text);
-            var blobItems = blobAdapter.GetBlobItems("foodimage");
-
-            foreach (var blobItem in blobItems)
-            {
-                Console.WriteLine("Blob name: {0}", blobItem.Name);
-            }
-
-            var imageUrlList = await BingSearchUtility.GetContentUrlListAsync(new HttpClient(), SearchTermTextBox.Text, BingKeyTextBox.Text, BingIdTextBox.Text);
+            var blobItems = new BlobAdapter(BlobKeyTextBox.Text).GetBlobNames("foodimage");
             var savePath = GetSaveDirectory(PathTextBox.Text, SearchTermTextBox.Text);
             int fileCount = 1;
-
             var sb = new StringBuilder();
-            foreach(var imageUrl in imageUrlList)
+            foreach(var item in blobItems)
             {
+                var imageUrl = $"{BlobUrl}/foodimage/{item}";
                 sb.Append(imageUrl);
                 try
                 {
@@ -66,7 +60,8 @@ namespace AzureExploer
                 }
                 sb.AppendLine("");
             }
-            File.AppendAllTextAsync(Path.Combine(savePath, "log.txt"), sb.ToString());
+            await File.AppendAllTextAsync(Path.Combine(savePath, "log.txt"), sb.ToString());
+
             button1.Enabled = true;
         }
 
