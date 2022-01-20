@@ -10,7 +10,6 @@ namespace AzureExploer
     public partial class Form1 : Form
     {
         private const string BlobUrl = "https://itadakimasu.blob.core.windows.net";
-        //https://itadakimasu.blob.core.windows.net/food/あさりの酒蒸し/0000.jpg
         private static HttpClient HttpClient { get; } = new();
 
         public Form1()
@@ -39,18 +38,21 @@ namespace AzureExploer
         {
             button1.Enabled = false;
 
-            var blobItems = new BlobAdapter(BlobKeyTextBox.Text).GetBlobNames("foodimage");
-            var savePath = GetSaveDirectory(PathTextBox.Text, SearchTermTextBox.Text);
+            var blobAdapter = new BlobAdapter(BlobKeyTextBox.Text);
             int fileCount = 1;
             var sb = new StringBuilder();
-            foreach(var item in blobItems)
+            foreach(var imageUrl in blobAdapter.GetBlobUrls("foodimage"))
             {
-                var imageUrl = $"{BlobUrl}/foodimage/{item}";
                 sb.Append(imageUrl);
                 try
                 {
+                    //TODO:フォルダが変わってもナンバリングが続く。
+
                     var stream = await HttpClient.GetStreamAsync(imageUrl);
-                    new Bitmap(stream).Save(Path.Combine(savePath, $"{fileCount:0000}.jpg"));
+                    var foodFolder = Path.GetFileName(Path.GetDirectoryName(imageUrl));
+                    var filePath = Path.Combine(PathTextBox.Text, foodFolder);
+                    Directory.CreateDirectory(filePath);
+                    new Bitmap(stream).Save(Path.Combine(filePath, $"{fileCount:0000}.jpg"));
                     fileCount++;
                     sb.Append($":{fileCount:0000}.jpg");
                 }
@@ -60,7 +62,7 @@ namespace AzureExploer
                 }
                 sb.AppendLine("");
             }
-            await File.AppendAllTextAsync(Path.Combine(savePath, "log.txt"), sb.ToString());
+            await File.AppendAllTextAsync(Path.Combine(PathTextBox.Text, "log.txt"), sb.ToString());
 
             button1.Enabled = true;
         }
