@@ -12,6 +12,8 @@ namespace AzureExploer
         private const string BlobUrl = "https://itadakimasu.blob.core.windows.net";
         private static HttpClient HttpClient { get; } = new();
 
+        private List<FoodGallery> FoodGallerys = new();
+
         public Form1()
         {
             InitializeComponent();
@@ -39,6 +41,46 @@ namespace AzureExploer
             button1.Enabled = false;
 
             var blobAdapter = new BlobAdapter(BlobKeyTextBox.Text);
+            string preDir = "";
+            var foodImages = new List<FoodImage>();
+            int imageIndex = 0;
+            int dirCount = 0;
+            foreach (var blob in blobAdapter.GetBlobs("foodimage"))
+            {
+                var dir = Path.GetDirectoryName(blob.Name) ?? "";
+                var file = Path.GetFileName(blob.Name) ?? "";
+                if (dir != preDir)
+                {
+                    Invoke(() => { treeView1.Nodes.Add(dir); });
+                    FoodGallerys.Add(new FoodGallery() { Name = dir, FoodImages = foodImages });
+                    preDir = dir;
+                    dirCount++;
+                }
+                var imageUrl = $"{blobAdapter.Url}foodimage/{blob.Name}";
+                var stream = await HttpClient.GetStreamAsync(imageUrl);
+                var bmp = new Bitmap(stream);
+                foodImages.Add(new FoodImage() { Checked = true, Url = imageUrl, Bitmap = bmp });
+                //Å‰‚¾‚¯
+                if (dirCount == 1)
+                {
+                    Invoke(() => {
+                        imageList1.Images.Add(bmp);
+                        listView1.BeginUpdate();
+                        listView1.Items.Add(file, imageIndex);
+                        listView1.EndUpdate();
+                    });
+                    imageIndex++;
+                }
+            }
+
+            //await Task.Run(async () =>
+            //{
+            //});
+
+
+
+            /*
+            var blobAdapter = new BlobAdapter(BlobKeyTextBox.Text);
             int fileCount = 1;
             var sb = new StringBuilder();
             foreach(var imageUrl in blobAdapter.GetBlobUrls("foodimage"))
@@ -56,13 +98,14 @@ namespace AzureExploer
                     fileCount++;
                     sb.Append($":{fileCount:0000}.jpg");
                 }
-                catch (Exception ex)    
+                catch (Exception ex)
                 {
                     sb.Append($":{ex.Message}");
                 }
                 sb.AppendLine("");
             }
             await File.AppendAllTextAsync(Path.Combine(PathTextBox.Text, "log.txt"), sb.ToString());
+            */
 
             button1.Enabled = true;
         }
