@@ -293,15 +293,27 @@ class Program
                 Console.WriteLine($"{food.val}:{url.idx + 1}/{urlList.Count}:{fileName}:{url.val}");
                 try
                 {
-                    var stream = await HttpClient.GetStreamAsync(url.val);
                     try
                     {
+                        var stream = await HttpClient.GetStreamAsync(url.val);
                         blobAdapter.Upload(stream, "foodimage", $"{food.val}/{fileName}");
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine($"Upload失敗:{ex.Message}:{ex.StackTrace}");
                     }
+
+                    try
+                    {
+                        var stream = await HttpClient.GetStreamAsync(url.val);
+                        using var reSizeStream = new MemoryStream(ImageSharpAdapter.ImageResize(stream, 300, 300));
+                        blobAdapter.Upload(reSizeStream, "foodimage", $"{food.val}/{url.idx:0000}_s.jpg");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Uploads失敗:{ex.Message}:{ex.StackTrace}");
+                    }
+
                 }
                 catch (Exception ex)
                 {

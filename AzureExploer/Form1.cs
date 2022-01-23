@@ -45,7 +45,7 @@ namespace AzureExploer
             var foodImages = new List<FoodImage>();
             int imageIndex = 0;
             int dirCount = 0;
-            foreach (var blob in blobAdapter.GetBlobs("foodimage"))
+            foreach (var blob in blobAdapter.GetBlobs("foodimage").Where(x => x.Name.Contains("ƒIƒ€ƒ‰ƒCƒX")))
             {
                 var dir = Path.GetDirectoryName(blob.Name) ?? "";
                 var file = Path.GetFileName(blob.Name) ?? "";
