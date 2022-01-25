@@ -47,6 +47,8 @@ namespace AzureExploer
             int dirCount = 0;
             foreach (var blob in blobAdapter.GetBlobs("foodimage").Where(x => x.Name.Contains("ƒIƒ€ƒ‰ƒCƒX")))
             {
+                if (!blob.Name.Contains("_s")) continue;
+
                 var dir = Path.GetDirectoryName(blob.Name) ?? "";
                 var file = Path.GetFileName(blob.Name) ?? "";
                 if (dir != preDir)
