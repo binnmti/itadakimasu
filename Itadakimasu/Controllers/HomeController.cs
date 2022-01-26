@@ -16,16 +16,17 @@ namespace Itadakimasu.Controllers
 
         public IActionResult Index()
         {
-            var blobConnectionString = _configuration.GetConnectionString("BlobConnectionString");
-            var blobAdapter = new BlobAdapter(blobConnectionString);
-            var foodImages = new List<ViewFoodImage>();
-            foreach (var blob in blobAdapter.GetBlobs("foodimage").Where(x => x.Name.Contains("オムライス")))
-            {
-                //最初からフォルダを分けた方がこれがいらないかも。
-                if (!blob.Name.Contains("_s")) continue;
-                foodImages.Add(new ViewFoodImage() { Checked = true, BlobUrl = $"{blobAdapter.Url}foodimage/{blob.Name}" });
-            }
-            return View(foodImages);
+            //var blobConnectionString = _configuration.GetConnectionString("BlobConnectionString");
+            //var blobAdapter = new BlobAdapter(blobConnectionString);
+            //var foodImages = new List<ViewFoodImage>();
+            //foreach (var blob in blobAdapter.GetBlobs("foodimage").Where(x => x.Name.Contains("オムライス")))
+            //{
+            //    //最初からフォルダを分けた方がこれがいらないかも。
+            //    if (!blob.Name.Contains("_s")) continue;
+            //    foodImages.Add(new ViewFoodImage() { Checked = true, BlobUrl = $"{blobAdapter.Url}foodimage/{blob.Name}" });
+            //}
+            //return View(foodImages);
+            return View(new List<ViewFoodImage>());
         }
 
         public IActionResult Privacy()
