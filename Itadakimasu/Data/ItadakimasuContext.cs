@@ -11,5 +11,6 @@ namespace Itadakimasu.Data
         }
 
         public DbSet<Food> Food { get; set; } = null!;
+        public DbSet<FoodImage> FoodImage { get; set; } = null!;
     }
 }

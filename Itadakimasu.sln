@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility", "Utility\Utility.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureExploer", "AzureExploer\AzureExploer.csproj", "{B2869475-1DFD-467D-83F5-92F4EDCF677D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItadakimasuViewer", "ItadakimasuViewer\ItadakimasuViewer.csproj", "{D2491BF1-77AD-4D28-A5E2-FB936F538C73}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,10 +39,6 @@ Global
 		{B2869475-1DFD-467D-83F5-92F4EDCF677D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2869475-1DFD-467D-83F5-92F4EDCF677D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2869475-1DFD-467D-83F5-92F4EDCF677D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D2491BF1-77AD-4D28-A5E2-FB936F538C73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D2491BF1-77AD-4D28-A5E2-FB936F538C73}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D2491BF1-77AD-4D28-A5E2-FB936F538C73}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D2491BF1-77AD-4D28-A5E2-FB936F538C73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

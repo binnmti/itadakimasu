@@ -1,6 +1,6 @@
-﻿using Itadakimasu.Model;
-using Microsoft.AspNetCore.Http;
+﻿using Itadakimasu.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using Utility;
 
 namespace Itadakimasu.Controllers
@@ -14,18 +14,29 @@ namespace Itadakimasu.Controllers
             _configuration = configuration;
         }
 
-        public ActionResult BlobViewer(string name)
+        public IActionResult Index()
         {
-            var blobViewer = new BlobViewer();
             var blobConnectionString = _configuration.GetConnectionString("BlobConnectionString");
             var blobAdapter = new BlobAdapter(blobConnectionString);
-            foreach (var blob in blobAdapter.GetBlobs("foodimage").Where(x => x.Name.Contains(name)))
+            var foodImages = new List<ViewFoodImage>();
+            foreach (var blob in blobAdapter.GetBlobs("foodimage").Where(x => x.Name.Contains("オムライス")))
             {
                 //最初からフォルダを分けた方がこれがいらないかも。
                 if (!blob.Name.Contains("_s")) continue;
-                blobViewer.FoodImages.Add(new FoodImage() { Checked = true, Url = $"{blobAdapter.Url}foodimage/{blob.Name}" });
+                foodImages.Add(new ViewFoodImage() { Checked = true, BlobUrl = $"{blobAdapter.Url}foodimage/{blob.Name}" });
             }
-            return View(blobViewer);
+            return View(foodImages);
+        }
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
