@@ -14,6 +14,7 @@ namespace FoodNameGenerator;
 
 class Program
 {
+    private static string ItadakimasuAPIUrl = "https://itadakimasu.azurewebsites.net/api/";
     private static readonly List<string> FoodNameList = new()
     {
         "オムライス",
@@ -296,24 +297,14 @@ class Program
                     try
                     {
                         var stream = await HttpClient.GetStreamAsync(url.val);
-                        blobAdapter.Upload(stream, "foodimage", $"{food.val}/{fileName}");
+                        var imageInfo = ImageSharpAdapter.GetImageInfo(stream, 300, 300);
+                        blobAdapter.Upload(imageInfo.Base, "foodimage", $"{food.val}/{fileName}");
+                        blobAdapter.Upload(imageInfo.Thumbnail, "foodimage", $"{food.val}/{url.idx:0000}_s.jpg");
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine($"Upload失敗:{ex.Message}:{ex.StackTrace}");
                     }
-
-                    try
-                    {
-                        var stream = await HttpClient.GetStreamAsync(url.val);
-                        using var reSizeStream = new MemoryStream(ImageSharpAdapter.ImageResize(stream, 300, 300));
-                        blobAdapter.Upload(reSizeStream, "foodimage", $"{food.val}/{url.idx:0000}_s.jpg");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Uploads失敗:{ex.Message}:{ex.StackTrace}");
-                    }
-
                 }
                 catch (Exception ex)
                 {

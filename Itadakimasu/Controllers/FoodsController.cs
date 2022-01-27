@@ -17,22 +17,25 @@ namespace Itadakimasu.Controllers
             _context = context;
         }
 
-        //https://localhost:7162/api/Foods
         [HttpPost]
         public async Task<ActionResult<Food>> PostFood(string name)
         {
+            if (_context.Food.Any(x => x.Name == name)) return BadRequest();
+
             var food = new Food() { Name = name };
             _context.Food.Add(food);
             await _context.SaveChangesAsync();
-            return CreatedAtAction("GetFood", new { id = food.Id }, food);
+            return food;
         }
 
         [HttpPost]
         public async Task<ActionResult<FoodImage>> PostFoodImage(FoodImage foodImage)
         {
+            if (_context.FoodImage.Any(x => x.BaseUrl == foodImage.BaseUrl)) return BadRequest();
+
             _context.FoodImage.Add(foodImage);
             await _context.SaveChangesAsync();
-            return CreatedAtAction("GetFoodImage", new { id = foodImage.Id }, foodImage);
+            return foodImage;
         }
 
     }
