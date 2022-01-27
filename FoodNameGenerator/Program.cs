@@ -297,9 +297,9 @@ class Program
                     try
                     {
                         var stream = await HttpClient.GetStreamAsync(url.val);
-                        var imageInfo = ImageSharpAdapter.GetImageInfo(stream, 300, 300);
-                        blobAdapter.Upload(imageInfo.Base, "foodimage", $"{food.val}/{fileName}");
-                        blobAdapter.Upload(imageInfo.Thumbnail, "foodimage", $"{food.val}/{url.idx:0000}_s.jpg");
+                        var jpeg = ImageSharpAdapter.ConvertJpeg(stream, 300, 300);
+                        blobAdapter.Upload(jpeg.Image, "foodimage", $"{food.val}/{fileName}");
+                        blobAdapter.Upload(jpeg.ThumbnailImage, "foodimage", $"{food.val}/{url.idx:0000}_s.jpg");
                     }
                     catch (Exception ex)
                     {

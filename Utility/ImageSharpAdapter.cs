@@ -6,21 +6,23 @@ namespace Utility;
 
 public static class ImageSharpAdapter
 {
-    public record ImageInfo(Stream Base, Stream Thumbnail, int Width, int Height);
+    //サイズは結構小さくなるが、クオリティが担保出来ると判断した圧縮率
+    private const int JpegEncoderQuality = 30;
+    public record Jpeg(Stream Image, int Width, int Height, Stream ThumbnailImage);
 
-    public static ImageInfo GetImageInfo(Stream stream, int width, int height)
+    public static Jpeg ConvertJpeg(Stream stream, int thumbnailWidth, int thumbnailHeight)
     {
         using var image = Image.Load(stream);
-        var w = image.Width; 
-        var h = image.Height;
-        var scale = Math.Min((float)width / w, (float)height / h);
-        var baseStream = GetStream(image, 100);
+        var width = image.Width; 
+        var height = image.Height;
+        var scale = Math.Min((float)thumbnailWidth / width, (float)thumbnailHeight / height);
+        var imageStream = GetJpegStream(image, 100);
         image.Mutate(x => x.Resize((int)(image.Width * scale), (int)(image.Height * scale)));
-        var thumbnailStream = GetStream(image, 30);
-        return new ImageInfo(baseStream, thumbnailStream, w, h);
+        var thumbnailStream = GetJpegStream(image, JpegEncoderQuality);
+        return new Jpeg(imageStream, width, height, thumbnailStream);
     }
 
-    private static Stream GetStream(Image image, int quality)
+    private static Stream GetJpegStream(Image image, int quality)
     {
         var output = new MemoryStream();
         image.Save(output, new JpegEncoder() { Quality = quality });
