@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Models
+namespace Models;
+public record Food
 {
-    public class Food
-    {
-        public long Id { get; set; }
-        [MaxLength(500)]
-        public string Name { get; set; } = "";
-    }
+    public long Id { get; set; }
+    [MaxLength(500)]
+    public string Name { get; set; } = "";
 }

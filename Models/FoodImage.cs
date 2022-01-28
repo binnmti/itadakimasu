@@ -1,17 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Models
+namespace Models;
+public record FoodImage
 {
-    public class FoodImage
-    {
-        public long Id { get; set; }
-        [MaxLength(500)]
-        public string Name { get; set; } = "";
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Bit { get; set; }
-        public int Size { get; set; }
-        public string BlobUrl { get; set; } = "";
-        public string BaseUrl { get; set; } = "";
-    }
+    public long Id { get; set; }
+    public string BaseUrl { get; set; } = "";
+    [MaxLength(500)]
+    public string BlobName { get; set; } = "";
+    public string BlobUrl { get; set; } = "";
+    public int BlobWidth { get; set; }
+    public int BlobHeight { get; set; }
+    public long BlobSize { get; set; }
+    //サムネイル
+    [MaxLength(500)]
+    public string BlobSName { get; set; } = "";
+    public string BlobSUrl { get; set; } = "";
+    public int BlobSWidth { get; set; }
+    public int BlobSHeight { get; set; }
+    public long BlobSSize { get; set; }
 }
