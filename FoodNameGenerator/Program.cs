@@ -287,7 +287,7 @@ class Program
         {
             Console.WriteLine($"{food.val}:開始");
             var foodResult = await HttpClient.PostAsync($"{ItadakimasuApiUrl}Foods/Food?name={food.val}", null);
-            if (!foodResult.IsSuccessStatusCode) continue;
+            if (foodResult.IsSuccessStatusCode) continue;
 
             var urlList = await BingSearchUtility.GetContentUrlListAsync(HttpClient, food.val, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
             foreach(var url in urlList.Select((val, idx) => (val, idx)))

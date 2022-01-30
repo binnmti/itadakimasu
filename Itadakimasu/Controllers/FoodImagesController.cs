@@ -18,22 +18,24 @@ namespace Itadakimasu.Controllers
         [HttpGet("{baseUrl}")]
         public async Task<ActionResult<FoodImage>> GetFoodImage(string baseUrl)
         {
-            var foodImage = await _context.FoodImage.FindAsync(baseUrl);
-            if (foodImage == null)
-            {
-                return NotFound();
-            }
+            var foodImage = await Find(baseUrl);
+            if (foodImage == null) return NotFound();
             return foodImage;
         }
 
         [HttpPost]
         public async Task<ActionResult<FoodImage>> PostFoodImage(FoodImage foodImage)
         {
-            if (_context.FoodImage.Any(x => x.BaseUrl == foodImage.BaseUrl)) return Conflict();
+            var hit = await Find(foodImage.BaseUrl);
+            if (hit != null) return Conflict();
 
             _context.FoodImage.Add(foodImage);
             await _context.SaveChangesAsync();
             return foodImage;
         }
+
+        private async Task<FoodImage?> Find(string baseUrl)
+            => await _context.FoodImage.FindAsync(baseUrl);
+
     }
 }

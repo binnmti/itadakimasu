@@ -18,7 +18,8 @@ namespace Itadakimasu.Controllers
         [HttpPost]
         public async Task<ActionResult<Food>> PostFood(string name)
         {
-            if (_context.Food.Any(x => x.Name == name)) return Conflict();
+            var hit = await _context.Food.FindAsync(name);
+            if (hit != null) return Conflict();
 
             var food = new Food() { Name = name };
             _context.Food.Add(food);
