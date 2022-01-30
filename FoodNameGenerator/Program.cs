@@ -290,12 +290,34 @@ class Program
             var urlList = await BingSearchUtility.GetContentUrlListAsync(HttpClient, food.val, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
             foreach(var url in urlList.Select((val, idx) => (val, idx)))
             {
+                var foodResult = await HttpClient.PostAsync($"{ItadakimasuApiUrl}Foods/Food?name={food.val}", null);
+                if (!foodResult.IsSuccessStatusCode) continue;
+
                 Console.WriteLine($"{food.val}:{url.idx + 1}/{urlList.Count}:{url.idx:0000}.jpg:{url.val}");
                 try
                 {
                     string uploadUrl, uploadtUrl;
                     var stream = await HttpClient.GetStreamAsync(url.val);
                     var jpeg = ImageSharpAdapter.ConvertJpeg(stream, 300, 300);
+                    var foodImage = new FoodImage()
+                    {
+                        BaseUrl = url.val,
+                        BlobName = $"{url.idx:0000}.jpg",
+                        BlobUrl = $"{blobAdapter.Url}/foodimage/{food.val}{url.idx:0000}.jpg",
+                        BlobWidth = jpeg.Width,
+                        BlobHeight = jpeg.Height,
+                        BlobSize = jpeg.Image.Length,
+
+                        BlobSName = $"{url.idx:0000}_s.jpg",
+                        BlobSUrl = $"{blobAdapter.Url}/foodimage/{food.val}{url.idx:0000}_s.jpg",
+                        BlobSWidth = 300,
+                        BlobSHeight = 300,
+                        BlobSSize = jpeg.ThumbnailImage.Length,
+                    };
+                    var foodImageResult = await HttpClient.PostAsJsonAsync($"{ItadakimasuApiUrl}Foods/FoodImage", JsonContent.Create(foodImage));
+                    if (!foodResult.IsSuccessStatusCode) continue;
+
+
                     try
                     {
                         uploadUrl = blobAdapter.Upload(jpeg.Image, "foodimage", $"{food.val}/{url.idx:0000}.jpg");
@@ -306,32 +328,13 @@ class Program
                         Console.WriteLine($"Upload失敗:{ex.Message}:{ex.StackTrace}");
                         continue;
                     }
-                    var foodImage = new FoodImage() {
-                        BaseUrl = url.val,
-                        BlobName = $"{url.idx:0000}.jpg",
-                        BlobUrl = uploadUrl,
-                        BlobWidth = jpeg.Width,
-                        BlobHeight = jpeg.Height,
-                        BlobSize = jpeg.Image.Length,
-
-                        BlobSName = $"{url.idx:0000}_s.jpg",
-                        BlobSUrl = uploadtUrl,
-                        BlobSWidth = 300,
-                        BlobSHeight = 300,
-                        BlobSSize = jpeg.ThumbnailImage.Length,
-                    };
-                    await HttpClient.PostAsJsonAsync($"{ItadakimasuApiUrl}FoodImage", JsonContent.Create(foodImage));
                 }
                 catch (Exception ex)
                 {
                     if (ex.Message.Contains("Response status code does not indicate success: 400")) HttpClient = new HttpClient();
                     Console.WriteLine($"GetStreamAsync失敗:{ex.Message}:{ex.StackTrace}");
                 }
-
             };
-            var response = await HttpClient.PostAsync($"{ItadakimasuApiUrl}Foods?name={food.val}", null);
-            var result = response.IsSuccessStatusCode ? "成功" : response.ReasonPhrase;
-
             Console.WriteLine($"{food.val}:終了:{food.idx + 1}/{FoodNameList.Count}");
             Thread.Sleep(1000);
         }
