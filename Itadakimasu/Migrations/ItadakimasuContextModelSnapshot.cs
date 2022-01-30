@@ -51,25 +51,40 @@ namespace Itadakimasu.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Bit")
+                    b.Property<int>("BlobHeight")
                         .HasColumnType("int");
+
+                    b.Property<string>("BlobName")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("BlobSHeight")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BlobSName")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<long>("BlobSSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("BlobSUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BlobSWidth")
+                        .HasColumnType("int");
+
+                    b.Property<long>("BlobSize")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("BlobUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("Size")
-                        .HasColumnType("int");
-
-                    b.Property<int>("X")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Y")
+                    b.Property<int>("BlobWidth")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

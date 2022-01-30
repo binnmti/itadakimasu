@@ -18,7 +18,7 @@ namespace Itadakimasu.Controllers
         [HttpGet("{baseUrl}")]
         public async Task<ActionResult<FoodImage>> GetFoodImage(string baseUrl)
         {
-            var foodImage = await Find(baseUrl);
+            var foodImage = await FindAsync(baseUrl);
             if (foodImage == null) return NotFound();
             return foodImage;
         }
@@ -26,7 +26,7 @@ namespace Itadakimasu.Controllers
         [HttpPost]
         public async Task<ActionResult<FoodImage>> PostFoodImage(FoodImage foodImage)
         {
-            var hit = await Find(foodImage.BaseUrl);
+            var hit = await FindAsync(foodImage.BaseUrl);
             if (hit != null) return Conflict();
 
             _context.FoodImage.Add(foodImage);
@@ -34,7 +34,7 @@ namespace Itadakimasu.Controllers
             return foodImage;
         }
 
-        private async Task<FoodImage?> Find(string baseUrl)
+        private async Task<FoodImage?> FindAsync(string baseUrl)
             => await _context.FoodImage.FindAsync(baseUrl);
 
     }

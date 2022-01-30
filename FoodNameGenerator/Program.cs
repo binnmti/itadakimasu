@@ -286,7 +286,7 @@ class Program
         foreach (var food in FoodNameList.Select((val, idx) => (val, idx)))
         {
             Console.WriteLine($"{food.val}:開始");
-            var foodResult = await HttpClient.PostAsync($"{ItadakimasuApiUrl}Foods/Food?name={food.val}", null);
+            var foodResult = await HttpClient.GetAsync($"{ItadakimasuApiUrl}Foods/Food?name={food.val}");
             if (foodResult.IsSuccessStatusCode) continue;
 
             var urlList = await BingSearchUtility.GetContentUrlListAsync(HttpClient, food.val, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
@@ -342,6 +342,7 @@ class Program
                     Console.WriteLine($"GetStreamAsync失敗:{ex.Message}:{ex.StackTrace}");
                 }
             };
+            await HttpClient.PostAsync($"{ItadakimasuApiUrl}Foods/Food?name={food.val}", null);
             Console.WriteLine($"{food.val}:終了:{food.idx + 1}/{FoodNameList.Count}");
             Thread.Sleep(1000);
         }

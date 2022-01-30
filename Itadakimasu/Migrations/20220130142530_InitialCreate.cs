@@ -27,13 +27,17 @@ namespace Itadakimasu.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    X = table.Column<int>(type: "int", nullable: false),
-                    Y = table.Column<int>(type: "int", nullable: false),
-                    Bit = table.Column<int>(type: "int", nullable: false),
-                    Size = table.Column<int>(type: "int", nullable: false),
+                    BaseUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BlobName = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     BlobUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BaseUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    BlobWidth = table.Column<int>(type: "int", nullable: false),
+                    BlobHeight = table.Column<int>(type: "int", nullable: false),
+                    BlobSize = table.Column<long>(type: "bigint", nullable: false),
+                    BlobSName = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    BlobSUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BlobSWidth = table.Column<int>(type: "int", nullable: false),
+                    BlobSHeight = table.Column<int>(type: "int", nullable: false),
+                    BlobSSize = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
