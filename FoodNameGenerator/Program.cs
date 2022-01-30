@@ -286,14 +286,17 @@ class Program
         foreach (var food in FoodNameList.Select((val, idx) => (val, idx)))
         {
             Console.WriteLine($"{food.val}:開始");
+            var foodResult = await HttpClient.PostAsync($"{ItadakimasuApiUrl}Foods/Food?name={food.val}", null);
+            if (!foodResult.IsSuccessStatusCode) continue;
 
             var urlList = await BingSearchUtility.GetContentUrlListAsync(HttpClient, food.val, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
             foreach(var url in urlList.Select((val, idx) => (val, idx)))
             {
-                var foodResult = await HttpClient.PostAsync($"{ItadakimasuApiUrl}Foods/Food?name={food.val}", null);
-                if (!foodResult.IsSuccessStatusCode) continue;
-
                 Console.WriteLine($"{food.val}:{url.idx + 1}/{urlList.Count}:{url.idx:0000}.jpg:{url.val}");
+
+                var hit = await HttpClient.GetAsync($"{ItadakimasuApiUrl}Foods/FoodImage?baseUrl={url.val}");
+                if (hit.IsSuccessStatusCode) continue;
+
                 try
                 {
                     string uploadUrl, uploadtUrl;
@@ -314,10 +317,6 @@ class Program
                         BlobSHeight = 300,
                         BlobSSize = jpeg.ThumbnailImage.Length,
                     };
-                    var foodImageResult = await HttpClient.PostAsJsonAsync($"{ItadakimasuApiUrl}Foods/FoodImage", JsonContent.Create(foodImage));
-                    if (!foodResult.IsSuccessStatusCode) continue;
-
-
                     try
                     {
                         uploadUrl = blobAdapter.Upload(jpeg.Image, "foodimage", $"{food.val}/{url.idx:0000}.jpg");
@@ -327,6 +326,14 @@ class Program
                     {
                         Console.WriteLine($"Upload失敗:{ex.Message}:{ex.StackTrace}");
                         continue;
+                    }
+                    try
+                    {
+                        await HttpClient.PostAsJsonAsync($"{ItadakimasuApiUrl}Foods/FoodImage", JsonContent.Create(foodImage));
+                    }
+                    catch
+                    {
+                        throw;
                     }
                 }
                 catch (Exception ex)
