@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Itadakimasu.Data;
 using Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Itadakimasu.Controllers
 {
@@ -35,7 +36,7 @@ namespace Itadakimasu.Controllers
         }
 
         private async Task<FoodImage?> FindAsync(string baseUrl)
-            => await _context.FoodImage.FindAsync(baseUrl);
+            => await _context.FoodImage.SingleOrDefaultAsync(x => x.BaseUrl == baseUrl);
 
     }
 }

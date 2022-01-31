@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Itadakimasu.Data;
 using Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Itadakimasu.Controllers
 {
@@ -16,7 +17,7 @@ namespace Itadakimasu.Controllers
         }
 
         [HttpGet("{name}")]
-        public async Task<ActionResult<FoodImage>> GetFood(string name)
+        public async Task<ActionResult<Food>> GetFood(string name)
         {
             var food = await FindAsync(name);
             if (food == null) return NotFound();
@@ -36,8 +37,8 @@ namespace Itadakimasu.Controllers
             return food;
         }
 
-        private async Task<FoodImage?> FindAsync(string name)
-            => await _context.FoodImage.FindAsync(name);
+        private async Task<Food?> FindAsync(string name)
+            => await _context.Food.SingleOrDefaultAsync(x => x.Name == name);
 
     }
 }

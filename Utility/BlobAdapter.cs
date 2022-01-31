@@ -14,11 +14,8 @@ namespace Utility
 
         public string Url => BlobServiceClient.Uri.ToString();
 
-        public string Upload(Stream stream, string containerName, string blobName)
-        {
-            BlobServiceClient.GetBlobContainerClient(containerName).GetBlobClient(blobName).Upload(stream, true);
-            return $"{BlobServiceClient.Uri}{containerName}/{blobName}";
-        }
+        public void Upload(Stream stream, string containerName, string blobName)
+            => BlobServiceClient.GetBlobContainerClient(containerName).GetBlobClient(blobName).Upload(stream, true);
 
         public Response<BlobDownloadResult> Download(string containerName, string blobName)
             => BlobServiceClient.GetBlobContainerClient(containerName).GetBlobClient(blobName).DownloadContent();

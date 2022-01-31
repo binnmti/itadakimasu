@@ -1,3 +1,9 @@
+enable-migrations
+add-migration InitialCreate
+
+update-database
+
+----
 cd Itadakimasu
 dotnet ef database drop
 
