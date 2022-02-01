@@ -24,7 +24,6 @@ namespace Itadakimasu.Controllers
             return food;
         }
 
-
         [HttpPost]
         public async Task<ActionResult<Food>> PostFood(string name)
         {

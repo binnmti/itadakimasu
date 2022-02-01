@@ -2,6 +2,7 @@
 using Itadakimasu.Data;
 using Models;
 using Microsoft.EntityFrameworkCore;
+using System.Web;
 
 namespace Itadakimasu.Controllers
 {
@@ -16,13 +17,17 @@ namespace Itadakimasu.Controllers
             _context = context;
         }
 
+        [HttpGet("food-image-count")]
+        public int FoodImageCount() => _context.FoodImage.Count();
+
         [HttpGet("{baseUrl}")]
         public async Task<ActionResult<FoodImage>> GetFoodImage(string baseUrl)
         {
-            var foodImage = await FindAsync(baseUrl);
+            var foodImage = await FindAsync(HttpUtility.UrlDecode(baseUrl));
             if (foodImage == null) return NotFound();
             return foodImage;
         }
+
 
         [HttpPost]
         public async Task<ActionResult<FoodImage>> PostFoodImage(FoodImage foodImage)

@@ -5,6 +5,8 @@ public record FoodImage
 {
     public long Id { get; set; }
     public string BaseUrl { get; set; } = "";
+    [MaxLength(10)]
+    public string SearchAPI { get; set; } = "";
     [MaxLength(500)]
     public string BlobName { get; set; } = "";
     public string BlobUrl { get; set; } = "";

@@ -10,6 +10,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using Utility;
 
 namespace FoodNameGenerator;
@@ -289,19 +290,30 @@ class Program
         HttpClient.Timeout = TimeSpan.FromSeconds(5000);
         HttpClient.DefaultRequestHeaders.Accept.Clear();
         HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        var a1 = HttpUtility.UrlEncode("http://6987452.cocolog-nifty.com/photos/uncategorized/2010/10/11/1_3.jpg");
+        var a2 = HttpUtility.UrlDecode("http://6987452.cocolog-nifty.com/photos/uncategorized/2010/10/11/1_3.jpg");
+
+        //var responseMessage = await HttpClient.GetAsync($"{ItadakimasuApiUrl}FoodImages/food-image-count");
+        //var count = responseMessage.Content.ReadAsStringAsync().Result;
+
+        //var responseMessage2 = HttpClient.GetFromJsonAsync<int>($"{ItadakimasuApiUrl}FoodImages/food-image-count");
+        //var count2 = responseMessage2.Result;
+
         var blobAdapter = new BlobAdapter(blobConnectionString);
         foreach (var food in FoodNameList.Select((val, idx) => (val, idx)))
         {
             Console.WriteLine($"{food.val}:開始");
-            var foodResult = await HttpClient.GetAsync($"{ItadakimasuApiUrl}Foods/Food?name={food.val}");
-            if (foodResult.IsSuccessStatusCode) continue;
+            //TODO:既にあっても、FoodImagesは更新したい。
+            //var foodResult = await HttpClient.GetAsync($"{ItadakimasuApiUrl}Foods/Food?name={food.val}");
+            //if (foodResult.IsSuccessStatusCode) continue;
 
             var urlList = await BingSearchUtility.GetContentUrlListAsync(HttpClient, food.val, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
             foreach (var url in urlList.Select((val, idx) => (val, idx)))
             {
                 Console.WriteLine($"{food.val}:{url.idx + 1}/{urlList.Count}:{url.idx:0000}.jpg:{url.val}");
 
-                var hit = await HttpClient.GetAsync($"{ItadakimasuApiUrl}FoodImages/FoodImage?baseUrl={url.val}");
+                var hit = await HttpClient.GetAsync($"{ItadakimasuApiUrl}FoodImages?baseUrl={url.val}");
                 if (hit.IsSuccessStatusCode)
                 {
                     Console.WriteLine($"DB重複");
@@ -318,7 +330,26 @@ class Program
                     Console.WriteLine($"GetStreamAsync失敗:{ex.Message}:{ex.StackTrace}");
                     continue;
                 }
-                var jpeg = ImageSharpAdapter.ConvertJpeg(stream, 300, 300);
+                ImageSharpAdapter.Jpeg jpeg = default;
+                try
+                {
+                    jpeg = ImageSharpAdapter.ConvertJpeg(stream, 300, 300);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"ImageSharpAdapter変換:{ex.Message}:{ex.StackTrace}");
+                    continue;
+                }
+                try
+                {
+                    blobAdapter.Upload(jpeg.Image, "foodimage", $"{food.val}/{url.idx:0000}.jpg");
+                    blobAdapter.Upload(jpeg.ThumbnailImage, "foodimage", $"{food.val}/{url.idx:0000}_s.jpg");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Upload失敗:{ex.Message}:{ex.StackTrace}");
+                    continue;
+                }
                 var foodImage = new FoodImage()
                 {
                     BaseUrl = url.val,
@@ -334,17 +365,8 @@ class Program
                     BlobSHeight = 300,
                     BlobSSize = jpeg.ThumbnailImage.Length,
                 };
-                try
-                {
-                    blobAdapter.Upload(jpeg.Image, "foodimage", $"{food.val}/{url.idx:0000}.jpg");
-                    blobAdapter.Upload(jpeg.ThumbnailImage, "foodimage", $"{food.val}/{url.idx:0000}_s.jpg");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Upload失敗:{ex.Message}:{ex.StackTrace}");
-                    continue;
-                }
-                await HttpClient.PostAsJsonAsync($"{ItadakimasuApiUrl}FoodImages", foodImage);
+                var result = await HttpClient.PostAsJsonAsync($"{ItadakimasuApiUrl}FoodImages", foodImage);
+                Console.WriteLine(result.IsSuccessStatusCode ? $"DB成功" : $"DB失敗:{result.ReasonPhrase}");
             };
             await HttpClient.PostAsync($"{ItadakimasuApiUrl}Foods?name={food.val}", null);
             Console.WriteLine($"{food.val}:終了:{food.idx + 1}/{FoodNameList.Count}");
