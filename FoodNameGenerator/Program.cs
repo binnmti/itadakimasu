@@ -290,21 +290,11 @@ class Program
         HttpClient.Timeout = TimeSpan.FromSeconds(5000);
         HttpClient.DefaultRequestHeaders.Accept.Clear();
         HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-        var a1 = HttpUtility.UrlEncode("http://6987452.cocolog-nifty.com/photos/uncategorized/2010/10/11/1_3.jpg");
-        var a2 = HttpUtility.UrlDecode("http://6987452.cocolog-nifty.com/photos/uncategorized/2010/10/11/1_3.jpg");
-
-        //var responseMessage = await HttpClient.GetAsync($"{ItadakimasuApiUrl}FoodImages/food-image-count");
-        //var count = responseMessage.Content.ReadAsStringAsync().Result;
-
-        //var responseMessage2 = HttpClient.GetFromJsonAsync<int>($"{ItadakimasuApiUrl}FoodImages/food-image-count");
-        //var count2 = responseMessage2.Result;
-
         var blobAdapter = new BlobAdapter(blobConnectionString);
         foreach (var food in FoodNameList.Select((val, idx) => (val, idx)))
         {
             Console.WriteLine($"{food.val}:開始");
-            //TODO:既にあっても、FoodImagesは更新したい。
+            //TODO:Foodが既にあっても、FoodImagesは更新したい。
             //var foodResult = await HttpClient.GetAsync($"{ItadakimasuApiUrl}Foods/Food?name={food.val}");
             //if (foodResult.IsSuccessStatusCode) continue;
 
@@ -353,12 +343,12 @@ class Program
                 var foodImage = new FoodImage()
                 {
                     BaseUrl = url.val,
+                    SearchAPI = "Bing",
                     BlobName = $"{url.idx:0000}.jpg",
                     BlobUrl = $"{blobAdapter.Url}foodimage/{food.val}{url.idx:0000}.jpg",
                     BlobWidth = jpeg.Width,
                     BlobHeight = jpeg.Height,
                     BlobSize = jpeg.Image.Length,
-
                     BlobSName = $"{url.idx:0000}_s.jpg",
                     BlobSUrl = $"{blobAdapter.Url}foodimage/{food.val}{url.idx:0000}_s.jpg",
                     BlobSWidth = 300,

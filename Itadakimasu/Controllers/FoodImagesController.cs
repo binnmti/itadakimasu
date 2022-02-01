@@ -28,13 +28,15 @@ namespace Itadakimasu.Controllers
             return foodImage;
         }
 
-
         [HttpPost]
         public async Task<ActionResult<FoodImage>> PostFoodImage(FoodImage foodImage)
         {
             var hit = await FindAsync(foodImage.BaseUrl);
             if (hit != null) return Conflict();
 
+            var count = await _context.FoodImage.CountAsync();
+            foodImage.BlobName = $"{count:0000}.jpg";
+            foodImage.BlobSName = $"{count:0000}_s.jpg";
             _context.FoodImage.Add(foodImage);
             await _context.SaveChangesAsync();
             return foodImage;
@@ -42,6 +44,5 @@ namespace Itadakimasu.Controllers
 
         private async Task<FoodImage?> FindAsync(string baseUrl)
             => await _context.FoodImage.SingleOrDefaultAsync(x => x.BaseUrl == baseUrl);
-
     }
 }
