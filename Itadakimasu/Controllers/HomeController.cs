@@ -1,32 +1,35 @@
 ﻿using Itadakimasu.Models;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using System.Diagnostics;
-using Utility;
 
 namespace Itadakimasu.Controllers
 {
     public class HomeController : Controller
     {
         private readonly IConfiguration _configuration;
+        private readonly IHttpClientFactory _clientFactory;
 
-        public HomeController(IConfiguration configuration)
+        public HomeController(IHttpClientFactory clientFactory, IConfiguration configuration)
         {
+            _clientFactory = clientFactory;
             _configuration = configuration;
         }
 
-        public IActionResult Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    var client = _clientFactory.CreateClient();
+        //    var response = await client.GetFromJsonAsync<List<Food>>("foods/foods");
+        //    return View(new List<ViewFoodImage>());
+        //}
+
+        [Route("food-viewer/{foodName}")]
+        public async Task<IActionResult> FoodViewer(string foodName)
         {
-            //var blobConnectionString = _configuration.GetConnectionString("BlobConnectionString");
-            //var blobAdapter = new BlobAdapter(blobConnectionString);
-            //var foodImages = new List<ViewFoodImage>();
-            //foreach (var blob in blobAdapter.GetBlobs("foodimage").Where(x => x.Name.Contains("オムライス")))
-            //{
-            //    //最初からフォルダを分けた方がこれがいらないかも。
-            //    if (!blob.Name.Contains("_s")) continue;
-            //    foodImages.Add(new ViewFoodImage() { Checked = true, BlobUrl = $"{blobAdapter.Url}foodimage/{blob.Name}" });
-            //}
-            //return View(foodImages);
-            return View(new List<ViewFoodImage>());
+            var client = _clientFactory.CreateClient();
+            var foods = await client.GetFromJsonAsync<List<Food>>("foods/food-list") ?? new List<Food>();
+            var foodImages = await client.GetFromJsonAsync<List<FoodImage>>($"foodimages/food-image-list/{foodName}") ?? new List<FoodImage>();
+            return View(new ViewFoodViewer(foods.ToViewFoods(), foodImages.ToViewFoodImages()));
         }
 
         public IActionResult Privacy()

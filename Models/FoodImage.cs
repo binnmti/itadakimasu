@@ -4,6 +4,10 @@ namespace Models;
 public record FoodImage
 {
     public long Id { get; set; }
+
+    [MaxLength(500)]
+    public string FoodName { get; set; } = "";
+
     public string BaseUrl { get; set; } = "";
     [MaxLength(10)]
     public string SearchAPI { get; set; } = "";

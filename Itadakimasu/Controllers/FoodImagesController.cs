@@ -20,6 +20,10 @@ namespace Itadakimasu.Controllers
         [HttpGet("food-image-count")]
         public int FoodImageCount() => _context.FoodImage.Count();
 
+        [HttpGet("food-image-list/{foodName}")]
+        public async Task<ActionResult<List<FoodImage>>> FoodImageList(string foodName)
+            => await _context.FoodImage.Where(x => x.FoodName == foodName).ToListAsync();
+
         //新規追加名を返す
         [HttpGet("get-new-name")]
         public async Task<ActionResult<int>> GetNewName(string baseUrl, string searchAPI)

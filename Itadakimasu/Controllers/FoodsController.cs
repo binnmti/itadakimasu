@@ -16,6 +16,10 @@ namespace Itadakimasu.Controllers
             _context = context;
         }
 
+        [HttpGet("food-list")]
+        public async Task<ActionResult<List<Food>>> FoodList()
+            => await _context.Food.ToListAsync();
+
         [HttpGet("{name}")]
         public async Task<ActionResult<Food>> GetFood(string name)
         {

@@ -1,14 +1,12 @@
-﻿namespace Itadakimasu.Models
+﻿using Models;
+
+namespace Itadakimasu.Models
 {
-    public record ViewFoodImage
+    public record ViewFoodImage(bool Checked, string Name, int X, int Y, long Size, string BlobUrl, string BaseUrl);
+
+    public static class VewFoodImageConvert
     {
-        public bool Checked { get; set; }
-        public string Name { get; set; } = "";
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Bit { get; set; }
-        public int Size { get; set; }
-        public string BlobUrl { get; set; } = "";
-        public string BaseUrl { get; set; } = "";
+        public static IEnumerable<ViewFoodImage> ToViewFoodImages(this IEnumerable<FoodImage> foodImages)
+            => foodImages.Select(x => new ViewFoodImage(true, x.FoodName, x.BlobWidth, x.BlobHeight, x.BlobSize, x.BlobUrl, x.BaseUrl));
     }
 }
