@@ -22,6 +22,8 @@ class Program
 #else
     private static readonly string ItadakimasuApiUrl = "https://itadakimasu.azurewebsites.net/api/";
 #endif
+    private static readonly string SearchAPI = "Bing";
+    private static readonly string BlobFoderName = "food";
     private static readonly List<string> FoodNameList = new()
     {
         "オムライス",
@@ -301,10 +303,10 @@ class Program
             var urlList = await BingSearchUtility.GetContentUrlListAsync(HttpClient, food.val, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
             foreach (var url in urlList.Select((val, idx) => (val, idx)))
             {
-                Console.WriteLine($"{food.val}:{url.idx + 1}/{urlList.Count}:{url.idx:0000}.jpg:{url.val}");
+                Console.WriteLine($"{food.val}:{url.idx + 1}/{urlList.Count}:{url.val}");
 
-                var hit = await HttpClient.GetAsync($"{ItadakimasuApiUrl}FoodImages?baseUrl={url.val}");
-                if (hit.IsSuccessStatusCode)
+                var newName = await HttpClient.GetFromJsonAsync<int>($"{ItadakimasuApiUrl}FoodImages/get-new-name?baseUrl={HttpUtility.UrlEncode(url.val)}&searchAPI={SearchAPI}");
+                if (newName == -1)
                 {
                     Console.WriteLine($"DB重複");
                     continue;
@@ -330,27 +332,31 @@ class Program
                     Console.WriteLine($"ImageSharpAdapter変換:{ex.Message}:{ex.StackTrace}");
                     continue;
                 }
+
+                var fileName = $"{SearchAPI}{newName:0000}";
+                //この例外はあんまり無いはずなので要確認。
                 try
                 {
-                    blobAdapter.Upload(jpeg.Image, "foodimage", $"{food.val}/{url.idx:0000}.jpg");
-                    blobAdapter.Upload(jpeg.ThumbnailImage, "foodimage", $"{food.val}/{url.idx:0000}_s.jpg");
+                    blobAdapter.Upload(jpeg.Image, BlobFoderName, $"{food.val}/{fileName}.jpg");
+                    blobAdapter.Upload(jpeg.ThumbnailImage, BlobFoderName, $"{food.val}/{fileName}_s.jpg");
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Upload失敗:{ex.Message}:{ex.StackTrace}");
                     continue;
                 }
+
                 var foodImage = new FoodImage()
                 {
                     BaseUrl = url.val,
                     SearchAPI = "Bing",
-                    BlobName = $"{url.idx:0000}.jpg",
-                    BlobUrl = $"{blobAdapter.Url}foodimage/{food.val}{url.idx:0000}.jpg",
+                    BlobName = $"{fileName}.jpg",
+                    BlobUrl = $"{blobAdapter.Url}{BlobFoderName}/{food.val}/{fileName}.jpg",
                     BlobWidth = jpeg.Width,
                     BlobHeight = jpeg.Height,
                     BlobSize = jpeg.Image.Length,
-                    BlobSName = $"{url.idx:0000}_s.jpg",
-                    BlobSUrl = $"{blobAdapter.Url}foodimage/{food.val}{url.idx:0000}_s.jpg",
+                    BlobSName = $"{fileName}_s.jpg",
+                    BlobSUrl = $"{blobAdapter.Url}{BlobFoderName}/{food.val}/{fileName}_s.jpg",
                     BlobSWidth = 300,
                     BlobSHeight = 300,
                     BlobSSize = jpeg.ThumbnailImage.Length,

@@ -20,12 +20,13 @@ namespace Itadakimasu.Controllers
         [HttpGet("food-image-count")]
         public int FoodImageCount() => _context.FoodImage.Count();
 
-        [HttpGet("{baseUrl}")]
-        public async Task<ActionResult<FoodImage>> GetFoodImage(string baseUrl)
+        //新規追加名を返す
+        [HttpGet("get-new-name")]
+        public async Task<ActionResult<int>> GetNewName(string baseUrl, string searchAPI)
         {
             var foodImage = await FindAsync(HttpUtility.UrlDecode(baseUrl));
-            if (foodImage == null) return NotFound();
-            return foodImage;
+            if (foodImage != null) return -1;
+            return await _context.FoodImage.Where(x => x.SearchAPI == searchAPI).CountAsync();
         }
 
         [HttpPost]
@@ -34,9 +35,6 @@ namespace Itadakimasu.Controllers
             var hit = await FindAsync(foodImage.BaseUrl);
             if (hit != null) return Conflict();
 
-            var count = await _context.FoodImage.CountAsync();
-            foodImage.BlobName = $"{count:0000}.jpg";
-            foodImage.BlobSName = $"{count:0000}_s.jpg";
             _context.FoodImage.Add(foodImage);
             await _context.SaveChangesAsync();
             return foodImage;

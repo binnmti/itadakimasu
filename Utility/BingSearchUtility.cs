@@ -48,7 +48,7 @@ namespace Utility
                 nextOffset = response.nextOffset;
                 contentUrlList.AddRange(response.value.Select(x => x.contentUrl));
             } while (count > nextOffset);
-            return contentUrlList;
+            return contentUrlList.Distinct().ToList();
         }
 
     }
