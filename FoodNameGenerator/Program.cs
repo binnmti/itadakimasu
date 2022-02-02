@@ -290,9 +290,8 @@ class Program
         var customVisionTrainingKey = configuration["CustomVisionTrainingKey"];
         var customVisionProjectId = configuration["CustomVisionProjectId"];
         HttpClient.Timeout = TimeSpan.FromSeconds(5000);
-        HttpClient.DefaultRequestHeaders.Accept.Clear();
-        HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         var blobAdapter = new BlobAdapter(blobConnectionString);
+
         foreach (var food in FoodNameList.Select((val, idx) => (val, idx)))
         {
             Console.WriteLine($"{food.val}:開始");
@@ -308,6 +307,7 @@ class Program
                 var newName = await HttpClient.GetFromJsonAsync<int>($"{ItadakimasuApiUrl}FoodImages/get-new-name?baseUrl={HttpUtility.UrlEncode(url.val)}&searchAPI={SearchAPI}");
                 if (newName == -1)
                 {
+                    //TODO:重複でも更新したいケースはさてどうするか。
                     Console.WriteLine($"DB重複");
                     continue;
                 }
