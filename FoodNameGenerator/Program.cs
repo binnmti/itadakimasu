@@ -334,9 +334,9 @@ class Program
                 }
 
                 var fileName = $"{SearchAPI}{newName:0000}";
-                //この例外はあんまり無いはずなので要確認。
                 try
                 {
+                    //たまにこの例外もある。
                     blobAdapter.Upload(jpeg.Image, BlobFoderName, $"{food.val}/{fileName}.jpg");
                     blobAdapter.Upload(jpeg.ThumbnailImage, BlobFoderName, $"{food.val}/{fileName}_s.jpg");
                 }
@@ -349,14 +349,12 @@ class Program
                 var foodImage = new FoodImage()
                 {
                     BaseUrl = url.val,
-                    SearchAPI = "Bing",
+                    SearchAPI = SearchAPI,
                     BlobName = $"{fileName}.jpg",
-                    BlobUrl = $"{blobAdapter.Url}{BlobFoderName}/{food.val}/{fileName}.jpg",
                     BlobWidth = jpeg.Width,
                     BlobHeight = jpeg.Height,
                     BlobSize = jpeg.Image.Length,
                     BlobSName = $"{fileName}_s.jpg",
-                    BlobSUrl = $"{blobAdapter.Url}{BlobFoderName}/{food.val}/{fileName}_s.jpg",
                     BlobSWidth = 300,
                     BlobSHeight = 300,
                     BlobSSize = jpeg.ThumbnailImage.Length,
