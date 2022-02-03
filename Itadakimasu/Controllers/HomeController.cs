@@ -16,21 +16,21 @@ namespace Itadakimasu.Controllers
             _configuration = configuration;
         }
 
-        //public async Task<IActionResult> Index()
-        //{
-        //    var client = _clientFactory.CreateClient();
-        //    var response = await client.GetFromJsonAsync<List<Food>>("foods/foods");
-        //    return View(new List<ViewFoodImage>());
-        //}
-
-        [Route("food-viewer/{foodName}")]
-        public async Task<IActionResult> FoodViewer(string foodName)
+        public async Task<IActionResult> Index()
         {
             var client = _clientFactory.CreateClient();
-            var foods = await client.GetFromJsonAsync<List<Food>>("foods/food-list") ?? new List<Food>();
-            var foodImages = await client.GetFromJsonAsync<List<FoodImage>>($"foodimages/food-image-list/{foodName}") ?? new List<FoodImage>();
-            return View(new ViewFoodViewer(foods.ToViewFoods(), foodImages.ToViewFoodImages()));
+            var response = await client.GetFromJsonAsync<List<Food>>($"{Request.Scheme}://{Request.Host}/api/Foods/food-list");
+            return View(new List<ViewFoodImage>());
         }
+
+        //[Route("food-viewer/{foodName}")]
+        //public async Task<IActionResult> FoodViewer(string foodName)
+        //{
+        //    var client = _clientFactory.CreateClient();
+        //    var foods = await client.GetFromJsonAsync<List<Food>>("api/foods/food-list") ?? new List<Food>();
+        //    var foodImages = await client.GetFromJsonAsync<List<FoodImage>>($"api/foodimages/food-image-list/{foodName}") ?? new List<FoodImage>();
+        //    return View(new ViewFoodViewer(foods.ToViewFoods(), foodImages.ToViewFoodImages()));
+        //}
 
         public IActionResult Privacy()
         {

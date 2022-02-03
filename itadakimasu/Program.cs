@@ -8,10 +8,10 @@ builder.Services.AddDbContext<ItadakimasuContext>(options => options.UseSqlServe
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ItadakimasuContext>();
 builder.Services.AddControllersWithViews();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
+builder.Services.AddApplicationInsightsTelemetry();
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())

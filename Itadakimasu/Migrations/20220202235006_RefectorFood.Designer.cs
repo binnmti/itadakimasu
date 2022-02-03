@@ -3,6 +3,7 @@ using Itadakimasu.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Itadakimasu.Migrations
 {
     [DbContext(typeof(ItadakimasuContext))]
-    partial class ItadakimasuContextModelSnapshot : ModelSnapshot
+    [Migration("20220202235006_RefectorFood")]
+    partial class RefectorFood
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,9 +30,6 @@ namespace Itadakimasu.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<int>("FoodImageCount")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()

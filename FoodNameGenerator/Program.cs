@@ -304,7 +304,7 @@ class Program
             {
                 Console.WriteLine($"{food.val}:{url.idx + 1}/{urlList.Count}:{url.val}");
 
-                var newName = await HttpClient.GetFromJsonAsync<int>($"{ItadakimasuApiUrl}FoodImages/get-new-name?baseUrl={HttpUtility.UrlEncode(url.val)}&searchAPI={SearchAPI}");
+                var newName = await HttpClient.GetFromJsonAsync<int>($"{ItadakimasuApiUrl}FoodImages/get-new-name?baseUrl={url.val}&searchAPI={SearchAPI}");
                 if (newName == -1)
                 {
                     //TODO:重複でも更新したいケースはさてどうするか。
@@ -336,7 +336,6 @@ class Program
                 var fileName = $"{SearchAPI}{newName:0000}";
                 try
                 {
-                    //たまにこの例外もある。
                     blobAdapter.Upload(jpeg.Image, BlobFoderName, $"{food.val}/{fileName}.jpg");
                     blobAdapter.Upload(jpeg.ThumbnailImage, BlobFoderName, $"{food.val}/{fileName}_s.jpg");
                 }
@@ -348,6 +347,7 @@ class Program
 
                 var foodImage = new FoodImage()
                 {
+                    FoodName = food.val,
                     BaseUrl = url.val,
                     SearchAPI = SearchAPI,
                     BlobName = $"{fileName}.jpg",

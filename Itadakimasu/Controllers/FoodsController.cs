@@ -34,7 +34,7 @@ namespace Itadakimasu.Controllers
             var hit = await FindAsync(name);
             if (hit != null) return Conflict();
 
-            var food = new Food() { Name = name };
+            var food = new Food() { Name = name, FoodImageCount = _context.FoodImage.Count(x => x.FoodName == name) };
             _context.Food.Add(food);
             await _context.SaveChangesAsync();
             return food;

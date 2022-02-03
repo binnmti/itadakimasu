@@ -28,7 +28,7 @@ namespace Itadakimasu.Controllers
         [HttpGet("get-new-name")]
         public async Task<ActionResult<int>> GetNewName(string baseUrl, string searchAPI)
         {
-            var foodImage = await FindAsync(HttpUtility.UrlDecode(baseUrl));
+            var foodImage = await FindAsync(baseUrl);
             if (foodImage != null) return -1;
             return await _context.FoodImage.Where(x => x.SearchAPI == searchAPI).CountAsync();
         }
