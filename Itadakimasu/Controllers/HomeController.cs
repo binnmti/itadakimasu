@@ -23,14 +23,14 @@ namespace Itadakimasu.Controllers
             return View(new List<ViewFoodImage>());
         }
 
-        //[Route("food-viewer/{foodName}")]
-        //public async Task<IActionResult> FoodViewer(string foodName)
-        //{
-        //    var client = _clientFactory.CreateClient();
-        //    var foods = await client.GetFromJsonAsync<List<Food>>("api/foods/food-list") ?? new List<Food>();
-        //    var foodImages = await client.GetFromJsonAsync<List<FoodImage>>($"api/foodimages/food-image-list/{foodName}") ?? new List<FoodImage>();
-        //    return View(new ViewFoodViewer(foods.ToViewFoods(), foodImages.ToViewFoodImages()));
-        //}
+        [Route("food-viewer/{foodName}")]
+        public async Task<IActionResult> FoodViewer(string foodName)
+        {
+            var client = _clientFactory.CreateClient();
+            var foods = await client.GetFromJsonAsync<List<Food>>($"{Request.Scheme}://{Request.Host}/api/foods/food-list") ?? new List<Food>();
+            var foodImages = await client.GetFromJsonAsync<List<FoodImage>>($"{Request.Scheme}://{Request.Host}/api/foodimages/food-image-list/{foodName}") ?? new List<FoodImage>();
+            return View(new ViewFoodViewer(foods.ToViewFoods(), foodImages.ToViewFoodImages()));
+        }
 
         public IActionResult Privacy()
         {

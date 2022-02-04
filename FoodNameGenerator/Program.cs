@@ -290,8 +290,8 @@ class Program
         var customVisionTrainingKey = configuration["CustomVisionTrainingKey"];
         var customVisionProjectId = configuration["CustomVisionProjectId"];
         HttpClient.Timeout = TimeSpan.FromSeconds(5000);
+        HttpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36");
         var blobAdapter = new BlobAdapter(blobConnectionString);
-
         foreach (var food in FoodNameList.Select((val, idx) => (val, idx)))
         {
             Console.WriteLine($"{food.val}:開始");
@@ -361,10 +361,10 @@ class Program
                 };
                 var result = await HttpClient.PostAsJsonAsync($"{ItadakimasuApiUrl}FoodImages", foodImage);
                 Console.WriteLine(result.IsSuccessStatusCode ? $"DB成功" : $"DB失敗:{result.ReasonPhrase}");
+                Thread.Sleep(1000);
             };
             await HttpClient.PostAsync($"{ItadakimasuApiUrl}Foods?name={food.val}", null);
             Console.WriteLine($"{food.val}:終了:{food.idx + 1}/{FoodNameList.Count}");
-            Thread.Sleep(1000);
         }
     }
 }
