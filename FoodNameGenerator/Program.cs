@@ -304,7 +304,7 @@ class Program
             {
                 Console.WriteLine($"{food.val}:{url.idx + 1}/{urlList.Count}:{url.val}");
 
-                var newName = await HttpClient.GetFromJsonAsync<int>($"{ItadakimasuApiUrl}FoodImages/get-new-name?baseUrl={url.val}&searchAPI={SearchAPI}");
+                var newName = await HttpClient.GetFromJsonAsync<int>($"{ItadakimasuApiUrl}FoodImages/get-new-name?baseUrl={HttpUtility.UrlEncode(url.val)}&searchAPI={SearchAPI}");
                 if (newName == -1)
                 {
                     //TODO:重複でも更新したいケースはさてどうするか。
