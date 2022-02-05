@@ -6,24 +6,29 @@
 
 <div class="row">
     <div class="col-2">
-        @foreach (var food in Model.Foods)
-        {
-            <a href="@food.Name">
-                <span>@food.Name</span>
-            </a>
-        }
+        <ul class="p-1">
+            @foreach (var item in Model.Foods)
+            {
+                <li class="border">
+                    <a href="@item.Name">@item.Name</a>
+                </li>
+            }
+        </ul>
     </div>
     <div class="col-8">
         <div class="actressList">
             <ul class="p-1">
                 @foreach (var item in Model.FoodImages)
                 {
-                    <li class="BustupM border">
+                    <li class="FoodImage border">
                         <div>
                             <img src="@item.BlobUrl" alt='@(item.Name)のバストアップ画像' title="@(item.Name)">
                         </div>
                         <div>
-                            <span>@(item.Name)(@(item.X)X@(item.Y):@(item.Size))</span>
+                            <span>@(item.Name)</span>
+                        </div>
+                        <div>
+                            <span>@(item.XY):@(item.Size)</span>
                         </div>
                     </li>
                 }

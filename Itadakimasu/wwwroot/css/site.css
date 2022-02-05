@@ -18,11 +18,16 @@ body {
 }
 
 
-
-.BustupM {
+.FoodImage {
     padding: 0;
     margin: 0;
     float: left;
     list-style: none;
+}
+
+.FoodImage img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
 }
 
