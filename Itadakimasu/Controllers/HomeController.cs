@@ -18,14 +18,14 @@ namespace Itadakimasu.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var client = _clientFactory.CreateClient();
-            var response = await client.GetFromJsonAsync<List<Food>>($"{Request.Scheme}://{Request.Host}/api/Foods/food-list");
-            return View(new List<ViewFoodImage>());
+            return View();
         }
 
-        [Route("food-viewer/{foodName}")]
+        [HttpGet]
+        [Route("/FoodViewer/{foodName}")]
         public async Task<IActionResult> FoodViewer(string foodName)
         {
+            if (string.IsNullOrEmpty(foodName)) foodName = "オムライス";
             var client = _clientFactory.CreateClient();
             var foods = await client.GetFromJsonAsync<List<Food>>($"{Request.Scheme}://{Request.Host}/api/foods/food-list") ?? new List<Food>();
             var foodImages = await client.GetFromJsonAsync<List<FoodImage>>($"{Request.Scheme}://{Request.Host}/api/foodimages/food-image-list/{foodName}") ?? new List<FoodImage>();

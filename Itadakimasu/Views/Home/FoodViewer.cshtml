@@ -4,26 +4,34 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
-
-
-    <div class="my-3">
-        <section>
-            <div class="actressList">
-                <ul class="p-1">
-                    @foreach (var item in Model.FoodImages)
-                    {
+<div class="row">
+    <div class="col-2">
+        @foreach (var food in Model.Foods)
+        {
+            <a href="@food.Name">
+                <span>@food.Name</span>
+            </a>
+        }
+    </div>
+    <div class="col-8">
+        <div class="actressList">
+            <ul class="p-1">
+                @foreach (var item in Model.FoodImages)
+                {
                     <li class="BustupM border">
-                        <div class="ActressImage">
+                        <div>
                             <img src="@item.BlobUrl" alt='@(item.Name)のバストアップ画像' title="@(item.Name)">
                         </div>
+                        <div>
+                            <span>@(item.Name)(@(item.X)X@(item.Y):@(item.Size))</span>
+                        </div>
                     </li>
-                    }
-                </ul>
-            </div>
-        </section>
+                }
+            </ul>
+        </div>
         <div class="clearfix" />
     </div>
+    <div class="col-2">
+    </div>
+</div>
+
