@@ -26,11 +26,11 @@ namespace Itadakimasu.Controllers
 
         //新規追加名を返す
         [HttpGet("get-new-name")]
-        public async Task<ActionResult<int>> GetNewName(string baseUrl, string searchAPI)
+        public async Task<ActionResult<int>> GetNewName(string baseUrl, string searchAPI, string foodName)
         {
             var foodImage = await FindAsync(baseUrl);
             if (foodImage != null) return -1;
-            return await _context.FoodImage.Where(x => x.SearchAPI == searchAPI).CountAsync();
+            return await _context.FoodImage.Where(x => x.SearchAPI == searchAPI).Where(x => x.FoodName == foodName).CountAsync();
         }
 
         [HttpPost]

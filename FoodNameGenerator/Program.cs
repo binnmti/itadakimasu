@@ -22,8 +22,8 @@ class Program
 #else
     private static readonly string ItadakimasuApiUrl = "https://itadakimasu.azurewebsites.net/api/";
 #endif
-    private static readonly string SearchAPI = "Bing";
-    private static readonly string BlobFoderName = "food";
+    private static readonly string SearchAPI = "bing";
+    private static readonly string BlobFoderName = "foodimage";
     private static readonly List<string> FoodNameList = new()
     {
         "オムライス",
@@ -302,9 +302,9 @@ class Program
             var urlList = await BingSearchUtility.GetContentUrlListAsync(HttpClient, food.val, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
             foreach (var url in urlList.Select((val, idx) => (val, idx)))
             {
-                Console.WriteLine($"{food.val}:{url.idx + 1}/{urlList.Count}:{url.val}");
+                Console.WriteLine($"{food.val}:{food.idx + 1}/{FoodNameList.Count}:{url.idx + 1}/{urlList.Count}:{url.val}");
 
-                var newName = await HttpClient.GetFromJsonAsync<int>($"{ItadakimasuApiUrl}FoodImages/get-new-name?baseUrl={HttpUtility.UrlEncode(url.val)}&searchAPI={SearchAPI}");
+                var newName = await HttpClient.GetFromJsonAsync<int>($"{ItadakimasuApiUrl}FoodImages/get-new-name?baseUrl={HttpUtility.UrlEncode(url.val)}&searchAPI={SearchAPI}&foodName={food.val}");
                 if (newName == -1)
                 {
                     //TODO:重複でも更新したいケースはさてどうするか。
@@ -318,7 +318,8 @@ class Program
                 }
                 catch (Exception ex)
                 {
-                    if (ex.Message.Contains("Response status code does not indicate success: 400")) HttpClient = new HttpClient();
+                    //作り直し
+                    HttpClient = new HttpClient();
                     Console.WriteLine($"GetStreamAsync失敗:{ex.Message}:{ex.StackTrace}");
                     continue;
                 }

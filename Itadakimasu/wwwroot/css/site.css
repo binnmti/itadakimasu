@@ -16,3 +16,17 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+
+
+.BustupM {
+    padding: 0;
+    margin: 0;
+    float: left;
+    list-style: none;
+}
+
+.BustupM img {
+    height: 300px;
+    width: 300px;
+}

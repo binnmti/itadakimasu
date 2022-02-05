@@ -11,6 +11,6 @@ namespace Itadakimasu.Models
             => foodImages.Select(x => new ViewFoodImage(true, x.FoodName, x.BlobWidth, x.BlobHeight, x.BlobSize, x.ToBlobUrl(), x.BaseUrl));
 
         //https://itadakimasu.blob.core.windows.net/food/寿司/Bing41775.jpg
-        private static string ToBlobUrl(this FoodImage foodImage) => $"{BlobUrl}/{foodImage.FoodName}/{foodImage.BlobName}";
+        private static string ToBlobUrl(this FoodImage foodImage) => $"{BlobUrl}/{foodImage.FoodName}/{foodImage.BlobSName}";
     }
 }
