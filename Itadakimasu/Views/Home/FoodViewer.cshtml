@@ -16,19 +16,21 @@
         </ul>
     </div>
     <div class="col-8">
+        <div class="form-inline d-flex">
+            @await Html.PartialAsync("_Select", ViewData["ViewerSize"])
+        </div>
+
         <div class="actressList">
             <ul class="p-1">
                 @foreach (var item in Model.FoodImages)
                 {
                     <li class="FoodImage border">
                         <div>
-                            <img src="@item.BlobUrl" alt='@(item.Name)のバストアップ画像' title="@(item.Name)">
+                            @{ var select = ViewData["ViewerSize"] as Itadakimasu.Models.Select.ISelectItem; }
+                            <img class="Image@(select.CurrentKey)" src="@item.BlobUrl" alt='@(item.Name)のバストアップ画像' title="@(item.Name)">
                         </div>
                         <div>
                             <span>@(item.Name)</span>
-                        </div>
-                        <div>
-                            <span>@(item.XY):@(item.Size)</span>
                         </div>
                     </li>
                 }

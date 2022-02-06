@@ -1,0 +1,11 @@
+﻿@model Itadakimasu.Models.Select.ISelectItem
+
+<p class="p-1">@Model.Title:</p>
+<select id="@Model.Id" class="form-control form-control-sm" onchange="reloadSelect('@(Model.Id)')">
+    @{
+        foreach (var item in Model.Items)
+        {
+            <option value=@(item.Key) selected="@(Model.CurrentKey == item.Key)">@item.Value</option>
+        }
+    }
+</select>

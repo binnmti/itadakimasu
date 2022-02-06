@@ -1,4 +1,5 @@
 ﻿using Itadakimasu.Models;
+using Itadakimasu.Models.Select;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using System.Diagnostics;
@@ -23,9 +24,14 @@ namespace Itadakimasu.Controllers
 
         [HttpGet]
         [Route("/FoodViewer/{foodName}")]
-        public async Task<IActionResult> FoodViewer(string foodName)
+        public async Task<IActionResult> FoodViewer(string foodName, string size = "")
         {
             if (string.IsNullOrEmpty(foodName)) foodName = "オムライス";
+
+            var ViewerSize = new ViewerSize();
+            ViewerSize.SaveCookie(size, Request.Cookies, Response.Cookies);
+            ViewData["ViewerSize"] = ViewerSize;
+
             var client = _clientFactory.CreateClient();
             var foods = await client.GetFromJsonAsync<List<Food>>($"{Request.Scheme}://{Request.Host}/api/foods/food-list") ?? new List<Food>();
             var foodImages = await client.GetFromJsonAsync<List<FoodImage>>($"{Request.Scheme}://{Request.Host}/api/foodimages/food-image-list/{foodName}") ?? new List<FoodImage>();
