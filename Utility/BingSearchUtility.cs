@@ -31,22 +31,33 @@ namespace Utility
 
         public static async Task<List<string>> GetContentUrlListAsync(HttpClient client, string searchTerm, string subscriptionKey, string customConfigId)
         {
+            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
+
             var contentUrlList = new List<string>();
             int nextOffset = 0;
-            int count;
+            int count = 0;
             do
             {
-                Thread.Sleep(1000);
-
                 var url = $"{BingUrl}/v7.0/custom/images/search?q={searchTerm}&customconfig={customConfigId}&mkt=ja-JP&offset={nextOffset}";
-                client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
+                HttpResponseMessage httpResponseMessage = default;
+                try
+                {
+                    httpResponseMessage = await client.GetAsync(url);
+                }
+                catch (Exception ex)
+                {
+                    client = new HttpClient();
+                    Console.WriteLine($"GetContentUrlListAsync失敗:{ex.Message}:{ex.StackTrace}");
+                    continue;
+                }
 
-                var httpResponseMessage = await client.GetAsync(url);
                 var responseContent = await httpResponseMessage.Content.ReadAsStreamAsync();
                 var response = await JsonSerializer.DeserializeAsync<BingCustomSearchResponse>(responseContent) ?? new BingCustomSearchResponse();
                 count = response.totalEstimatedMatches;
                 nextOffset = response.nextOffset;
                 contentUrlList.AddRange(response.value.Select(x => x.contentUrl));
+
+                Thread.Sleep(1000);
             } while (count > nextOffset);
             return contentUrlList.Distinct().ToList();
         }

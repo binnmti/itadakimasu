@@ -2,10 +2,12 @@ enable-migrations
 add-migration InitialCreate
 
 update-database
+    "DefaultConnection": "(localdb)\\mssqllocaldb;Initial Catalog=Itadakimasu;Trusted_Connection=True;MultipleActiveResultSets=true",
 
 ----
 cd Itadakimasu
 
+dotnet ef migrations add ImageFirst
 dotnet ef migrations add RefectorFood
 dotnet ef migrations add InitialCreate
 dotnet ef migrations add AddBaseUrl

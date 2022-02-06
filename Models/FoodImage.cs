@@ -21,4 +21,7 @@ public record FoodImage
     public int BlobSWidth { get; set; }
     public int BlobSHeight { get; set; }
     public long BlobSSize { get; set; }
+
+    public int StatusNumber { get; set; }
+
 }

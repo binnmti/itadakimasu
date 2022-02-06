@@ -19,12 +19,21 @@ body {
 
 
 .FoodImage {
-    padding: 0;
+    padding: 16px;
     margin: 0;
     float: left;
     list-style: none;
+    position: relative;
 }
-
+.FoodImageCheck {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: absolute;
+    top: 7%;
+    left: 7%;
+}
 
 .ImageS {
     width: 100px;

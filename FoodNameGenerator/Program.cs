@@ -356,8 +356,8 @@ class Program
                     BlobHeight = jpeg.Height,
                     BlobSize = jpeg.Image.Length,
                     BlobSName = $"{fileName}_s.jpg",
-                    BlobSWidth = 300,
-                    BlobSHeight = 300,
+                    BlobSWidth = jpeg.ThumbnailWidth,
+                    BlobSHeight = jpeg.ThumbnailHeight,
                     BlobSSize = jpeg.ThumbnailImage.Length,
                 };
                 var result = await HttpClient.PostAsJsonAsync($"{ItadakimasuApiUrl}FoodImages", foodImage);

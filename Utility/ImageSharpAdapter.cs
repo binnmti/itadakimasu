@@ -8,7 +8,7 @@ public static class ImageSharpAdapter
 {
     //サイズは結構小さくなるが、クオリティが担保出来ると判断した圧縮率
     private const int JpegEncoderQuality = 30;
-    public record Jpeg(Stream Image, int Width, int Height, Stream ThumbnailImage);
+    public record Jpeg(Stream Image, int Width, int Height, Stream ThumbnailImage, int ThumbnailWidth, int ThumbnailHeight);
 
     public static Jpeg ConvertJpeg(Stream stream, int thumbnailWidth, int thumbnailHeight)
     {
@@ -19,7 +19,7 @@ public static class ImageSharpAdapter
         var imageStream = GetJpegStream(image, 100);
         image.Mutate(x => x.Resize((int)(image.Width * scale), (int)(image.Height * scale)));
         var thumbnailStream = GetJpegStream(image, JpegEncoderQuality);
-        return new Jpeg(imageStream, width, height, thumbnailStream);
+        return new Jpeg(imageStream, width, height, thumbnailStream, (int)(image.Width * scale), (int)(image.Height * scale));
     }
 
     private static Stream GetJpegStream(Image image, int quality)
