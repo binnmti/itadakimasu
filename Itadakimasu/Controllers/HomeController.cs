@@ -28,14 +28,15 @@ namespace Itadakimasu.Controllers
         {
             if (string.IsNullOrEmpty(foodName)) foodName = "オムライス";
 
-            var ViewerSize = new ViewerSize();
-            ViewerSize.SaveCookie(size, Request.Cookies, Response.Cookies);
-            ViewData["ViewerSize"] = ViewerSize;
+            var viewerSize = new SelectViewerSize();
+            viewerSize.SaveCookie(size, Request.Cookies, Response.Cookies);
+            ViewData["ViewerSize"] = viewerSize;
 
             var client = _clientFactory.CreateClient();
             var foods = await client.GetFromJsonAsync<List<Food>>($"{Request.Scheme}://{Request.Host}/api/foods/food-list") ?? new List<Food>();
             var foodImages = await client.GetFromJsonAsync<List<FoodImage>>($"{Request.Scheme}://{Request.Host}/api/foodimages/food-image-list/{foodName}") ?? new List<FoodImage>();
-            return View(new ViewFoodViewer(foods.ToViewFoods(), foodImages.ToViewFoodImages()));
+            var viewFoodImages = foodImages.ToViewFoodImages().ToList();
+            return View(new ViewFoodViewer(foods.ToViewFoods(viewFoodImages), viewFoodImages));
         }
 
         public IActionResult Privacy()

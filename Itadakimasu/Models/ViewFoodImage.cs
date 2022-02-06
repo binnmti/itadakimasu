@@ -2,14 +2,14 @@
 
 namespace Itadakimasu.Models
 {
-    public record ViewFoodImage(bool Checked, string Name, string XY, string Size, string BlobUrl, string BaseUrl);
+    public record ViewFoodImage(bool Checked, string Name, string FoodName, string XY, string Size, string BlobUrl, string BaseUrl);
 
     public static class VewFoodImageConvert
     {
         private static readonly string BlobUrl = "https://itadakimasu.blob.core.windows.net/foodimage";
 
         public static IEnumerable<ViewFoodImage> ToViewFoodImages(this IEnumerable<FoodImage> foodImages)
-            => foodImages.Select(x => new ViewFoodImage(true, x.BlobName, x.ToXY(), x.ToSize(), x.ToBlobUrl(), x.BaseUrl));
+            => foodImages.Select(x => new ViewFoodImage(true, x.BlobName, x.FoodName, x.ToXY(), x.ToSize(), x.ToBlobUrl(), x.BaseUrl));
 
         private static string ToXY(this FoodImage foodImage)
             => $"{foodImage.BlobWidth}X{foodImage.BlobHeight}";

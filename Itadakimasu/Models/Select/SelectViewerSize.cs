@@ -1,6 +1,6 @@
 ﻿namespace Itadakimasu.Models.Select;
 
-public class ViewerSize : ISelectItem
+public class SelectViewerSize : ISelectItem
 {
     public string Id => "ViewerSize";
     public string Title => "表示サイズ";
