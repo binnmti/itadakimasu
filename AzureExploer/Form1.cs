@@ -2,17 +2,23 @@ using Azure;
 using Azure.Storage.Blobs.Models;
 using AzureExploer.Properties;
 using System.Text;
-using System.Text.RegularExpressions;
+using System.Net.Http.Json;
 using Utility;
+using Models;
+//
 
 namespace AzureExploer
 {
     public partial class Form1 : Form
     {
+#if DEBUG
+        ////private static readonly string ItadakimasuApiUrl = "https://localhost:7162/api/";
+        private static readonly string ItadakimasuApiUrl = "https://itadakimasu.azurewebsites.net/api/";
+#else
+        private static readonly string ItadakimasuApiUrl = "https://itadakimasu.azurewebsites.net/api/";
+#endif
         private const string BlobUrl = "https://itadakimasu.blob.core.windows.net";
-        private static HttpClient HttpClient { get; } = new();
-
-        private List<FoodGallery> FoodGallerys = new();
+        private static HttpClient Client { get; } = new();
 
         public Form1()
         {
@@ -39,75 +45,16 @@ namespace AzureExploer
         private async void button1_Click(object sender, EventArgs e)
         {
             button1.Enabled = false;
-
-            var blobAdapter = new BlobAdapter(BlobKeyTextBox.Text);
-            string preDir = "";
-            var foodImages = new List<FoodImage>();
-            int imageIndex = 0;
-            int dirCount = 0;
-            foreach (var blob in blobAdapter.GetBlobs("foodimage").Where(x => x.Name.Contains("オムライス")))
-            {
-                if (!blob.Name.Contains("_s")) continue;
-
-                var dir = Path.GetDirectoryName(blob.Name) ?? "";
-                var file = Path.GetFileName(blob.Name) ?? "";
-                if (dir != preDir)
-                {
-                    Invoke(() => { treeView1.Nodes.Add(dir); });
-                    FoodGallerys.Add(new FoodGallery() { Name = dir, FoodImages = foodImages });
-                    preDir = dir;
-                    dirCount++;
-                }
-                var imageUrl = $"{blobAdapter.Url}foodimage/{blob.Name}";
-                var stream = await HttpClient.GetStreamAsync(imageUrl);
-                var bmp = new Bitmap(stream);
-                foodImages.Add(new FoodImage() { Checked = true, Url = imageUrl, Bitmap = bmp });
-                //最初だけ
-                if (dirCount == 1)
-                {
-                    Invoke(() => {
-                        imageList1.Images.Add(bmp);
-                        listView1.BeginUpdate();
-                        listView1.Items.Add(file, imageIndex);
-                        listView1.EndUpdate();
-                    });
-                    imageIndex++;
-                }
-            }
-
-            //await Task.Run(async () =>
+            
+            var foods = await Client.GetFromJsonAsync<List<Food>>($"{ItadakimasuApiUrl}/foods/food-list") ?? new List<Food>();
+            var foodImages = await Client.GetFromJsonAsync<List<FoodImage>>($"{ItadakimasuApiUrl}/foodimages/food-image-list/{foods.First().Name}") ?? new List<FoodImage>();
+            treeView1.Nodes.AddRange(foods.Select(x => new TreeNode(x.Name)).ToArray());
+            //foreach (var foodImage in foodImages.ToViewFoodImages().Select((val,idx) => (val,idx)))
             //{
-            //});
-
-
-
-            /*
-            var blobAdapter = new BlobAdapter(BlobKeyTextBox.Text);
-            int fileCount = 1;
-            var sb = new StringBuilder();
-            foreach(var imageUrl in blobAdapter.GetBlobUrls("foodimage"))
-            {
-                sb.Append(imageUrl);
-                try
-                {
-                    //TODO:フォルダが変わってもナンバリングが続く。
-
-                    var stream = await HttpClient.GetStreamAsync(imageUrl);
-                    var foodFolder = Path.GetFileName(Path.GetDirectoryName(imageUrl));
-                    var filePath = Path.Combine(PathTextBox.Text, foodFolder);
-                    Directory.CreateDirectory(filePath);
-                    new Bitmap(stream).Save(Path.Combine(filePath, $"{fileCount:0000}.jpg"));
-                    fileCount++;
-                    sb.Append($":{fileCount:0000}.jpg");
-                }
-                catch (Exception ex)
-                {
-                    sb.Append($":{ex.Message}");
-                }
-                sb.AppendLine("");
-            }
-            await File.AppendAllTextAsync(Path.Combine(PathTextBox.Text, "log.txt"), sb.ToString());
-            */
+            //    var stream = await Client.GetStreamAsync(foodImage.val.BlobUrl);
+            //    imageList1.Images.Add(new Bitmap(stream));
+            //    listView1.Items.Add(foodImage.val.Name, foodImage.idx);
+            //}
 
             button1.Enabled = true;
         }

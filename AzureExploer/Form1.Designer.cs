@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Top");
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("");
             this.panel1 = new System.Windows.Forms.Panel();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -69,7 +67,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1046, 209);
+            this.panel1.Size = new System.Drawing.Size(1814, 209);
             this.panel1.TabIndex = 0;
             // 
             // comboBox1
@@ -176,18 +174,14 @@
             this.treeView1.Dock = System.Windows.Forms.DockStyle.Left;
             this.treeView1.Location = new System.Drawing.Point(0, 209);
             this.treeView1.Name = "treeView1";
-            treeNode1.Name = "ノード0";
-            treeNode1.Text = "Top";
-            this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1});
-            this.treeView1.Size = new System.Drawing.Size(182, 447);
+            this.treeView1.Size = new System.Drawing.Size(182, 718);
             this.treeView1.TabIndex = 1;
             // 
             // splitter1
             // 
             this.splitter1.Location = new System.Drawing.Point(182, 209);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(4, 447);
+            this.splitter1.Size = new System.Drawing.Size(4, 718);
             this.splitter1.TabIndex = 2;
             this.splitter1.TabStop = false;
             // 
@@ -197,13 +191,10 @@
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            listViewItem1.StateImageIndex = 0;
-            this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
             this.listView1.LargeImageList = this.imageList1;
             this.listView1.Location = new System.Drawing.Point(186, 209);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(860, 447);
+            this.listView1.Size = new System.Drawing.Size(1628, 718);
             this.listView1.SmallImageList = this.imageList1;
             this.listView1.TabIndex = 3;
             this.listView1.UseCompatibleStateImageBehavior = false;
@@ -218,7 +209,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1046, 656);
+            this.ClientSize = new System.Drawing.Size(1814, 927);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.treeView1);
