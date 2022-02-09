@@ -16,21 +16,21 @@
             }
         </ul>
     </div>
-    <div class="col-8">
+    <div class="col-10">
         <div class="align-items-center">
-            @await Html.PartialAsync("_Select", ViewData["ViewerSize"])
+            @await Html.PartialAsync("_Select", ViewData["SelectViewerCount"])
+            @await Html.PartialAsync("_Select", ViewData["SelectViewerSize"])
             <input type="checkbox" id="CheckAll" /><a>全チェック</a>
             <button type="button" class="btn" data-bs-toggle="button">
             </button>
         </div>
-
         <div class="actressList">
             <ul class="p-1">
                 @foreach (var item in Model.FoodImages)
                 {
                     <li class="FoodImage border">
                         <div>
-                            @{ var select = ViewData["ViewerSize"] as Itadakimasu.Models.Select.ISelectItem; }
+                            @{ var select = ViewData["SelectViewerSize"] as Itadakimasu.Models.Select.ISelectItem; }
                             <img class="Image@(select.CurrentKey)" src="@item.BlobUrl" alt='@(item.Name)の画像' title="@(item.Name)">
                             <div class="FoodImageCheck">
                                 <input type="checkbox" id="CheckSingle" />
@@ -42,10 +42,9 @@
                     </li>
                 }
             </ul>
+            <div class="clearfix" />
         </div>
-        <div class="clearfix" />
-    </div>
-    <div class="col-2">
+        @await Html.PartialAsync("_Pagination", Model.FoodImages.Parameter)
     </div>
 </div>
 

@@ -2,7 +2,7 @@
 
 public class SelectViewerSize : ISelectItem
 {
-    public string Id => "ViewerSize";
+    public string Id => nameof(SelectViewerSize);
     public string Title => "表示サイズ";
     public string DefaultKey => "S";
     public string CurrentKey { get; set; } = "";

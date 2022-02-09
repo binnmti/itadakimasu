@@ -1,4 +1,4 @@
 ﻿namespace Itadakimasu.Models
 {
-    public record ViewFoodViewer(IEnumerable<ViewFood> Foods, IEnumerable<ViewFoodImage> FoodImages);
+    public record ViewFoodViewer(IEnumerable<ViewFood> Foods, PaginatedList<ViewFoodImage> FoodImages);
 }

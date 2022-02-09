@@ -24,19 +24,26 @@ namespace Itadakimasu.Controllers
 
         [HttpGet]
         [Route("/FoodViewer/{foodName}")]
-        public async Task<IActionResult> FoodViewer(string foodName, string size = "")
+        public async Task<IActionResult> FoodViewer(string foodName, int page = 0, string size = "")
         {
             if (string.IsNullOrEmpty(foodName)) foodName = "オムライス";
 
+            var viewerCount = new SelectViewerCount();
+            viewerCount.SaveCookie(size, Request.Cookies, Response.Cookies);
+            ViewData[nameof(SelectViewerCount)] = viewerCount;
+            int.TryParse(viewerCount.CurrentKey, out var count);
+
             var viewerSize = new SelectViewerSize();
             viewerSize.SaveCookie(size, Request.Cookies, Response.Cookies);
-            ViewData["ViewerSize"] = viewerSize;
+            ViewData[nameof(SelectViewerSize)] = viewerSize;
 
             var client = _clientFactory.CreateClient();
-            var foods = await client.GetFromJsonAsync<List<Food>>($"{Request.Scheme}://{Request.Host}/api/foods/food-list") ?? new List<Food>();
-            var foodImages = await client.GetFromJsonAsync<List<FoodImage>>($"{Request.Scheme}://{Request.Host}/api/foodimages/food-image-list/{foodName}") ?? new List<FoodImage>();
+            var foodApiUrl = $"{Request.Scheme}://{Request.Host}/api";
+            var foods = await client.GetFromJsonAsync<List<Food>>($"{foodApiUrl}/foods/food-list") ?? new List<Food>();
+            var foodImages = await client.GetFromJsonAsync<List<FoodImage>>($"{foodApiUrl}/foodimages/food-image-list/{foodName}?page={page}&count={count}") ?? new List<FoodImage>();
+            var foodImageCount = await client.GetFromJsonAsync<int>($"{foodApiUrl}/foodimages/food-image-list-count/{foodName}");
             var viewFoodImages = foodImages.ToViewFoodImages().ToList();
-            return View(new ViewFoodViewer(foods.ToViewFoods(viewFoodImages), viewFoodImages));
+            return View(new ViewFoodViewer(foods.ToViewFoods(viewFoodImages), new PaginatedList<ViewFoodImage>(viewFoodImages, page, count, foodImageCount, $"/FoodViewer/{foodName}?")));
         }
 
         public IActionResult Privacy()
