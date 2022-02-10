@@ -17,12 +17,17 @@
         </ul>
     </div>
     <div class="col-10">
-        <div class="align-items-center">
+        <div class="d-flex flex-row">
             @await Html.PartialAsync("_Select", ViewData["SelectViewerCount"])
             @await Html.PartialAsync("_Select", ViewData["SelectViewerSize"])
-            <input type="checkbox" id="CheckAll" /><a>全チェック</a>
-            <button type="button" class="btn" data-bs-toggle="button">
-            </button>
+            <div class="col-auto">
+                <input type="checkbox" id="CheckAll" /><a>全チェック</a>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn" data-bs-toggle="button">1</button>
+                <button type="button" class="btn" data-bs-toggle="button">2</button>
+                <button type="button" class="btn" data-bs-toggle="button">3</button>
+            </div>
         </div>
         <div class="actressList">
             <ul class="p-1">
