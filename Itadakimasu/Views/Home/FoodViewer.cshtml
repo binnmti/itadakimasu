@@ -6,12 +6,11 @@
 
 <div class="row">
     <div class="col-2">
-        <ul class="p-1">
+        <ul class="list-group">
             @foreach (var item in Model.Foods)
             {
-                <li class="border">
-@*                    <img width="24" height="24" src="@item.BlobUrl" alt='@(item.Name)の画像' title="@(item.Name)">
-*@                    <a href="@item.Name">@(item.Name)(@item.FoodImageCount)</a>
+                <li class="list-group-item d-flex justify-content-between">
+                    <a href="@item.Name">@(item.Name)</a><span class="badge bg-light text-dark rounded-pill">@item.FoodImageCount</span>
                 </li>
             }
         </ul>
@@ -20,8 +19,11 @@
         <div class="d-flex flex-row">
             @await Html.PartialAsync("_Select", ViewData["SelectViewerCount"])
             @await Html.PartialAsync("_Select", ViewData["SelectViewerSize"])
-            <div class="col-auto">
-                <input type="checkbox" id="CheckAll" /><a>全チェック</a>
+        </div>
+        <div class="d-flex flex-row">
+            <div class="col-auto px-2 py-1">
+              <input class="form-check-input" type="checkbox" id="check-all" >
+              <label class="form-check-label" for="check-all">全チェック</label>
             </div>
             <div class="col-auto">
                 <button type="button" class="btn" data-bs-toggle="button">1</button>
@@ -29,17 +31,15 @@
                 <button type="button" class="btn" data-bs-toggle="button">3</button>
             </div>
         </div>
-        <div class="actressList">
-            <ul class="p-1">
+        <div>
+            <ul class="d-flex flex-wrap">
                 @foreach (var item in Model.FoodImages)
                 {
-                    <li class="FoodImage border">
+                    <li class="list-group-item">
+                        <input class="form-check-input" type="checkbox" id="check-single" />
                         <div>
                             @{ var select = ViewData["SelectViewerSize"] as Itadakimasu.Models.Select.ISelectItem; }
                             <img class="Image@(select.CurrentKey)" src="@item.BlobUrl" alt='@(item.Name)の画像' title="@(item.Name)">
-                            <div class="FoodImageCheck">
-                                <input type="checkbox" id="CheckSingle" />
-                            </div>
                         </div>
                         <div>
                             <span>@(item.Name)</span>

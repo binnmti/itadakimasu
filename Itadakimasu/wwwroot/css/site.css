@@ -17,24 +17,6 @@ body {
   margin-bottom: 60px;
 }
 
-
-.FoodImage {
-    padding: 16px;
-    margin: 0;
-    float: left;
-    list-style: none;
-    position: relative;
-}
-.FoodImageCheck {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    position: absolute;
-    top: 1%;
-    left: 1%;
-}
-
 .ImageS {
     width: 100px;
     height: 100px;
