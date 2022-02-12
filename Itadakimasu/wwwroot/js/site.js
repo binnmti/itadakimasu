@@ -6,4 +6,12 @@ function reloadSelect(id) {
     document.cookie = "".concat(id, "=").concat(value, ";Path=/");
     location.href = url.href;
 }
+// 「全て選択」チェックで全てにチェック付く
+function allChecked() {
+    var check = document.getElementById("check-all").checked;
+    var checkbox = document.getElementsByName("checkbox");
+    for (var i = 0; i < checkbox.length; i++) {
+        checkbox[i].checked = check;
+    }
+}
 //# sourceMappingURL=site.js.map
