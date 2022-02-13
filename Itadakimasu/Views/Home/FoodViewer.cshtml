@@ -33,13 +33,14 @@
         </div>
         <div>
             <ul class="d-flex flex-wrap">
-                @foreach (var item in Model.FoodImages)
+                @for (var i = 0; i < Model.FoodImages.Count; i++)
                 {
+                    var item = Model.FoodImages[i];
                     <li class="list-group-item">
                         <input class="form-check-input" name="checkbox" type="checkbox" onclick="DisChecked()" />
                         <div>
                             <label for="@(item.Name)">
-                                <img class="@(ViewData["CurrentViewerSize"])" src="@item.BlobSUrl" alt='@(item.Name)の画像' title="@(item.Name)">
+                                <img class="img-thumbnail @(ViewData["CurrentViewerSize"])" src="@item.BlobSUrl" alt='@(item.Name)の画像' title="@(item.Name)">
                             </label>
                         </div>
                         <div>
@@ -48,20 +49,20 @@
                          <div class="popup_wrap">
                              <input id="@(item.Name)" type="checkbox">
                             <div class="popup_overlay">
+                                <label for="@item.Name" class="popup_trigger"></label>
                                 <div class="popup_content">
                                     <div class="d-flex flex-row justify-content-between">
                                         <div>@item.Name</div>
                                         <div></div>
-                                        <label for="@(item.Name)" class="close_btn"><i class="far fa-times-circle"></i>bbb</label>
+                                        <label for="@(item.Name)" class="close_btn"><i class="far fa-times-circle"></i></label>
                                     </div>
-                                    <a class="btn btn-link" onclick="Product.changeImage('@(item.PrevName)', '@(item.NextName)')">
-                                        <img class="p-1" src="@item.BlobUrl">
+                                    <a class="btn btn-link" onclick="changeImage('@(item.Name)', '@(item.NextName)')">
+                                        <img class="popup_content_img" src="@item.BlobUrl">
                                     </a>
                                     <div class="d-flex flex-row justify-content-between">
-                                        <button type="button" class="btn btn-link" onclick="Product.changeImage('@(item.PrevName)', '@(item.NextName)'))">&laquo;&laquo;前へ</button>
-                                        <a>@(item.XY + 1)/@(Model.FoodImages.Count)</a>
-                                        <label for="@(item.Name)" class="close_btn"><i class="far fa-times-circle"></i>aaa</label>
-                                        <button type="button" class="btn btn-link" onclick="Product.changeImage('@(item.PrevName)', '@(item.NextName)'))">次へ&raquo;&raquo;</button>
+                                        <button type="button" class="btn btn-link" onclick="changeImage('@(item.Name)', '@(item.PrevName)')">&laquo;&laquo;前へ</button>
+                                        <a>@(i + 1)/@(Model.FoodImages.Count)</a>
+                                        <button type="button" class="btn btn-link" onclick="changeImage('@(item.Name)', '@(item.NextName)')">次へ&raquo;&raquo;</button>
                                     </div>
                                 </div>
                             </div>

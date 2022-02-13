@@ -14,4 +14,8 @@ function allChecked() {
         checkbox[i].checked = check;
     }
 }
+function changeImage(name, nextName) {
+    document.getElementById(name).checked = false;
+    document.getElementById(nextName).checked = true;
+}
 //# sourceMappingURL=site.js.map

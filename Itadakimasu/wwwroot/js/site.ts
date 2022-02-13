@@ -15,3 +15,8 @@ function allChecked() {
         (checkbox[i] as HTMLInputElement).checked = check;
     }
 }
+
+function changeImage(name: string, nextName: string): void {
+    (document.getElementById(name) as HTMLInputElement).checked = false;
+    (document.getElementById(nextName) as HTMLInputElement).checked = true;
+}
