@@ -38,13 +38,35 @@
                     <li class="list-group-item">
                         <input class="form-check-input" name="checkbox" type="checkbox" onclick="DisChecked()" />
                         <div>
-                            @{ var select = ViewData["SelectViewerSize"] as Itadakimasu.Models.Select.ISelectItem; }
-                            <img class="Image@(select.CurrentKey)" src="@item.BlobUrl" alt='@(item.Name)の画像' title="@(item.Name)">
+                            <label for="@(item.Name)">
+                                <img class="@(ViewData["CurrentViewerSize"])" src="@item.BlobSUrl" alt='@(item.Name)の画像' title="@(item.Name)">
+                            </label>
                         </div>
                         <div>
                             <span>@(item.Name)</span>
                         </div>
-                    </li>
+                         <div class="popup_wrap">
+                             <input id="@(item.Name)" type="checkbox">
+                            <div class="popup_overlay">
+                                <div class="popup_content">
+                                    <div class="d-flex flex-row justify-content-between">
+                                        <div>@item.Name</div>
+                                        <div></div>
+                                        <label for="@(item.Name)" class="close_btn"><i class="far fa-times-circle"></i>bbb</label>
+                                    </div>
+                                    <a class="btn btn-link" onclick="Product.changeImage('@(item.PrevName)', '@(item.NextName)')">
+                                        <img class="p-1" src="@item.BlobUrl">
+                                    </a>
+                                    <div class="d-flex flex-row justify-content-between">
+                                        <button type="button" class="btn btn-link" onclick="Product.changeImage('@(item.PrevName)', '@(item.NextName)'))">&laquo;&laquo;前へ</button>
+                                        <a>@(item.XY + 1)/@(Model.FoodImages.Count)</a>
+                                        <label for="@(item.Name)" class="close_btn"><i class="far fa-times-circle"></i>aaa</label>
+                                        <button type="button" class="btn btn-link" onclick="Product.changeImage('@(item.PrevName)', '@(item.NextName)'))">次へ&raquo;&raquo;</button>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
+                     </li>
                 }
             </ul>
             <div class="clearfix" />

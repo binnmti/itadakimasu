@@ -36,6 +36,7 @@ namespace Itadakimasu.Controllers
             var viewerSize = new SelectViewerSize();
             viewerSize.SaveCookie(size, Request.Cookies, Response.Cookies);
             ViewData[nameof(SelectViewerSize)] = viewerSize;
+            ViewData["CurrentViewerSize"] = viewerSize.CurrentKey;
 
             var client = _clientFactory.CreateClient();
             var foodApiUrl = $"{Request.Scheme}://{Request.Host}/api";
