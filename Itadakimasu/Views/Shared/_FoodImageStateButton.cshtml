@@ -1,0 +1,25 @@
+﻿@model Itadakimasu.Models.ViewFoodImage
+
+<button type="button" class="btn btn-outline-primary btn-sm foodImage-state" data-value="1" data-name="(@Model.Name)">1</button>
+<button type="button" class="btn btn-outline-primary btn-sm foodImage-state" data-value="2" data-name="(@Model.Name)">2</button>
+<button type="button" class="btn btn-outline-primary btn-sm foodImage-state" data-value="3" data-name="(@Model.Name)">3</button>
+<button type="button" class="btn btn-outline-primary btn-sm foodImage-state" data-value="-1" data-name="(@Model.Name)">-1</button>
+
+<script type="text/javascript">
+    window.onload = function async() {
+
+        const states = document.querySelectorAll('.foodImage-state');
+        states.forEach(s => s.addEventListener('click', event => {
+            event.preventDefault();
+            const value = event.target.getAttribute("data-value");
+            const name = event.target.getAttribute("data-name");
+            const response = await fetch('/api/food-image-state/', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ blobName: name, stateNumber: value })
+            });
+            if (!response.ok) return;
+        }));
+    }
+</script>
+
