@@ -39,7 +39,7 @@
                     <li class="list-group-item">
                         <input class="form-check-input" name="checkbox" type="checkbox" onclick="DisChecked()" />
                         <div>
-                            <label for="check_@(item.Name)">
+                            <label for="check_@(item.Id)">
                                 <img class="img-thumbnail @(ViewData["CurrentViewerSize"])" src="@item.BlobSUrl" alt='@(item.Name)の画像' title="@(item.Name)">
                             </label>
                         </div>
@@ -47,30 +47,30 @@
                             <span>@(item.Name)</span>
                         </div>
                          <div class="popup_wrap">
-                             <div id="foodImageId" data-value="@(item.Name)"></div>
-                             <input id="check_@(item.Name)" type="checkbox">
+                             <div id="foodImageId" data-value="@(item.Id)"></div>
+                             <input id="check_@(item.Id)" type="checkbox">
                             <div class="popup_overlay">
-                                <label for="check_@(item.Name)" class="popup_trigger"></label>
+                                <label for="check_@(item.Id)" class="popup_trigger"></label>
                                 <div class="popup_content">
                                     <div class="d-flex flex-row justify-content-between">
                                         <div>@item.Name</div>
                                         <div></div>
-                                        <label for="check_@(item.Name)" class="close_btn"><i class="far fa-times-circle"></i></label>
+                                        <label for="check_@(item.Id)" class="close_btn"><i class="far fa-times-circle"></i></label>
                                     </div>
-                                    <a class="btn btn-link" onclick="changeImage('check_@(item.Name)', 'check_@(item.NextName)')">
+                                    <a class="btn btn-link" onclick="changeImage('check_@(item.Id)', 'check_@(item.NextId)')">
                                         <img class="popup_content_img" src="@item.BlobUrl">
                                     </a>
                                     <div class="d-flex flex-row">
                                         <div></div>
-                                        <button type="button" class="btn btn-outline-dark btn-sm foodImage-state" data-value="1">1</button>
-                                        <button type="button" class="btn btn-outline-dark btn-sm foodImage-state" data-value="2">2</button>
-                                        <button type="button" class="btn btn-outline-dark btn-sm foodImage-state" data-value="3">3</button>
-                                        <button type="button" class="btn btn-outline-dark btn-sm foodImage-state" data-value="-1">-1</button>
+                                        <button type="button" class="btn btn-outline-dark btn-sm btn-foodImage" data-value="1">1</button>
+                                        <button type="button" class="btn btn-outline-dark btn-sm btn-foodImage" data-value="2">2</button>
+                                        <button type="button" class="btn btn-outline-dark btn-sm btn-foodImage" data-value="3">3</button>
+                                        <button type="button" class="btn btn-outline-dark btn-sm btn-foodImage" data-value="-1">-1</button>
                                     </div>
                                     <div class="d-flex flex-row justify-content-between">
-                                        <button type="button" class="btn btn-link" onclick="changeImage('check_@(item.Name)', 'check_@(item.PrevName)')">&laquo;&laquo;前へ</button>
+                                        <button type="button" class="btn btn-link" onclick="changeImage('check_@(item.Id)', 'check_@(item.PrevId)')">&laquo;&laquo;前へ</button>
                                         <a>@(i + 1)/@(Model.FoodImages.Count)</a>
-                                        <button type="button" class="btn btn-link" onclick="changeImage('check_@(item.Name)', 'check_@(item.NextName)')">次へ&raquo;&raquo;</button>
+                                        <button type="button" class="btn btn-link" onclick="changeImage('check_@(item.Id)', 'check_@(item.NextId)')">次へ&raquo;&raquo;</button>
                                     </div>
                                 </div>
                             </div>
@@ -85,18 +85,15 @@
 </div>
 
 <script type="text/javascript">
-    window.onload = function async() {
-        document.querySelectorAll('.foodImage-state').forEach(s => s.addEventListener('click', async (event) => {
-            //event.preventDefault();
-            const value = event.target.dataset.value;
-            const id = document.getElementById('foodImageId').dataset.value;
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.btn-foodImage').forEach(btn => btn.addEventListener('click', async (event) => {
             const response = await fetch('/api/FoodImages/food-image-state', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ blobName: id, stateNumber: value })
+                body: JSON.stringify({ Id: document.getElementById('foodImageId').dataset.value, StateNumber: event.target.dataset.value })
             });
             if (!response.ok) return;
         }));
-    }
+    });
 </script>
 

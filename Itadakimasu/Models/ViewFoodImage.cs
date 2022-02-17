@@ -2,7 +2,7 @@
 
 namespace Itadakimasu.Models
 {
-    public record ViewFoodImage(bool Checked, string Name, string FoodName, string XY, string Size, string BlobUrl, string BlobSUrl, string BaseUrl, string PrevName, string NextName);
+    public record ViewFoodImage(bool Checked, long Id, string Name, string FoodName, string XY, string Size, string BlobUrl, string BlobSUrl, string BaseUrl, long PrevId, long NextId);
 
     public static class VewFoodImageConvert
     {
@@ -11,6 +11,7 @@ namespace Itadakimasu.Models
         public static IEnumerable<ViewFoodImage> ToViewFoodImages(this List<FoodImage> foodImages)
             => foodImages.Select((x, idx) => new ViewFoodImage(
                     true,
+                    x.Id,
                     x.BlobName,
                     x.FoodName,
                     x.ToXY(),
@@ -18,8 +19,8 @@ namespace Itadakimasu.Models
                     x.ToBlobUrl(),
                     x.ToBlobSUrl(),
                     x.BaseUrl,
-                    idx == 0 ? foodImages.Last().BlobName : foodImages.ElementAt(idx - 1).BlobName,
-                    idx == foodImages.Count - 1 ? foodImages.First().BlobName : foodImages.ElementAt(idx + 1).BlobName));
+                    idx == 0 ? foodImages.Last().Id : foodImages.ElementAt(idx - 1).Id,
+                    idx == foodImages.Count - 1 ? foodImages.First().Id : foodImages.ElementAt(idx + 1).Id));
 
         private static string ToXY(this FoodImage foodImage)
             => $"{foodImage.BlobWidth}X{foodImage.BlobHeight}";

@@ -31,20 +31,14 @@ namespace Itadakimasu.Controllers
             return await _context.FoodImage.Where(x => x.FoodName == foodName).Skip((page - 1) * count).Take(count).ToListAsync();
         }
 
-        public class FoodImageRequest
-        {
-            public string blobName { get; set; } = "";
-            public int stateNumber { get; set; }
-        }
-
+        public record FoodImageRequest(long Id, int StateNumber);
         [HttpPost("food-image-state")]
         public async Task<ActionResult<FoodImage>> FoodImageState([FromBody] FoodImageRequest request)
         {
-            //IDでやるように変更しよう
-            var hit = await _context.FoodImage.SingleOrDefaultAsync(x => x.BlobName == request.blobName);
+            var hit = await _context.FoodImage.SingleOrDefaultAsync(x => x.Id == request.Id);
             if (hit == null) return Conflict();
 
-            hit.StatusNumber = request.stateNumber;
+            hit.StatusNumber = request.StateNumber;
             await _context.SaveChangesAsync();
             return hit;
         }
