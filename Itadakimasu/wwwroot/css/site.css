@@ -35,11 +35,11 @@ body {
     object-fit: cover;
 }
 /* -------------------------------------------------- */
-.popup_wrap input {
+.popup_wrap > input {
     display: none;
 }
 
-.popup_wrap input:checked ~ .popup_overlay {
+.popup_wrap > input:checked ~ .popup_overlay {
     opacity: 1;
     transform: scale(1);
     transition: opacity 0.5s;
