@@ -2,7 +2,7 @@
 
 namespace Itadakimasu.Models
 {
-    public record ViewFoodImage(bool Checked, long Id, string Name, string FoodName, string XY, string Size, string BlobUrl, string BlobSUrl, string BaseUrl, long PrevId, long NextId);
+    public record ViewFoodImage(bool Checked, long Id, string Name, string FoodName, string XY, string Size, string BlobUrl, string BlobSUrl, string BaseUrl, int StatusNumber, long PrevId, long NextId);
 
     public static class VewFoodImageConvert
     {
@@ -19,6 +19,7 @@ namespace Itadakimasu.Models
                     x.ToBlobUrl(),
                     x.ToBlobSUrl(),
                     x.BaseUrl,
+                    x.StatusNumber,
                     idx == 0 ? foodImages.Last().Id : foodImages.ElementAt(idx - 1).Id,
                     idx == foodImages.Count - 1 ? foodImages.First().Id : foodImages.ElementAt(idx + 1).Id));
 
