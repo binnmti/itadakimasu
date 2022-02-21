@@ -26,9 +26,8 @@
               <label class="form-check-label" for="check-all">全チェック</label>
             </div>
             <div class="col-auto">
-                <button type="button" class="btn btn-outline-primary btn-sm">1</button>
-                <button type="button" class="btn btn-outline-primary btn-sm">2</button>
-                <button type="button" class="btn btn-outline-primary btn-sm">3</button>
+                チェックした画像をまとめて
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="setAllStateNumber('1')">1</button>
             </div>
         </div>
         <div>
@@ -39,7 +38,7 @@
                     <li class="list-group-item">
                         <div class="d-flex flex-row justify-content-between">
                             <div>
-                                <input class="check_@(item.Id)" name="checkbox" type="checkbox" onclick="checkSync(this)" />
+                                <input class="check_@(item.Id)" name="checkbox" type="checkbox" data-id="@(item.Id)" onclick="checkSync(this)" />
                             </div>
                             <div></div>
                             <div>
@@ -103,6 +102,23 @@
 </div>
 
 <script type="text/javascript">
+
+    async function setAllStateNumber(state) 
+    {
+        let ids = [];
+        for(let element of document.getElementsByName("checkbox"))
+        {
+            if(!element.dataset.id || !element.checked) continue;
+            ids.push(element.dataset.id);
+        }
+        const response = await fetch('/api/FoodImages/food-image-all-state', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ Ids: ids, StateNumber: state })
+        });
+        window.location.reload();
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.btn-foodImage').forEach(btn => btn.addEventListener('click', async (event) => {
             const id = event.target.parentNode.dataset.id;

@@ -8,7 +8,7 @@
 }
 
 // 「全て選択」チェックで全てにチェック付く
-function allChecked(element: HTMLElement) {
+function allChecked(element: HTMLElement)  {
     const checked = (element as HTMLInputElement).checked;
     const checkbox = document.getElementsByName("checkbox");
     for (let i = 0; i < checkbox.length; i++) {

@@ -43,6 +43,15 @@ namespace Itadakimasu.Controllers
             return hit;
         }
 
+        public record FoodImageAllRequest(List<long> Ids, int StateNumber);
+        [HttpPost("food-image-all-state")]
+        public void FoodImageAllState([FromBody] FoodImageAllRequest request)
+        {
+            var hits = _context.FoodImage.Where(x => request.Ids.Any(i => i == x.Id)).ToList();
+            hits.ForEach(x => x.StatusNumber = request.StateNumber);
+            _context.SaveChanges();
+        }
+
         //新規追加名を返す
         [HttpGet("get-new-name")]
         public async Task<ActionResult<int>> GetNewName(string baseUrl, string searchAPI, string foodName)
