@@ -10,7 +10,7 @@
             @foreach (var item in Model.Foods)
             {
                 <li class="list-group-item d-flex justify-content-between">
-                    <a href="@item.Name">@(item.Name)</a><span class="badge bg-light text-dark rounded-pill">@item.FoodImageCount</span>
+                    <a href="FoodViewer?foodName=@(item.Name)&stateNumber=@(ViewData["StateNumber"])">@(item.Name)</a><span class="badge bg-light text-dark rounded-pill">@item.FoodImageCount</span>
                 </li>
             }
         </ul>
@@ -23,7 +23,6 @@
                 表示番号:
                 @for(int number = -1; number <= 5; number++)
                 {
-                    if (number == 0) continue;
                     <button type="button" class="badge rounded-pill bg-light text-dark" onclick="setFilterStateNumber('@(number)')">@(number)</button>
                 }
             </div>
@@ -115,7 +114,7 @@
 <script type="text/javascript">
     function setFilterStateNumber(stateNumber) 
     {
-        window.location = `/FoodViewer/オムライス?stateNumber=${stateNumber}`;
+        window.location = `/FoodViewer?stateNumber=${stateNumber}`;
     }
 
     async function setAllStateNumber(state) 

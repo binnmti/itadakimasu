@@ -20,10 +20,10 @@ namespace Itadakimasu.Controllers
         public IActionResult Index() => View();
 
         [HttpGet]
-        [Route("/FoodViewer/{foodName}")]
+        [Route("/FoodViewer")]
         public async Task<IActionResult> FoodViewer(string foodName, int page = 0, string size = "", int stateNumber = 0)
         {
-            if (string.IsNullOrEmpty(foodName)) foodName = "オムライス";
+            ViewData["StateNumber"] = stateNumber;
 
             var viewerCount = new SelectViewerCount();
             viewerCount.SaveCookie(size, Request.Cookies, Response.Cookies);
@@ -39,9 +39,10 @@ namespace Itadakimasu.Controllers
             var foodApiUrl = $"{Request.Scheme}://{Request.Host}/api";
 
             var foods = await client.GetFromJsonAsync<List<FoodImagesController.Food>>($"{foodApiUrl}/foodimages/food-list?stateNumber={stateNumber}") ?? new List<FoodImagesController.Food>();
+            if (string.IsNullOrEmpty(foodName)) foodName = foods.First().Name;
             var foodImages = await client.GetFromJsonAsync<List<FoodImage>>($"{foodApiUrl}/foodimages/food-image-list/{foodName}?page={page}&count={count}&stateNumber={stateNumber}") ?? new List<FoodImage>();
             var foodImageCount = await client.GetFromJsonAsync<int>($"{foodApiUrl}/foodimages/food-image-list-count/{foodName}?stateNumber={stateNumber}");
-            return View(new ViewFoodViewer(foods.ToViewFoods(), new PaginatedList<ViewFoodImage>(foodImages.ToViewFoodImages(), page, count, foodImageCount, $"/FoodViewer/{foodName}?")));
+            return View(new ViewFoodViewer(foods.ToViewFoods(), new PaginatedList<ViewFoodImage>(foodImages.ToViewFoodImages(), page, count, foodImageCount, $"/FoodViewer?foodName={foodName}&stateNumber={stateNumber}&")));
         }
 
         public IActionResult Privacy() => View();

@@ -42,13 +42,15 @@ namespace AzureExploer
             }
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
             button1.Enabled = false;
             
-            var foods = await Client.GetFromJsonAsync<List<Food>>($"{ItadakimasuApiUrl}/foods/food-list") ?? new List<Food>();
-            var foodImages = await Client.GetFromJsonAsync<List<FoodImage>>($"{ItadakimasuApiUrl}/foodimages/food-image-list/{foods.First().Name}") ?? new List<FoodImage>();
-            treeView1.Nodes.AddRange(foods.Select(x => new TreeNode(x.Name)).ToArray());
+            //var foods = await Client.GetFromJsonAsync<List<Food>>($"{ItadakimasuApiUrl}/foods/food-list") ?? new List<Food>();
+            //var foodImages = await Client.GetFromJsonAsync<List<FoodImage>>($"{ItadakimasuApiUrl}/foodimages/food-image-list/{foods.First().Name}") ?? new List<FoodImage>();
+            //treeView1.Nodes.AddRange(foods.Select(x => new TreeNode(x.Name)).ToArray());
+
+
             //foreach (var foodImage in foodImages.ToViewFoodImages().Select((val,idx) => (val,idx)))
             //{
             //    var stream = await Client.GetStreamAsync(foodImage.val.BlobUrl);
