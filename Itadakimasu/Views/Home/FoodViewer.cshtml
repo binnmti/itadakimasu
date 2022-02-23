@@ -19,6 +19,14 @@
         <div class="d-flex flex-row">
             @await Html.PartialAsync("_Select", ViewData["SelectViewerCount"])
             @await Html.PartialAsync("_Select", ViewData["SelectViewerSize"])
+            <div class="col-auto">
+                表示番号:
+                @for(int number = -1; number <= 5; number++)
+                {
+                    if (number == 0) continue;
+                    <button type="button" class="badge rounded-pill bg-light text-dark" onclick="setFilterStateNumber('@(number)')">@(number)</button>
+                }
+            </div>
         </div>
         <div class="d-flex flex-row">
             <div class="col-auto px-2 py-1">
@@ -27,7 +35,10 @@
             </div>
             <div class="col-auto">
                 チェックした画像をまとめて
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="setAllStateNumber('1')">1</button>
+                @for(int number = -1; number <= 5; number++)
+                {
+                    <button type="button" class="badge rounded-pill bg-dark" onclick="setAllStateNumber('@(number)')">@(number)</button>
+                }
             </div>
         </div>
         <div>
@@ -102,6 +113,10 @@
 </div>
 
 <script type="text/javascript">
+    function setFilterStateNumber(stateNumber) 
+    {
+        window.location = `/FoodViewer/オムライス?stateNumber=${stateNumber}`;
+    }
 
     async function setAllStateNumber(state) 
     {

@@ -17,21 +17,18 @@ namespace Itadakimasu.Controllers
             _configuration = configuration;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
 
         [HttpGet]
         [Route("/FoodViewer/{foodName}")]
-        public async Task<IActionResult> FoodViewer(string foodName, int page = 0, string size = "")
+        public async Task<IActionResult> FoodViewer(string foodName, int page = 0, string size = "", int stateNumber = 0)
         {
             if (string.IsNullOrEmpty(foodName)) foodName = "オムライス";
 
             var viewerCount = new SelectViewerCount();
             viewerCount.SaveCookie(size, Request.Cookies, Response.Cookies);
             ViewData[nameof(SelectViewerCount)] = viewerCount;
-            int.TryParse(viewerCount.CurrentKey, out var count);
+            _ = int.TryParse(viewerCount.CurrentKey, out var count);
 
             var viewerSize = new SelectViewerSize();
             viewerSize.SaveCookie(size, Request.Cookies, Response.Cookies);
@@ -40,22 +37,16 @@ namespace Itadakimasu.Controllers
 
             var client = _clientFactory.CreateClient();
             var foodApiUrl = $"{Request.Scheme}://{Request.Host}/api";
-            var foods = await client.GetFromJsonAsync<List<Food>>($"{foodApiUrl}/foods/food-list") ?? new List<Food>();
-            var foodImages = await client.GetFromJsonAsync<List<FoodImage>>($"{foodApiUrl}/foodimages/food-image-list/{foodName}?page={page}&count={count}") ?? new List<FoodImage>();
-            var foodImageCount = await client.GetFromJsonAsync<int>($"{foodApiUrl}/foodimages/food-image-list-count/{foodName}");
-            var viewFoodImages = foodImages.ToViewFoodImages().ToList();
-            return View(new ViewFoodViewer(foods.ToViewFoods(viewFoodImages), new PaginatedList<ViewFoodImage>(viewFoodImages, page, count, foodImageCount, $"/FoodViewer/{foodName}?")));
+
+            var foods = await client.GetFromJsonAsync<List<FoodImagesController.Food>>($"{foodApiUrl}/foodimages/food-list?stateNumber={stateNumber}") ?? new List<FoodImagesController.Food>();
+            var foodImages = await client.GetFromJsonAsync<List<FoodImage>>($"{foodApiUrl}/foodimages/food-image-list/{foodName}?page={page}&count={count}&stateNumber={stateNumber}") ?? new List<FoodImage>();
+            var foodImageCount = await client.GetFromJsonAsync<int>($"{foodApiUrl}/foodimages/food-image-list-count/{foodName}?stateNumber={stateNumber}");
+            return View(new ViewFoodViewer(foods.ToViewFoods(), new PaginatedList<ViewFoodImage>(foodImages.ToViewFoodImages(), page, count, foodImageCount, $"/FoodViewer/{foodName}?")));
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        public IActionResult Privacy() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
