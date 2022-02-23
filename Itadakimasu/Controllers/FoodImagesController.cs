@@ -89,6 +89,26 @@ namespace Itadakimasu.Controllers
             return foodImage;
         }
 
+//        [HttpPost("food-image-default-state")]
+//        public async Task FoodImageDefaultState()
+//        {
+//#if !DEBUG
+//            //TODO:これでもまだ弱い。本当は管理者のみ
+//            if (!SignInManager.IsSignedIn(User)) return;
+//#endif
+//            foreach (var foodImages in _context.FoodImage.ToLookup(x => x.FoodName))
+//            {
+//                for (int i = 1; i <= 4; i++)
+//                {
+//                    foreach (var f in foodImages.Skip((i - 1) * 50).Take(50))
+//                    {
+//                        f.StatusNumber = i;
+//                    }
+//                }
+//            }
+//            await _context.SaveChangesAsync();
+//        }
+
         private async Task<FoodImage?> FindAsync(string baseUrl)
             => await _context.FoodImage.SingleOrDefaultAsync(x => x.BaseUrl == baseUrl);
     }
