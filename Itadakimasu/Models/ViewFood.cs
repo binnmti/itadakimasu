@@ -1,4 +1,5 @@
 ﻿using Itadakimasu.Controllers;
+using Models;
 
 namespace Itadakimasu.Models
 {

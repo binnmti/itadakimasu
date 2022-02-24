@@ -38,7 +38,7 @@
             </div>
 @{ 
 #if !DEBUG
-                @if (SignInManager.IsSignedIn(User))
+                if (SignInManager.IsSignedIn(User))
 #endif
                 {
                     <div class="col-auto">
@@ -100,7 +100,7 @@
                                         @{
 
 #if !DEBUG
-                                            @if (SignInManager.IsSignedIn(User))
+                                            if (SignInManager.IsSignedIn(User))
 #endif
                                             {
                                                 for(int number = -1; number <= 5; number++)

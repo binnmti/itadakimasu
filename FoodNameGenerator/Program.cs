@@ -284,13 +284,29 @@ class Program
         if (isDevelopment) builder.AddUserSecrets<Program>();
 
         var configuration = builder.Build();
-        var blobConnectionString = configuration["BlobConnectionString"]; 
+        var blobConnectionString = configuration["BlobConnectionString"];
         var bingCustomSearchSubscriptionKey = configuration["BingCustomSearchSubscriptionKey"];
         var bingCustomSearchCustomConfigId = configuration["BingCustomSearchCustomConfigId"];
         var customVisionTrainingKey = configuration["CustomVisionTrainingKey"];
         var customVisionProjectId = configuration["CustomVisionProjectId"];
         HttpClient.Timeout = TimeSpan.FromSeconds(5000);
         HttpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36");
+
+        var customVisionWarpper = new CustomVisionWarpper(HttpClient, customVisionTrainingKey, customVisionProjectId);
+        var foodImages = await HttpClient.GetFromJsonAsync<Dictionary<string, List<FoodImage>>>($"{ItadakimasuApiUrl}foodimages/food-name-food-image-list?count=50");
+        int co = 1;
+        foreach (var foodImage in foodImages)
+        {
+            customVisionWarpper.CreateTrainingImages(foodImage.Key, foodImage.Value.Select(x => x.ToBlobUrl()).ToList());
+
+            Console.WriteLine($"{foodImage.Key}:{co++}/{foodImages.Count}");
+            Thread.Sleep(1000);
+        }
+        //await UpdateBlobForBing(blobConnectionString, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
+    }
+
+    private static async Task UpdateBlobForBing(string blobConnectionString, string bingCustomSearchSubscriptionKey, string bingCustomSearchCustomConfigId)
+    {
         var blobAdapter = new BlobAdapter(blobConnectionString);
         foreach (var food in FoodNameList.Select((val, idx) => (val, idx)))
         {

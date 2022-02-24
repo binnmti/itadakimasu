@@ -6,8 +6,6 @@ namespace Itadakimasu.Models
 
     internal static class VewFoodImageConvert
     {
-        private static readonly string BlobUrl = "https://itadakimasu.blob.core.windows.net/foodimage";
-
         internal static IEnumerable<ViewFoodImage> ToViewFoodImages(this List<FoodImage> foodImages)
             => foodImages.Select((x, idx) => new ViewFoodImage(
                     true,
@@ -22,9 +20,6 @@ namespace Itadakimasu.Models
                     x.StatusNumber,
                     idx == 0 ? foodImages.Last().Id : foodImages.ElementAt(idx - 1).Id,
                     idx == foodImages.Count - 1 ? foodImages.First().Id : foodImages.ElementAt(idx + 1).Id));
-
-        internal static string ToBlobUrl(this FoodImage foodImage) => $"{BlobUrl}/{foodImage.FoodName}/{foodImage.BlobName}";
-        internal static string ToBlobSUrl(this FoodImage foodImage) => $"{BlobUrl}/{foodImage.FoodName}/{foodImage.BlobSName}";
 
         private static string ToXY(this FoodImage foodImage)
             => $"{foodImage.BlobWidth}X{foodImage.BlobHeight}";

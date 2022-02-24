@@ -23,5 +23,12 @@ public record FoodImage
     public long BlobSSize { get; set; }
 
     public int StatusNumber { get; set; }
+}
 
+public static class VewFoodImageConvert
+{
+    private static readonly string BlobUrl = "https://itadakimasu.blob.core.windows.net/foodimage";
+
+    public static string ToBlobUrl(this FoodImage foodImage) => $"{BlobUrl}/{foodImage.FoodName}/{foodImage.BlobName}";
+    public static string ToBlobSUrl(this FoodImage foodImage) => $"{BlobUrl}/{foodImage.FoodName}/{foodImage.BlobSName}";
 }

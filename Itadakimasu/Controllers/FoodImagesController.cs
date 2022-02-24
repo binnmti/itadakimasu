@@ -25,6 +25,10 @@ namespace Itadakimasu.Controllers
         public async Task<List<Food>> FoodList(int stateNumber = 0)
             => await _context.FoodImage.StateNumber(stateNumber).GroupBy(x => x.FoodName).Select(x => new Food(x.Key, x.Count(), x.First())).ToListAsync();
 
+        [HttpGet("food-name-food-image-list")]
+        public Dictionary<string, List<FoodImage>> FoodNameFoodImageList(int count)
+           => _context.FoodImage.ToLookup(x => x.FoodName).ToDictionary(x => x.Key, x => x.Select(s => s).Take(count).ToList());
+
         [HttpGet("food-image-count")]
         public int FoodImageCount() => _context.FoodImage.Count();
 
@@ -46,7 +50,7 @@ namespace Itadakimasu.Controllers
         {
 #if !DEBUG
             //TODO:これでもまだ弱い。本当は管理者のみ
-            if (!SignInManager.IsSignedIn(User)) return;
+            if (!SignInManager.IsSignedIn(User)) return Unauthorized();
 #endif
             var hit = await _context.FoodImage.SingleOrDefaultAsync(x => x.Id == request.Id);
             if (hit == null) return Conflict();
