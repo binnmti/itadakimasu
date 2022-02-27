@@ -291,14 +291,24 @@ class Program
         var customVisionProjectId = configuration["CustomVisionProjectId"];
         HttpClient.Timeout = TimeSpan.FromSeconds(5000);
         HttpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36");
-        var customVisionWarpper = new CustomVisionWarpper(HttpClient, customVisionTrainingKey, customVisionProjectId);
-        var foodNameFoodImages = await HttpClient.GetFromJsonAsync<Dictionary<string, List<FoodImage>>>($"{ItadakimasuApiUrl}foodimages/food-name-food-image-list?count=100");
 
+        await UpdateCustomVision(customVisionTrainingKey, customVisionProjectId);
+
+        //await UpdateBlobForBing(blobConnectionString, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
+    }
+
+    private static async Task UpdateCustomVision(string customVisionTrainingKey, string customVisionProjectId)
+    {
+        const int TrainingImagesMax = 50;
+        var customVisionWarpper = new CustomVisionWarpper(HttpClient, customVisionTrainingKey, customVisionProjectId);
+        //とりあえず倍プッシュ。
+        var foodNameFoodImages = await HttpClient.GetFromJsonAsync<Dictionary<string, List<FoodImage>>>($"{ItadakimasuApiUrl}foodimages/food-name-food-image-list?count={TrainingImagesMax*2}");
+        //TODO:認証
         int co = 1;
         foreach (var foodNameFoodImage in foodNameFoodImages)
         {
             int skip = 0;
-            int take = 50;
+            int take = TrainingImagesMax;
             while (take != 0)
             {
                 var foodImageList = foodNameFoodImage.Value.Skip(skip).Take(take).ToList();
@@ -316,8 +326,6 @@ class Program
             }
             Console.WriteLine($"{foodNameFoodImage.Key}:{co++}/{foodNameFoodImages.Count}");
         }
-
-        //await UpdateBlobForBing(blobConnectionString, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
     }
 
     private static async Task UpdateBlobForBing(string blobConnectionString, string bingCustomSearchSubscriptionKey, string bingCustomSearchCustomConfigId)
