@@ -46,7 +46,7 @@ namespace Itadakimasu.Controllers
         [Authorize]
         public record FoodImageRequest(long Id, int StateNumber);
         [HttpPost("food-image-state")]
-        public async Task<ActionResult<FoodImage>> FoodImageState([FromBody] FoodImageRequest request)
+        public async Task<ActionResult<FoodImage>> FoodImageState([FromBody]FoodImageRequest request)
         {
 #if !DEBUG
             //TODO:これでもまだ弱い。本当は管理者のみ

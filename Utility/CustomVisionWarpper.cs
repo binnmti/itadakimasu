@@ -22,7 +22,7 @@ namespace Utility
             ProjectGuid = TrainingClient.GetProject(new Guid(projectId)).Id;
         }
 
-        public void CreateTrainingImages(string foodName, List<string> imageUrlList)
+        public ImageCreateSummary CreateTrainingImages(string foodName, List<string> imageUrlList)
             => TrainingClient.CreateImagesFromUrls(ProjectGuid, new ImageUrlCreateBatch
             {
                 TagIds = new List<Guid>() { GetTag(foodName).Id },

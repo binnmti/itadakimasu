@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -291,17 +291,32 @@ class Program
         var customVisionProjectId = configuration["CustomVisionProjectId"];
         HttpClient.Timeout = TimeSpan.FromSeconds(5000);
         HttpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36");
-
         var customVisionWarpper = new CustomVisionWarpper(HttpClient, customVisionTrainingKey, customVisionProjectId);
-        var foodImages = await HttpClient.GetFromJsonAsync<Dictionary<string, List<FoodImage>>>($"{ItadakimasuApiUrl}foodimages/food-name-food-image-list?count=50");
-        int co = 1;
-        foreach (var foodImage in foodImages)
-        {
-            customVisionWarpper.CreateTrainingImages(foodImage.Key, foodImage.Value.Select(x => x.ToBlobUrl()).ToList());
+        var foodNameFoodImages = await HttpClient.GetFromJsonAsync<Dictionary<string, List<FoodImage>>>($"{ItadakimasuApiUrl}foodimages/food-name-food-image-list?count=100");
 
-            Console.WriteLine($"{foodImage.Key}:{co++}/{foodImages.Count}");
-            Thread.Sleep(1000);
+        int co = 1;
+        foreach (var foodNameFoodImage in foodNameFoodImages)
+        {
+            int skip = 0;
+            int take = 50;
+            while (take != 0)
+            {
+                var foodImageList = foodNameFoodImage.Value.Skip(skip).Take(take).ToList();
+                var result = customVisionWarpper.CreateTrainingImages(foodNameFoodImage.Key, foodImageList.Select(x => x.ToBlobUrl()).ToList());
+                skip += take;
+                take = result.Images.Count(x => !x.Status.Contains("OK"));
+                for (int i = 0; i < foodImageList.Count; i++)
+                {
+                    var foodImage = foodImageList[i];
+                    var StateNumber = result.Images[i].Status.Contains("OK") ? 1 : -1;
+                    var json = JsonSerializer.Serialize(new { foodImage.Id, StateNumber });
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    var r = await HttpClient.PostAsync($"{ItadakimasuApiUrl}foodimages/food-image-state", content);
+                }
+            }
+            Console.WriteLine($"{foodNameFoodImage.Key}:{co++}/{foodNameFoodImages.Count}");
         }
+
         //await UpdateBlobForBing(blobConnectionString, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
     }
 
