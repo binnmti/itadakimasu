@@ -7,6 +7,7 @@ update-database
 ----
 cd Itadakimasu
 
+dotnet ef migrations add NewUser
 dotnet ef migrations add ImageFirst
 dotnet ef migrations add RefectorFood
 dotnet ef migrations add InitialCreate
