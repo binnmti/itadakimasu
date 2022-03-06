@@ -36,23 +36,14 @@ class Program
         var configuration = builder.Build();
         var customVisionTrainingKey = configuration["CustomVisionTrainingKey"];
         var customVisionProjectId = configuration["CustomVisionProjectId"];
-        var itadakimasuUser = configuration["ItadakimasuUser"];
-        var itadakimasuPassword = configuration["ItadakimasuPassword"];
+        var userName = configuration["ItadakimasuUser"];
+        var password = configuration["ItadakimasuPassword"];
 
         HttpClient.Timeout = TimeSpan.FromSeconds(5000);
         HttpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36");
 
-        //var request = new HttpRequestMessage
-        //{
-        //    Method = HttpMethod.Post,
-        //    RequestUri = new Uri(ItadakimasuApiUrl)
-        //};
-        //request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(
-        //    "Basic",
-        //    Convert.ToBase64String(Encoding.ASCII.GetBytes(string.Format("{0}:{1}", itadakimasuUser, itadakimasuPassword))));
-        //var re = await HttpClient.SendAsync(request);
-
-
+        var json = JsonContent.Create(new { userName, password });
+        var r = await HttpClient.PostAsync($"{ItadakimasuApiUrl}foodimages/login", json);
 
         //await BlobForBingSearchResult.Update(blobConnectionString, ItadakimasuApiUrl, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
         await CustomVision.Update(HttpClient, ItadakimasuApiUrl, customVisionTrainingKey, customVisionProjectId);

@@ -4,6 +4,9 @@ using Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Itadakimasu.Controllers
 {
@@ -13,11 +16,27 @@ namespace Itadakimasu.Controllers
     {
         private readonly ItadakimasuContext _context;
         private SignInManager<IdentityUser> SignInManager { get; }
+        private UserManager<IdentityUser> UserManager { get; }
 
-        public FoodImagesController(ItadakimasuContext context, SignInManager<IdentityUser> signInManager)
+        public record LoginModel(string UserName, string Password, bool RememberMe);
+        [HttpPost("login")]
+        public async Task<string> Login([FromBody]LoginModel login)
+        {
+            var user = await UserManager.Users.FirstOrDefaultAsync(u => u.UserName == login.UserName || u.Email == login.UserName);
+            var result = await SignInManager.PasswordSignInAsync(user?.UserName ?? "", login.Password, login.RememberMe, false);
+            if (!result.Succeeded) return "";
+
+            var claims = new[] { new Claim(ClaimTypes.Name, user.UserName) };
+            var credentials = new SigningCredentials(new SymmetricSecurityKey(Guid.NewGuid().ToByteArray()), SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken("ExampleServer", "ExampleClients", claims, expires: DateTime.Now.AddSeconds(60), signingCredentials: credentials);
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public FoodImagesController(ItadakimasuContext context, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
         {
             _context = context;
             SignInManager = signInManager;
+            UserManager = userManager;
         }
 
         public record Food(string Name, int FoodImageCount, FoodImage First);
@@ -48,10 +67,13 @@ namespace Itadakimasu.Controllers
         [HttpPost("food-image-state")]
         public async Task<ActionResult<FoodImage>> FoodImageState([FromBody]FoodImageRequest request)
         {
-#if !DEBUG
-            //TODO:これでもまだ弱い。本当は管理者のみ
+//#if !DEBUG
+//            //TODO:これでもまだ弱い。本当は管理者のみ
+//            if (!SignInManager.IsSignedIn(User)) return Unauthorized();
+//#endif
+
             if (!SignInManager.IsSignedIn(User)) return Unauthorized();
-#endif
+
             var hit = await _context.FoodImage.SingleOrDefaultAsync(x => x.Id == request.Id);
             if (hit == null) return Conflict();
 
