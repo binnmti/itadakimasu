@@ -36,18 +36,23 @@ class Program
         var configuration = builder.Build();
         var customVisionTrainingKey = configuration["CustomVisionTrainingKey"];
         var customVisionProjectId = configuration["CustomVisionProjectId"];
+        var itadakimasuUser = configuration["ItadakimasuUser"];
+        var itadakimasuPassword = configuration["ItadakimasuPassword"];
+
         HttpClient.Timeout = TimeSpan.FromSeconds(5000);
         HttpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36");
 
+        //var request = new HttpRequestMessage
+        //{
+        //    Method = HttpMethod.Post,
+        //    RequestUri = new Uri(ItadakimasuApiUrl)
+        //};
+        //request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(
+        //    "Basic",
+        //    Convert.ToBase64String(Encoding.ASCII.GetBytes(string.Format("{0}:{1}", itadakimasuUser, itadakimasuPassword))));
+        //var re = await HttpClient.SendAsync(request);
 
-        string USER_ID = "mjm54XXXXXX";
-        string PASSWORD = "cTF8hjXXXX";
 
-        MultipartFormDataContent mContent = new MultipartFormDataContent();
-        mContent.Add(new StringContent(USER_ID), "mjm_id");
-        mContent.Add(new StringContent(PASSWORD), "password");
-
-        HttpResponseMessage response = await HttpClient.PostAsync(ItadakimasuApiUrl, mContent);
 
         //await BlobForBingSearchResult.Update(blobConnectionString, ItadakimasuApiUrl, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
         await CustomVision.Update(HttpClient, ItadakimasuApiUrl, customVisionTrainingKey, customVisionProjectId);
