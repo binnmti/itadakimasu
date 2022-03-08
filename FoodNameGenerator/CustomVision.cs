@@ -44,7 +44,7 @@ namespace FoodNameGenerator
                         var stateNumber = isOK ? 1 : -1;
                         var statusReason = isOK ? "" : result.Images[i].Status;
                         var json = JsonContent.Create(new { foodImage.Id, stateNumber, statusReason });
-                        var r = await httpClient.PostAsync($"{itadakimasuApiUrl}foodimages/food-image-state", json);
+                        var r = await httpClient.PostAsync($"{itadakimasuApiUrl}foodimages/food-image-state-jwt", json);
                     }
                     Thread.Sleep(1000);
                 }

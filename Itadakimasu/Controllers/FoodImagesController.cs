@@ -4,6 +4,10 @@ using Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
 
 namespace Itadakimasu.Controllers
 {
@@ -20,6 +24,23 @@ namespace Itadakimasu.Controllers
             _context = context;
             SignInManager = signInManager;
             UserManager = userManager;
+        }
+
+        [HttpGet("get-access-token")]
+        public async Task<string> GetAccessToken(string userName, string password)
+        {
+            var user = await UserManager.Users.FirstOrDefaultAsync(u => u.UserName == userName || u.Email == password);
+            var result = await SignInManager.PasswordSignInAsync(user?.UserName ?? "", password, false, false);
+            if (!result.Succeeded) return "";
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("12345678901234567890"));
+            var token = new JwtSecurityToken(
+                issuer: "hoge",
+                audience: "fuga",
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
+            );
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         public record Food(string Name, int FoodImageCount, FoodImage First);
@@ -49,12 +70,23 @@ namespace Itadakimasu.Controllers
             => await _context.FoodImage.StateNumber(stateNumber).CountAsync(x => x.FoodName == foodName);
 
         public record FoodImageRequest(long Id, int StateNumber, string StatusReason);
+        [Authorize]
         [HttpPost("food-image-state")]
         public async Task<ActionResult<FoodImage>> FoodImageState([FromBody]FoodImageRequest request)
         {
 #if !DEBUG
             if (!SignInManager.IsSignedIn(User)) return Unauthorized();
 #endif
+            return await SaveChangesAsync(request);
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost("food-image-state-jwt")]
+        public async Task<ActionResult<FoodImage>> FoodImageStateJwt([FromBody] FoodImageRequest request)
+            => await SaveChangesAsync(request);
+
+        private async Task<ActionResult<FoodImage>> SaveChangesAsync(FoodImageRequest request)
+        {
             var hit = await _context.FoodImage.SingleOrDefaultAsync(x => x.Id == request.Id);
             if (hit == null) return Conflict();
 
