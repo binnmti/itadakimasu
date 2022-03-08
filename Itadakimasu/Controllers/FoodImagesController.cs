@@ -4,9 +4,6 @@ using Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace Itadakimasu.Controllers
 {
@@ -17,20 +14,6 @@ namespace Itadakimasu.Controllers
         private readonly ItadakimasuContext _context;
         private SignInManager<IdentityUser> SignInManager { get; }
         private UserManager<IdentityUser> UserManager { get; }
-
-        //public record LoginModel(string UserName, string Password, bool RememberMe);
-        //[HttpPost("login")]
-        //public async Task<string> Login([FromBody]LoginModel login)
-        //{
-        //    var user = await UserManager.Users.FirstOrDefaultAsync(u => u.UserName == login.UserName || u.Email == login.UserName);
-        //    var result = await SignInManager.PasswordSignInAsync(user?.UserName ?? "", login.Password, login.RememberMe, false);
-        //    if (!result.Succeeded) return "";
-
-        //    var claims = new[] { new Claim(ClaimTypes.Name, user.UserName) };
-        //    var credentials = new SigningCredentials(new SymmetricSecurityKey(Guid.NewGuid().ToByteArray()), SecurityAlgorithms.HmacSha256);
-        //    var token = new JwtSecurityToken("ExampleServer", "ExampleClients", claims, expires: DateTime.Now.AddSeconds(60), signingCredentials: credentials);
-        //    return new JwtSecurityTokenHandler().WriteToken(token);
-        //}
 
         public FoodImagesController(ItadakimasuContext context, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
         {
@@ -46,7 +29,10 @@ namespace Itadakimasu.Controllers
 
         [HttpGet("food-name-food-image-list")]
         public Dictionary<string, List<FoodImage>> FoodNameFoodImageList(int count)
-           => _context.FoodImage.ToLookup(x => x.FoodName).ToDictionary(x => x.Key, x => x.Select(s => s).Where(s => s.StatusNumber != -1).Take(count).ToList());
+        {
+            count = Math.Max(count, 100);
+            return _context.FoodImage.ToLookup(x => x.FoodName).ToDictionary(x => x.Key, x => x.Select(s => s).Where(s => s.StatusNumber != -1).Take(count).ToList());
+        }
 
         [HttpGet("food-image-count")]
         public int FoodImageCount() => _context.FoodImage.Count();
@@ -62,15 +48,13 @@ namespace Itadakimasu.Controllers
         public async Task<ActionResult<int>> FoodImageListCount(string foodName, int stateNumber = 0)
             => await _context.FoodImage.StateNumber(stateNumber).CountAsync(x => x.FoodName == foodName);
 
-        //[Authorize]
         public record FoodImageRequest(long Id, int StateNumber, string StatusReason);
         [HttpPost("food-image-state")]
         public async Task<ActionResult<FoodImage>> FoodImageState([FromBody]FoodImageRequest request)
         {
-//#if !DEBUG
-//            //TODO:これでもまだ弱い。本当は管理者のみ
-//            if (!SignInManager.IsSignedIn(User)) return Unauthorized();
-//#endif
+#if !DEBUG
+            if (!SignInManager.IsSignedIn(User)) return Unauthorized();
+#endif
             var hit = await _context.FoodImage.SingleOrDefaultAsync(x => x.Id == request.Id);
             if (hit == null) return Conflict();
 
@@ -80,14 +64,14 @@ namespace Itadakimasu.Controllers
             return hit;
         }
 
-        //[Authorize]
+        [Authorize]
         public record FoodImageAllRequest(List<long> Ids, int StateNumber);
         [HttpPost("food-image-all-state")]
         public void FoodImageAllState([FromBody] FoodImageAllRequest request)
         {
-//#if !DEBUG
-//            if (!SignInManager.IsSignedIn(User)) return;
-//#endif
+#if !DEBUG
+            if (!SignInManager.IsSignedIn(User)) return;
+#endif
             var hits = _context.FoodImage.Where(x => request.Ids.Any(i => i == x.Id)).ToList();
             hits.ForEach(x => x.StatusNumber = request.StateNumber);
             _context.SaveChanges();
@@ -112,26 +96,6 @@ namespace Itadakimasu.Controllers
             await _context.SaveChangesAsync();
             return foodImage;
         }
-
-//        [HttpPost("food-image-default-state")]
-//        public async Task FoodImageDefaultState()
-//        {
-//#if !DEBUG
-//            //TODO:これでもまだ弱い。本当は管理者のみ
-//            if (!SignInManager.IsSignedIn(User)) return;
-//#endif
-//            foreach (var foodImages in _context.FoodImage.ToLookup(x => x.FoodName))
-//            {
-//                for (int i = 1; i <= 4; i++)
-//                {
-//                    foreach (var f in foodImages.Skip((i - 1) * 50).Take(50))
-//                    {
-//                        f.StatusNumber = i;
-//                    }
-//                }
-//            }
-//            await _context.SaveChangesAsync();
-//        }
 
         private async Task<FoodImage?> FindAsync(string baseUrl)
             => await _context.FoodImage.SingleOrDefaultAsync(x => x.BaseUrl == baseUrl);

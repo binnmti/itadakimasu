@@ -46,6 +46,11 @@ class Program
         //var json = JsonContent.Create(new { userName, password });
         //var r = await HttpClient.PostAsync($"{ItadakimasuApiUrl}foodimages/login", json);
 
+        var accessToken = await HttpClient.GetStringAsync($"https://localhost:7162/token");
+        HttpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+
+        var r = await HttpClient.GetStringAsync($"{ItadakimasuApiUrl}foodimages/food-image-count");
+
         //await BlobForBingSearchResult.Update(blobConnectionString, ItadakimasuApiUrl, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
         await CustomVision.Update(HttpClient, ItadakimasuApiUrl, customVisionTrainingKey, customVisionProjectId);
     }
