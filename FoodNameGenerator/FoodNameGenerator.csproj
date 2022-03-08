@@ -25,7 +25,6 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Itadakimasu\Itadakimasu.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\Utility\Utility.csproj" />
   </ItemGroup>

@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Utility;
 
@@ -18,7 +16,7 @@ namespace FoodNameGenerator
         internal static async Task Update(HttpClient httpClient, string itadakimasuApiUrl,  string customVisionTrainingKey, string customVisionProjectId)
         {
             var customVisionWarpper = new CustomVisionWarpper(httpClient, customVisionTrainingKey, customVisionProjectId);
-            //とりあえず倍プッシュ。
+            //とりあえずcountを倍プッシュ。
             var foodNameFoodImages = await httpClient.GetFromJsonAsync<Dictionary<string, List<FoodImage>>>($"{itadakimasuApiUrl}foodimages/food-name-food-image-list?count={TrainingImagesMax * 2}");
 
             //TODO:認証

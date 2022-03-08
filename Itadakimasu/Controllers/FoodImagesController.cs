@@ -18,19 +18,19 @@ namespace Itadakimasu.Controllers
         private SignInManager<IdentityUser> SignInManager { get; }
         private UserManager<IdentityUser> UserManager { get; }
 
-        public record LoginModel(string UserName, string Password, bool RememberMe);
-        [HttpPost("login")]
-        public async Task<string> Login([FromBody]LoginModel login)
-        {
-            var user = await UserManager.Users.FirstOrDefaultAsync(u => u.UserName == login.UserName || u.Email == login.UserName);
-            var result = await SignInManager.PasswordSignInAsync(user?.UserName ?? "", login.Password, login.RememberMe, false);
-            if (!result.Succeeded) return "";
+        //public record LoginModel(string UserName, string Password, bool RememberMe);
+        //[HttpPost("login")]
+        //public async Task<string> Login([FromBody]LoginModel login)
+        //{
+        //    var user = await UserManager.Users.FirstOrDefaultAsync(u => u.UserName == login.UserName || u.Email == login.UserName);
+        //    var result = await SignInManager.PasswordSignInAsync(user?.UserName ?? "", login.Password, login.RememberMe, false);
+        //    if (!result.Succeeded) return "";
 
-            var claims = new[] { new Claim(ClaimTypes.Name, user.UserName) };
-            var credentials = new SigningCredentials(new SymmetricSecurityKey(Guid.NewGuid().ToByteArray()), SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken("ExampleServer", "ExampleClients", claims, expires: DateTime.Now.AddSeconds(60), signingCredentials: credentials);
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+        //    var claims = new[] { new Claim(ClaimTypes.Name, user.UserName) };
+        //    var credentials = new SigningCredentials(new SymmetricSecurityKey(Guid.NewGuid().ToByteArray()), SecurityAlgorithms.HmacSha256);
+        //    var token = new JwtSecurityToken("ExampleServer", "ExampleClients", claims, expires: DateTime.Now.AddSeconds(60), signingCredentials: credentials);
+        //    return new JwtSecurityTokenHandler().WriteToken(token);
+        //}
 
         public FoodImagesController(ItadakimasuContext context, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
         {
@@ -62,7 +62,7 @@ namespace Itadakimasu.Controllers
         public async Task<ActionResult<int>> FoodImageListCount(string foodName, int stateNumber = 0)
             => await _context.FoodImage.StateNumber(stateNumber).CountAsync(x => x.FoodName == foodName);
 
-        [Authorize]
+        //[Authorize]
         public record FoodImageRequest(long Id, int StateNumber);
         [HttpPost("food-image-state")]
         public async Task<ActionResult<FoodImage>> FoodImageState([FromBody]FoodImageRequest request)
@@ -82,14 +82,14 @@ namespace Itadakimasu.Controllers
             return hit;
         }
 
-        [Authorize]
+        //[Authorize]
         public record FoodImageAllRequest(List<long> Ids, int StateNumber);
         [HttpPost("food-image-all-state")]
         public void FoodImageAllState([FromBody] FoodImageAllRequest request)
         {
-#if !DEBUG
-            if (!SignInManager.IsSignedIn(User)) return;
-#endif
+//#if !DEBUG
+//            if (!SignInManager.IsSignedIn(User)) return;
+//#endif
             var hits = _context.FoodImage.Where(x => request.Ids.Any(i => i == x.Id)).ToList();
             hits.ForEach(x => x.StatusNumber = request.StateNumber);
             _context.SaveChanges();
