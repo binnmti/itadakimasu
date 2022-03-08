@@ -21,3 +21,7 @@ dotnet ef migrations add YourMigration
 dotnet ef migrations remove
 dotnet build
 dotnet ef migrations add YourMigration
+
+---
+* First 
+dotnet tool restore

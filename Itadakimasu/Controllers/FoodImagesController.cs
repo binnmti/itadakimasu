@@ -46,7 +46,7 @@ namespace Itadakimasu.Controllers
 
         [HttpGet("food-name-food-image-list")]
         public Dictionary<string, List<FoodImage>> FoodNameFoodImageList(int count)
-           => _context.FoodImage.ToLookup(x => x.FoodName).ToDictionary(x => x.Key, x => x.Select(s => s).Take(count).ToList());
+           => _context.FoodImage.ToLookup(x => x.FoodName).ToDictionary(x => x.Key, x => x.Select(s => s).Where(s => s.StatusNumber != -1).Take(count).ToList());
 
         [HttpGet("food-image-count")]
         public int FoodImageCount() => _context.FoodImage.Count();
@@ -63,7 +63,7 @@ namespace Itadakimasu.Controllers
             => await _context.FoodImage.StateNumber(stateNumber).CountAsync(x => x.FoodName == foodName);
 
         //[Authorize]
-        public record FoodImageRequest(long Id, int StateNumber);
+        public record FoodImageRequest(long Id, int StateNumber, string StatusReason);
         [HttpPost("food-image-state")]
         public async Task<ActionResult<FoodImage>> FoodImageState([FromBody]FoodImageRequest request)
         {
@@ -71,13 +71,11 @@ namespace Itadakimasu.Controllers
 //            //TODO:これでもまだ弱い。本当は管理者のみ
 //            if (!SignInManager.IsSignedIn(User)) return Unauthorized();
 //#endif
-
-            if (!SignInManager.IsSignedIn(User)) return Unauthorized();
-
             var hit = await _context.FoodImage.SingleOrDefaultAsync(x => x.Id == request.Id);
             if (hit == null) return Conflict();
 
             hit.StatusNumber = request.StateNumber;
+            hit.StatusReason = request.StatusReason;
             await _context.SaveChangesAsync();
             return hit;
         }

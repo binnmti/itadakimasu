@@ -23,6 +23,7 @@ public record FoodImage
     public long BlobSSize { get; set; }
 
     public int StatusNumber { get; set; }
+    public string StatusReason { get; set; } = "";
 }
 
 public static class VewFoodImageConvert
