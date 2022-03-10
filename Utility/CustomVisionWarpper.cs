@@ -8,17 +8,17 @@ namespace Utility
     {
         private static readonly int ImageUrlsLimited = 64;
         private static readonly string TrainingEndPoint = "https://itadakimasugallery.cognitiveservices.azure.com/";
-        private static readonly string PredictionEndpoint = "https://itadakimasugallery.cognitiveservices.azure.com/";
+        private static readonly string PredictionEndpoint = "https://itadakimasu-prediction.cognitiveservices.azure.com/";
         
         private CustomVisionTrainingClient TrainingClient { get; }
         private CustomVisionPredictionClient PredictionClient { get; }
         
         private Guid ProjectGuid { get; }
 
-        public CustomVisionWarpper(HttpClient httpclient, string trainingKey, string projectId)
+        public CustomVisionWarpper(HttpClient httpclient, string trainingKey, string predictionKey, string projectId)
         {
             TrainingClient = GetTrainingClient(httpclient, trainingKey);
-            //PredictionClient = GetPredictionClient(trainingKey);
+            PredictionClient = GetPredictionClient(httpclient, predictionKey);
             ProjectGuid = TrainingClient.GetProject(new Guid(projectId)).Id;
         }
 
@@ -29,24 +29,24 @@ namespace Utility
                 Images = imageUrlList.Take(ImageUrlsLimited).Select(x => new ImageUrlCreateEntry() { Url = x }).ToList(),
             });
 
-        public void Test()
+        public void TestIteration(string url)
         {
-            //var result = PredictionClient.ClassifyImageUrl(ProjectGuid, , , publishedModelName, testImage);
-            //foreach (var c in result.Predictions)
-            //{
-            //    Console.WriteLine($"\t{c.TagName}: {c.Probability:P1}");
-            //}
-
+            string PublishedModelName = "Iteration3";
+            var result = PredictionClient.ClassifyImageUrl(ProjectGuid, PublishedModelName, new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.Models.ImageUrl(url));
+            foreach (var c in result.Predictions)
+            {
+                Console.WriteLine($"\t{c.TagName}: {c.Probability:P1}");
+            }
         }
 
-        private CustomVisionTrainingClient GetTrainingClient(HttpClient httpclient, string trainingKey)
+        private static CustomVisionTrainingClient GetTrainingClient(HttpClient httpclient, string trainingKey)
             => new(new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training.ApiKeyServiceClientCredentials(trainingKey), httpclient, false)
             {
                 Endpoint = TrainingEndPoint
             };
 
-        private CustomVisionPredictionClient GetPredictionClient(string predictionKey)
-            => new(new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.ApiKeyServiceClientCredentials(predictionKey))
+        private static CustomVisionPredictionClient GetPredictionClient(HttpClient httpclient, string predictionKey)
+            => new(new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.ApiKeyServiceClientCredentials(predictionKey), httpclient, false)
             {
                 Endpoint = PredictionEndpoint
             };

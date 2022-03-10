@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace Models;
+
 public record FoodImage
 {
     public long Id { get; set; }

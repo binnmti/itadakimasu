@@ -14,13 +14,11 @@ namespace FoodNameGenerator
     {
         private const int TrainingImagesMax = 50;
 
-        internal static async Task Update(HttpClient httpClient, string itadakimasuApiUrl,  string customVisionTrainingKey, string customVisionProjectId)
+        internal static async Task Update(HttpClient httpClient, string itadakimasuApiUrl,  string customVisionTrainingKey, string customVisionpPredictionKey, string customVisionProjectId)
         {
-            var customVisionWarpper = new CustomVisionWarpper(httpClient, customVisionTrainingKey, customVisionProjectId);
+            var customVisionWarpper = new CustomVisionWarpper(httpClient, customVisionTrainingKey, customVisionpPredictionKey, customVisionProjectId);
             //とりあえずcountを倍プッシュ。
             var foodNameFoodImages = await httpClient.GetFromJsonAsync<Dictionary<string, List<FoodImage>>>($"{itadakimasuApiUrl}foodimages/food-name-food-image-list?count={TrainingImagesMax * 2}");
-
-            //TODO:認証
             int co = 1;
             foreach (var foodNameFoodImage in foodNameFoodImages)
             {

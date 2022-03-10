@@ -25,8 +25,9 @@ class Program
         if (isDevelopment) builder.AddUserSecrets<Program>();
 
         var configuration = builder.Build();
-        var customVisionTrainingKey = configuration["CustomVisionTrainingKey"];
         var customVisionProjectId = configuration["CustomVisionProjectId"];
+        var customVisionTrainingKey = configuration["CustomVisionTrainingKey"];
+        var customVisionpPredictionKey = configuration["CustomVisionpPredictionKey"];
         var userName = configuration["ItadakimasuUser"];
         var password = configuration["ItadakimasuPassword"];
 
@@ -35,7 +36,7 @@ class Program
         var accessToken = await HttpClient.GetStringAsync($"{ItadakimasuApiUrl}foodimages/get-access-token?userName={userName}&password={password}");
         HttpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
 
-        await CustomVision.Update(HttpClient, ItadakimasuApiUrl, customVisionTrainingKey, customVisionProjectId);
+        await CustomVision.Update(HttpClient, ItadakimasuApiUrl, customVisionTrainingKey, customVisionpPredictionKey, customVisionProjectId);
         //await BlobForBingSearchResult.Update(blobConnectionString, ItadakimasuApiUrl, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
     }
 }
