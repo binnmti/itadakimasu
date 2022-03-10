@@ -25,6 +25,7 @@ public record FoodImage
 
     public int StatusNumber { get; set; }
     public string StatusReason { get; set; } = "";
+    public string TestResult { get; set; } = "";
 }
 
 public static class VewFoodImageConvert

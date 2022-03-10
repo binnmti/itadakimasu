@@ -1,6 +1,9 @@
 ﻿using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction;
 using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training;
 using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training.Models;
+using System.Text;
+using CustomVisionPrediction = Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction;
+using CustomVisionTraining = Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training;
 
 namespace Utility
 {
@@ -29,24 +32,24 @@ namespace Utility
                 Images = imageUrlList.Take(ImageUrlsLimited).Select(x => new ImageUrlCreateEntry() { Url = x }).ToList(),
             });
 
-        public void TestIteration(string url)
+
+        public string TestIteration(string url)
         {
+            var sb = new StringBuilder();
             string PublishedModelName = "Iteration3";
-            var result = PredictionClient.ClassifyImageUrl(ProjectGuid, PublishedModelName, new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.Models.ImageUrl(url));
-            foreach (var c in result.Predictions)
-            {
-                Console.WriteLine($"\t{c.TagName}: {c.Probability:P1}");
-            }
+            var result = PredictionClient.ClassifyImageUrl(ProjectGuid, PublishedModelName, new CustomVisionPrediction.Models.ImageUrl(url));
+            result.Predictions.Take(5).ToList().ForEach(c => sb.AppendLine($"{c.TagName}:{c.Probability * 100}%"));
+            return sb.ToString();
         }
 
         private static CustomVisionTrainingClient GetTrainingClient(HttpClient httpclient, string trainingKey)
-            => new(new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training.ApiKeyServiceClientCredentials(trainingKey), httpclient, false)
+            => new(new CustomVisionTraining.ApiKeyServiceClientCredentials(trainingKey), httpclient, false)
             {
                 Endpoint = TrainingEndPoint
             };
 
         private static CustomVisionPredictionClient GetPredictionClient(HttpClient httpclient, string predictionKey)
-            => new(new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.ApiKeyServiceClientCredentials(predictionKey), httpclient, false)
+            => new(new CustomVisionPrediction.ApiKeyServiceClientCredentials(predictionKey), httpclient, false)
             {
                 Endpoint = PredictionEndpoint
             };

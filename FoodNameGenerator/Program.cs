@@ -36,7 +36,7 @@ class Program
         var accessToken = await HttpClient.GetStringAsync($"{ItadakimasuApiUrl}foodimages/get-access-token?userName={userName}&password={password}");
         HttpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
 
-        await CustomVision.Update(HttpClient, ItadakimasuApiUrl, customVisionTrainingKey, customVisionpPredictionKey, customVisionProjectId);
+        await CustomVision2.Update(HttpClient, ItadakimasuApiUrl, customVisionTrainingKey, customVisionpPredictionKey, customVisionProjectId);
         //await BlobForBingSearchResult.Update(blobConnectionString, ItadakimasuApiUrl, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
     }
 }

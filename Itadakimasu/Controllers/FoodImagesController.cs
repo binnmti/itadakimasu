@@ -69,7 +69,7 @@ namespace Itadakimasu.Controllers
         public async Task<ActionResult<int>> FoodImageListCount(string foodName, int stateNumber = 0)
             => await _context.FoodImage.StateNumber(stateNumber).CountAsync(x => x.FoodName == foodName);
 
-        public record FoodImageRequest(long Id, int StateNumber, string StatusReason);
+        public record FoodImageRequest(long Id, int StateNumber, string StatusReason, string TestResult);
         [Authorize]
         [HttpPost("food-image-state")]
         public async Task<ActionResult<FoodImage>> FoodImageState([FromBody]FoodImageRequest request)
@@ -77,21 +77,37 @@ namespace Itadakimasu.Controllers
 #if !DEBUG
             if (!SignInManager.IsSignedIn(User)) return Unauthorized();
 #endif
-            return await SaveChangesAsync(request);
+            return await SaveChangesStatusAsync(request);
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("food-image-state-jwt")]
         public async Task<ActionResult<FoodImage>> FoodImageStateJwt([FromBody] FoodImageRequest request)
-            => await SaveChangesAsync(request);
+            => await SaveChangesStatusAsync(request);
 
-        private async Task<ActionResult<FoodImage>> SaveChangesAsync(FoodImageRequest request)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost("food-image-test-result-jwt")]
+        public async Task<ActionResult<FoodImage>> FoodImageTestResultJwt([FromBody] FoodImageRequest request)
+            => await SaveChangesTestResultAsync(request);
+
+
+        private async Task<ActionResult<FoodImage>> SaveChangesStatusAsync(FoodImageRequest request)
         {
             var hit = await _context.FoodImage.SingleOrDefaultAsync(x => x.Id == request.Id);
             if (hit == null) return Conflict();
 
             hit.StatusNumber = request.StateNumber;
             hit.StatusReason = request.StatusReason;
+            await _context.SaveChangesAsync();
+            return hit;
+        }
+
+        private async Task<ActionResult<FoodImage>> SaveChangesTestResultAsync(FoodImageRequest request)
+        {
+            var hit = await _context.FoodImage.SingleOrDefaultAsync(x => x.Id == request.Id);
+            if (hit == null) return Conflict();
+
+            hit.TestResult = request.TestResult;    
             await _context.SaveChangesAsync();
             return hit;
         }
