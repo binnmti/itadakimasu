@@ -28,7 +28,7 @@ namespace FoodNameGenerator
                     var testResult = "";
                     try
                     {
-                        testResult = customVisionWarpper.TestIteration(foodImage.ToBlobUrl());
+                        testResult = customVisionWarpper.TestIteration(foodImage.FoodName, foodImage.ToBlobUrl());
                     }
                     catch (CustomVisionErrorException ex)
                     {

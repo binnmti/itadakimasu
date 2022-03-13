@@ -10,7 +10,7 @@ namespace Utility
     public class CustomVisionWarpper
     {
         private static readonly int ImageUrlsLimited = 64;
-        private static readonly string TrainingEndPoint = "https://itadakimasugallery.cognitiveservices.azure.com/";
+        private static readonly string TrainingEndPoint = "https://itadakimasu.cognitiveservices.azure.com/";
         private static readonly string PredictionEndpoint = "https://itadakimasu-prediction.cognitiveservices.azure.com/";
         
         private CustomVisionTrainingClient TrainingClient { get; }
@@ -25,20 +25,19 @@ namespace Utility
             ProjectGuid = TrainingClient.GetProject(new Guid(projectId)).Id;
         }
 
-        public ImageCreateSummary CreateTrainingImages(string foodName, List<string> imageUrlList)
-            => TrainingClient.CreateImagesFromUrls(ProjectGuid, new ImageUrlCreateBatch
+        public IEnumerable<ImageCreateSummary> CreateTrainingImages(string foodName, List<string> imageUrlList)
+            => imageUrlList.Chunk(ImageUrlsLimited).Select(x => TrainingClient.CreateImagesFromUrls(ProjectGuid, new ImageUrlCreateBatch
             {
                 TagIds = new List<Guid>() { GetTag(foodName).Id },
-                Images = imageUrlList.Take(ImageUrlsLimited).Select(x => new ImageUrlCreateEntry() { Url = x }).ToList(),
-            });
+                Images = x.Select(x => new ImageUrlCreateEntry() { Url = x }).ToList(),
+            }));
 
-
-        public string TestIteration(string url)
+        public string TestIteration(string foodName, string url)
         {
             string PublishedModelName = "Iteration3";
             var result = PredictionClient.ClassifyImageUrl(ProjectGuid, PublishedModelName, new CustomVisionPrediction.Models.ImageUrl(url));
             var model = result.Predictions.First();
-            return $"{model.TagName}:{model.Probability:P1}";
+            return foodName == model.TagName ? "" : $"{model.TagName}:{model.Probability:P1}";
         }
 
         private static CustomVisionTrainingClient GetTrainingClient(HttpClient httpclient, string trainingKey)

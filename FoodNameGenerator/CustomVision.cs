@@ -29,21 +29,26 @@ namespace FoodNameGenerator
                 while (take != 0)
                 {
                     var foodImageList = foodNameFoodImage.Value.Skip(skip).Take(take).ToList();
-                    var result = customVisionWarpper.CreateTrainingImages(foodNameFoodImage.Key, foodImageList.Select(x => x.ToBlobUrl()).ToList());
+                    var resultList = customVisionWarpper.CreateTrainingImages(foodNameFoodImage.Key, foodImageList.Select(x => x.ToBlobUrl()).ToList());
                     skip += take;
-                    take = result.Images.Count(x => x.Status != "OK");
+                    take = resultList.Sum(x => x.Images.Count(x => x.Status != "OK"));
                     //結果は１つずつpost。まとめたAPIを作っても良いかも。。
-                    for (int i = 0; i < foodImageList.Count; i++)
+                    var foodImageListCount = 0;
+                    foreach (var result in resultList)
                     {
-                        var foodImage = foodImageList[i];
-                        if (foodImage.StatusNumber != 0) continue;
-                        bool isOK = result.Images[i].Status == "OK";
+                        for (int i = 0; i < result.Images.Count; i++)
+                        {
+                            var foodImage = foodImageList[foodImageListCount];
+                            foodImageListCount++;
+                            if (foodImage.StatusNumber != 0) continue;
+                            bool isOK = result.Images[i].Status == "OK";
 
-                        var stateNumber = isOK ? 1 : -1;
-                        var statusReason = isOK ? "" : result.Images[i].Status;
-                        var testResult = "";
-                        var json = JsonContent.Create(new { foodImage.Id, stateNumber, statusReason, testResult });
-                        var r = await httpClient.PostAsync($"{itadakimasuApiUrl}foodimages/food-image-state-jwt", json);
+                            var stateNumber = isOK ? 1 : -1;
+                            var statusReason = isOK ? "" : result.Images[i].Status;
+                            var testResult = "";
+                            var json = JsonContent.Create(new { foodImage.Id, stateNumber, statusReason, testResult });
+                            var r = await httpClient.PostAsync($"{itadakimasuApiUrl}foodimages/food-image-state-jwt", json);
+                        }
                     }
                     Thread.Sleep(1000);
                 }
