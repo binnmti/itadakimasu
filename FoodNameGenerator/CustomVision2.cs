@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.Models;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,10 +25,19 @@ namespace FoodNameGenerator
                 for (int i = 0; i < foodImageList.Count; i++)
                 {
                     var foodImage = foodImageList[i];
-
-                    var testResult = customVisionWarpper.TestIteration(foodImage.ToBlobUrl());
-
-                    var json = JsonContent.Create(new { foodImage.Id, testResult });
+                    var testResult = "";
+                    try
+                    {
+                        testResult = customVisionWarpper.TestIteration(foodImage.ToBlobUrl());
+                    }
+                    catch (CustomVisionErrorException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        continue;
+                    }
+                    int stateNumber = 0;
+                    string statusReason = "";
+                    var json = JsonContent.Create(new { foodImage.Id, stateNumber, statusReason, testResult });
                     var r = await httpClient.PostAsync($"{itadakimasuApiUrl}foodimages/food-image-test-result-jwt", json);
                 }
                 Thread.Sleep(1000);

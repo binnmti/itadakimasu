@@ -35,11 +35,10 @@ namespace Utility
 
         public string TestIteration(string url)
         {
-            var sb = new StringBuilder();
             string PublishedModelName = "Iteration3";
             var result = PredictionClient.ClassifyImageUrl(ProjectGuid, PublishedModelName, new CustomVisionPrediction.Models.ImageUrl(url));
-            result.Predictions.Take(5).ToList().ForEach(c => sb.AppendLine($"{c.TagName}:{c.Probability * 100}%"));
-            return sb.ToString();
+            var model = result.Predictions.First();
+            return $"{model.TagName}:{model.Probability:P1}";
         }
 
         private static CustomVisionTrainingClient GetTrainingClient(HttpClient httpclient, string trainingKey)

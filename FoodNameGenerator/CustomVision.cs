@@ -12,7 +12,7 @@ namespace FoodNameGenerator
 {
     internal static class CustomVision
     {
-        private const int TrainingImagesMax = 50;
+        private const int TrainingImagesMax = 150;
 
         internal static async Task Update(HttpClient httpClient, string itadakimasuApiUrl,  string customVisionTrainingKey, string customVisionpPredictionKey, string customVisionProjectId)
         {
@@ -41,7 +41,8 @@ namespace FoodNameGenerator
 
                         var stateNumber = isOK ? 1 : -1;
                         var statusReason = isOK ? "" : result.Images[i].Status;
-                        var json = JsonContent.Create(new { foodImage.Id, stateNumber, statusReason });
+                        var testResult = "";
+                        var json = JsonContent.Create(new { foodImage.Id, stateNumber, statusReason, testResult });
                         var r = await httpClient.PostAsync($"{itadakimasuApiUrl}foodimages/food-image-state-jwt", json);
                     }
                     Thread.Sleep(1000);

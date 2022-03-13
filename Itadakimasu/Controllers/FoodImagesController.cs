@@ -50,10 +50,7 @@ namespace Itadakimasu.Controllers
 
         [HttpGet("food-name-food-image-list")]
         public Dictionary<string, List<FoodImage>> FoodNameFoodImageList(int count)
-        {
-            count = Math.Max(count, 100);
-            return _context.FoodImage.ToLookup(x => x.FoodName).ToDictionary(x => x.Key, x => x.Select(s => s).Where(s => s.StatusNumber != -1).Take(count).ToList());
-        }
+            => _context.FoodImage.ToLookup(x => x.FoodName).ToDictionary(x => x.Key, x => x.Select(s => s).Where(s => s.StatusNumber != -1).Take(count).ToList());
 
         [HttpGet("food-image-count")]
         public int FoodImageCount() => _context.FoodImage.Count();
