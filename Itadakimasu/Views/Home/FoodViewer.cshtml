@@ -160,7 +160,7 @@
         document.querySelectorAll('.btn-foodImage').forEach(btn => btn.addEventListener('click', async (event) => {
             const id = event.target.parentNode.dataset.id;
             const number = (event.target.dataset.value);
-            const response = await fetch('/api/FoodImages/food-image-state', {
+            const response = await fetch('/api/FoodImages/set-food-image-state', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ Id: id, StateNumber: number })

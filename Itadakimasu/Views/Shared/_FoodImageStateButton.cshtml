@@ -13,7 +13,7 @@
             event.preventDefault();
             const value = event.target.getAttribute("data-value");
             const name = event.target.getAttribute("data-name");
-            const response = await fetch('/api/food-image-state/', {
+            const response = await fetch('/api/FoodImages/set-food-image-state/', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ blobName: name, stateNumber: value })

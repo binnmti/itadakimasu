@@ -68,46 +68,19 @@ namespace Itadakimasu.Controllers
 
         public record FoodImageRequest(long Id, int StateNumber, string StatusReason, string TestResult);
         [Authorize]
-        [HttpPost("food-image-state")]
-        public async Task<ActionResult<FoodImage>> FoodImageState([FromBody]FoodImageRequest request)
+        [HttpPost("set-food-image-state")]
+        public async Task<ActionResult<FoodImage>> SetFoodImageState([FromBody]FoodImageRequest request)
         {
 #if !DEBUG
             if (!SignInManager.IsSignedIn(User)) return Unauthorized();
 #endif
-            return await SaveChangesStatusAsync(request);
+            return await SaveChangesFoodImageStateAsync(request);
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpPost("food-image-state-jwt")]
-        public async Task<ActionResult<FoodImage>> FoodImageStateJwt([FromBody] FoodImageRequest request)
-            => await SaveChangesStatusAsync(request);
-
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpPost("food-image-test-result-jwt")]
-        public async Task<ActionResult<FoodImage>> FoodImageTestResultJwt([FromBody] FoodImageRequest request)
-            => await SaveChangesTestResultAsync(request);
-
-
-        private async Task<ActionResult<FoodImage>> SaveChangesStatusAsync(FoodImageRequest request)
-        {
-            var hit = await _context.FoodImage.SingleOrDefaultAsync(x => x.Id == request.Id);
-            if (hit == null) return Conflict();
-
-            hit.StatusNumber = request.StateNumber;
-            hit.StatusReason = request.StatusReason;
-            await _context.SaveChangesAsync();
-            return hit;
-        }
-
-        private async Task<ActionResult<FoodImage>> SaveChangesTestResultAsync(FoodImageRequest request)
-        {
-            var hit = await _context.FoodImage.SingleOrDefaultAsync(x => x.Id == request.Id);
-            if (hit == null) return Conflict();
-
-            hit.TestResult = request.TestResult;    
-            await _context.SaveChangesAsync();
-            return hit;
-        }
+        [HttpPost("set-food-image-state-token")]
+        public async Task<ActionResult<FoodImage>> SetFoodImageStateToken([FromBody] FoodImageRequest request)
+            => await SaveChangesFoodImageStateAsync(request);
 
         [Authorize]
         public record FoodImageAllRequest(List<long> Ids, int StateNumber);
@@ -140,6 +113,18 @@ namespace Itadakimasu.Controllers
             _context.FoodImage.Add(foodImage);
             await _context.SaveChangesAsync();
             return foodImage;
+        }
+
+        private async Task<ActionResult<FoodImage>> SaveChangesFoodImageStateAsync(FoodImageRequest request)
+        {
+            var hit = await _context.FoodImage.SingleOrDefaultAsync(x => x.Id == request.Id);
+            if (hit == null) return Conflict();
+
+            if (request.StateNumber != 0) hit.StatusNumber = request.StateNumber;
+            if (request.TestResult != "") hit.TestResult = request.TestResult;
+            if (request.StatusReason != "") hit.StatusReason = request.StatusReason;
+            await _context.SaveChangesAsync();
+            return hit;
         }
 
         private async Task<FoodImage?> FindAsync(string baseUrl)
