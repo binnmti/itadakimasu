@@ -25,12 +25,12 @@ namespace Utility
             ProjectGuid = TrainingClient.GetProject(new Guid(projectId)).Id;
         }
 
-        public IEnumerable<ImageCreateSummary> CreateTrainingImages(string foodName, List<string> imageUrlList)
+        public List<ImageCreateSummary> CreateTrainingImages(string foodName, List<string> imageUrlList)
             => imageUrlList.Chunk(ImageUrlsLimited).Select(x => TrainingClient.CreateImagesFromUrls(ProjectGuid, new ImageUrlCreateBatch
             {
                 TagIds = new List<Guid>() { GetTag(foodName).Id },
                 Images = x.Select(x => new ImageUrlCreateEntry() { Url = x }).ToList(),
-            }));
+            })).ToList();
 
         public string TestIteration(string foodName, string url)
         {
