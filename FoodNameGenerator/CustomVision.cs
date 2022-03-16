@@ -72,12 +72,14 @@ internal static class CustomVision
                 try
                 {
                     testResult = customVisionWarpper.TestIteration(foodImage.FoodName, foodImage.ToBlobUrl());
+                    if (testResult == "") continue;
                 }
                 catch (CustomVisionErrorException ex)
                 {
+                    testResult = ex.Message;
                     Console.WriteLine(ex.Message);
-                    continue;
                 }
+
                 int stateNumber = 0;
                 string statusReason = "";
                 var json = JsonContent.Create(new { foodImage.Id, stateNumber, statusReason, testResult });

@@ -12,7 +12,8 @@ namespace Utility
         private static readonly int ImageUrlsLimited = 64;
         private static readonly string TrainingEndPoint = "https://itadakimasu.cognitiveservices.azure.com/";
         private static readonly string PredictionEndpoint = "https://itadakimasu-prediction.cognitiveservices.azure.com/";
-        
+        private static readonly string PublishedModelName = "Iteration1";
+
         private CustomVisionTrainingClient TrainingClient { get; }
         private CustomVisionPredictionClient PredictionClient { get; }
         
@@ -34,7 +35,6 @@ namespace Utility
 
         public string TestIteration(string foodName, string url)
         {
-            string PublishedModelName = "Iteration3";
             var result = PredictionClient.ClassifyImageUrl(ProjectGuid, PublishedModelName, new CustomVisionPrediction.Models.ImageUrl(url));
             var model = result.Predictions.First();
             return foodName == model.TagName ? "" : $"{model.TagName}:{model.Probability:P1}";
