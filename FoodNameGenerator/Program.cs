@@ -13,7 +13,15 @@ class Program
 #else
     private static readonly string ItadakimasuApiUrl = "https://itadakimasu.azurewebsites.net/api/";
 #endif
-    private static HttpClient HttpClient = new();
+    private static readonly HttpClient HttpClient = new();
+
+    private enum FoodNameGeneratorIteration
+    {
+        BlobForBingSearchResult,
+        CustomVisionUpdate,
+        CustomVisionTest,
+    }
+    private static readonly FoodNameGeneratorIteration Iteration = FoodNameGeneratorIteration.CustomVisionTest;
 
     static async Task Main()
     {
@@ -25,6 +33,9 @@ class Program
         if (isDevelopment) builder.AddUserSecrets<Program>();
 
         var configuration = builder.Build();
+        var blobConnectionString = configuration["BlobConnectionString"];
+        var bingCustomSearchSubscriptionKey = configuration["BingCustomSearchCustomConfigId"];
+        var bingCustomSearchCustomConfigId = configuration["BingCustomSearchCustomConfigId"];
         var customVisionProjectId = configuration["CustomVisionProjectId"];
         var customVisionTrainingKey = configuration["CustomVisionTrainingKey"];
         var customVisionpPredictionKey = configuration["CustomVisionpPredictionKey"];
@@ -36,7 +47,17 @@ class Program
         var accessToken = await HttpClient.GetStringAsync($"{ItadakimasuApiUrl}foodimages/get-access-token?userName={userName}&password={password}");
         HttpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
 
-        await CustomVision.Update(HttpClient, ItadakimasuApiUrl, customVisionTrainingKey, customVisionpPredictionKey, customVisionProjectId);
-        //await BlobForBingSearchResult.Update(blobConnectionString, ItadakimasuApiUrl, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
+        switch (Iteration)
+        {
+            case FoodNameGeneratorIteration.BlobForBingSearchResult:
+                await BlobForBingSearchResult.Update(HttpClient, blobConnectionString, ItadakimasuApiUrl, bingCustomSearchSubscriptionKey, bingCustomSearchCustomConfigId);
+                break;
+            case FoodNameGeneratorIteration.CustomVisionUpdate:
+                await CustomVision.Update(HttpClient, ItadakimasuApiUrl, customVisionTrainingKey, customVisionpPredictionKey, customVisionProjectId);
+                break;
+            case FoodNameGeneratorIteration.CustomVisionTest:
+                await CustomVision.Test(HttpClient, ItadakimasuApiUrl, customVisionTrainingKey, customVisionpPredictionKey, customVisionProjectId);
+                break;
+        };
     }
 }
