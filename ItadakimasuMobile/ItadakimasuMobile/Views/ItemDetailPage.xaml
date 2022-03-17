@@ -3,8 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ItadakimasuMobile.Views.ItemDetailPage"
              Title="{Binding Title}">
-
     <StackLayout Spacing="20" Padding="15">
+        <Label Text="Photo Picker"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+        <Button Text="Pick Photo"
+                    Clicked="OnPickPhotoButtonClicked" />
+        <Image x:Name="image" />
         <Label Text="Text:" FontSize="Medium" />
         <Label Text="{Binding Text}" FontSize="Small"/>
         <Label Text="Description:" FontSize="Medium" />

@@ -1,8 +1,5 @@
 ﻿using ItadakimasuMobile.Services;
-using ItadakimasuMobile.Views;
-using System;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace ItadakimasuMobile
 {
