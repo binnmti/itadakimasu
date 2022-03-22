@@ -20,8 +20,8 @@ namespace Itadakimasu.Controllers
             ConnectionStrings = connectionStrings.Value;
         }
 
-        [HttpGet("get-food")]
-        public string GetFood(string imageUrl)
+        [HttpGet("get-food-name")]
+        public string GetFoodName(string imageUrl)
         {
             var httpClient = _httpClientFactory.CreateClient();
             var customVisionWarpper = new CustomVisionWarpper(httpClient, ConnectionStrings.CustomVisionTrainingKey, ConnectionStrings.CustomVisionpPredictionKey, ConnectionStrings.CustomVisionProjectId);
