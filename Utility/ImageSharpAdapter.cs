@@ -41,7 +41,6 @@ public static class ImageSharpAdapter
     private static double GetDecimalNumber(Rational[] rationals)
         => rationals[0].Numerator + ((double)rationals[1].Numerator / 60) + (rationals[2].Numerator / (double)rationals[2].Denominator / 3600);
 
-
     private static Stream GetJpegStream(Image image, int quality)
     {
         var output = new MemoryStream();
