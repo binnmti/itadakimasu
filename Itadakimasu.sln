@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItadakimasuMobile.iOS", "It
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItadakimasuMobile", "ItadakimasuMobile\ItadakimasuMobile\ItadakimasuMobile.csproj", "{A4D7F88A-96B8-4F16-AAF2-DE7AFA6F3047}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilityTestProject", "UtilityTestProject\UtilityTestProject.csproj", "{2656245B-243C-4DB3-AE30-BC878818785C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityTestProject", "UtilityTestProject\UtilityTestProject.csproj", "{2656245B-243C-4DB3-AE30-BC878818785C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

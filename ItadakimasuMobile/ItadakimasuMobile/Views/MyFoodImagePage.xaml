@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ItadakimasuMobile.Views.MyFoodImagePage"
+             Title="{Binding Title}">
+    <StackLayout Spacing="20" Padding="15">
+        <Label Text="Photo Picker"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+        <Button Text="Pick Photo"
+                    Clicked="OnPickPhotoButtonClicked" />
+        <Image x:Name="image" />
+        <Label Text="FoodName:" FontSize="Medium" />
+        <Label Text="{Binding FoodName}" FontSize="Small"/>
+        <Label Text="Memo:" FontSize="Medium" />
+        <Label Text="{Binding Memo}" FontSize="Small"/>
+    </StackLayout>
+
+</ContentPage>
