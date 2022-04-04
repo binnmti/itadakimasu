@@ -40,6 +40,13 @@ namespace Utility
             return foodName == model.TagName ? "" : $"{model.TagName}:{model.Probability:P1}";
         }
 
+        public string TestIteration(string foodName, Stream stream)
+        {
+            var result = PredictionClient.ClassifyImage(ProjectGuid, PublishedModelName, stream);
+            var model = result.Predictions.First();
+            return foodName == model.TagName ? "" : $"{model.TagName}:{model.Probability:P1}";
+        }
+
         private static CustomVisionTrainingClient GetTrainingClient(HttpClient httpclient, string trainingKey)
             => new(new CustomVisionTraining.ApiKeyServiceClientCredentials(trainingKey), httpclient, false)
             {

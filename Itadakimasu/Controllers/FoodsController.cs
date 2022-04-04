@@ -30,5 +30,17 @@ namespace Itadakimasu.Controllers
             var result = customVisionWarpper.TestIteration("", imageUrl);
             return result;
         }
+
+        [HttpPost("get-food-name-stream")]
+        public string GetFoodNameStraem([FromBody] Stream stream)
+        {
+            var httpClient = _httpClientFactory.CreateClient();
+            var customVisionWarpper = new CustomVisionWarpper(httpClient, ConnectionStrings.CustomVisionTrainingKey, ConnectionStrings.CustomVisionpPredictionKey, ConnectionStrings.CustomVisionProjectId);
+
+            //TODO:第一引数は戻し方なので再設計
+            var result = customVisionWarpper.TestIteration("", stream);
+            return result;
+        }
+
     }
 }

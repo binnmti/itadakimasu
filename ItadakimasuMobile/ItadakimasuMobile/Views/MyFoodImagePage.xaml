@@ -12,6 +12,10 @@
         <Image x:Name="image" />
         <Label Text="FoodName:" FontSize="Medium" />
         <Label Text="{Binding FoodName}" FontSize="Small"/>
+        <Label Text="Lat:" FontSize="Medium" />
+        <Label Text="{Binding Lat}" FontSize="Small"/>
+        <Label Text="Lng:" FontSize="Medium" />
+        <Label Text="{Binding Lng}" FontSize="Small"/>
         <Label Text="Memo:" FontSize="Medium" />
         <Label Text="{Binding Memo}" FontSize="Small"/>
     </StackLayout>
