@@ -1,8 +1,6 @@
 ﻿using ItadakimasuMobile.Services;
-using ItadakimasuMobile.Utils;
 using ItadakimasuMobile.ViewModels;
 using System;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace ItadakimasuMobile.Views
@@ -32,14 +30,14 @@ namespace ItadakimasuMobile.Views
             var stream = await DependencyService.Get<IPhotoPickerService>().GetImageStreamAsync();
             if (stream != null)
             {
-                _viewModel.FoodImage.Source = ImageSource.FromStream(() => stream);
+                _viewModel.FoodImage = stream;
+                var imageSource = ImageSource.FromStream(() => stream);
+                FoodImage.Source = imageSource;
 
-                var httpClient = new System.Net.Http.HttpClient();
-
-                (_viewModel.Lat, _viewModel.Lng) = await ImageSharpAdapter.GetGpsAsync(stream);
+                //(_viewModel.Lat, _viewModel.Lng) = await ImageSharpAdapter.GetGpsAsync(stream);
+                //var httpClient = new System.Net.Http.HttpClient();
                 //var hotpepper = new HotpepperAdapter(hotpepperApiKey, HttpClient);
                 //var result = await hotpepper.GetResultAsync(lat.ToString(), lng.ToString());
-
             }
 
              (sender as Button).IsEnabled = true;

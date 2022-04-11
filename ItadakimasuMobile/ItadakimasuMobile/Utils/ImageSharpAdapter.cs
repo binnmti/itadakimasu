@@ -14,6 +14,8 @@ namespace ItadakimasuMobile.Utils
 
             using (var image = await Image.LoadAsync(stream))
             {
+                if (image.Metadata.ExifProfile == null) return (0, 0);
+
                 var latiude = image.Metadata.ExifProfile.GetValue(ExifTag.GPSLatitude);
                 var longitude = image.Metadata.ExifProfile.GetValue(ExifTag.GPSLongitude);
                 if (latiude != null && longitude != null)

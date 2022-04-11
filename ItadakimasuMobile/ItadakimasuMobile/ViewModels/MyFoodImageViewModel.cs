@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.IO;
 using Xamarin.Forms;
 
 namespace ItadakimasuMobile.ViewModels
@@ -12,13 +10,17 @@ namespace ItadakimasuMobile.ViewModels
             Title = "MyFoodImage";
         }
 
-        //イキナリURLになるとは限らない。
-        private Image foodImage;
-        public Image FoodImage
+        private Stream foodImage;
+        public Stream FoodImage
         {
             get => foodImage;
-            set => SetProperty(ref foodImage, value);
+            set
+            {
+                foodImage = value;
+                SetProperty(ref foodImage, value);
+            }
         }
+
 
         private string foodName;
         public string FoodName
