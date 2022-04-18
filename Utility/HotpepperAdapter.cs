@@ -15,8 +15,9 @@ public class HotpepperAdapter
         HttpClient = httpClient;
     }
 
-    public async Task<List<Shop>> GetResultAsync(string lat, string lng)
+    public async Task<List<Shop>> GetResultAsync(double lat, double lng)
     {
+        if (lat == 0 && lng == 0) return new List<Shop>();
         var str = await HttpClient.GetStringAsync($"{HotpepperUrl}key={HotpepperKey}&lat={lat}&lng={lng}");
         using var stream = new MemoryStream(Encoding.UTF8.GetBytes(str));
         var xml = new XmlSerializer(typeof(results)).Deserialize(stream) as results;

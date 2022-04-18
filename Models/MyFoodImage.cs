@@ -18,3 +18,7 @@ public record MyFoodImage
     public string Memo { get; set; } = "";
 }
 
+public record FoodImageResult(string FoodName, double Lat, double Lng, List<Shop> Shops);
+public record Shop(string Name, string Address, double Lat, double Lng);
+
+

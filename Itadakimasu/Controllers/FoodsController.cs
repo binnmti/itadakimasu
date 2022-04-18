@@ -2,6 +2,8 @@
 using Itadakimasu.Data;
 using Utility;
 using Microsoft.Extensions.Options;
+using Models;
+using ModelsShop = Models.Shop;
 
 namespace Itadakimasu.Controllers
 {
@@ -31,16 +33,21 @@ namespace Itadakimasu.Controllers
             return result;
         }
 
-        [HttpPost("get-food-name-stream")]
-        public string GetFoodNameStraem([FromBody] Stream stream)
+        [HttpPost("get-food-image-result")]
+        public async Task<FoodImageResult> GetFoodImageResult()
         {
+            using var stream = new MemoryStream();
+            await Request.Body.CopyToAsync(stream);
+            stream.Seek(0, SeekOrigin.Begin);
             var httpClient = _httpClientFactory.CreateClient();
             var customVisionWarpper = new CustomVisionWarpper(httpClient, ConnectionStrings.CustomVisionTrainingKey, ConnectionStrings.CustomVisionpPredictionKey, ConnectionStrings.CustomVisionProjectId);
-
+            var (lat, lng) = ImageSharpAdapter.GetGps(stream);
+            var hotpepper = new HotpepperAdapter(ConnectionStrings.HotpepperKey, httpClient);
+            var shops = await hotpepper.GetResultAsync(lat, lng);
+            stream.Seek(0, SeekOrigin.Begin);
             //TODO:第一引数は戻し方なので再設計
-            var result = customVisionWarpper.TestIteration("", stream);
-            return result;
+            var foodName = customVisionWarpper.TestIteration("", stream);
+            return new FoodImageResult(foodName, lat, lng, shops.Select(x => new ModelsShop(x.Name, x.Address, x.Lat, x.Lng)).ToList());
         }
-
     }
 }

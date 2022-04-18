@@ -1,7 +1,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
+using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Utility;
 
@@ -22,10 +26,11 @@ namespace UtilityTestProject
         [TestMethod]
         public async Task TestMethod1()
         {
-            var hotpepperApiKey = Configuration["HotpepperApiKey"];
-            var (lat, lng) = ImageSharpAdapter.GetGps(@"C:\Users\BinMatsui\OneDrive\デスクトップ\GPSON.jpg");
-            var hotpepper = new HotpepperAdapter(hotpepperApiKey, HttpClient);
-            var result = await hotpepper.GetResultAsync(lat.ToString(), lng.ToString());
+            var filePath = @"C:\Users\BinMatsui\OneDrive\デスクトップ\bing0200.jpg";
+            var data = File.ReadAllBytes(filePath);
+            var content = new ByteArrayContent(data);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            var result = await HttpClient.PostAsync("https://localhost:7162/api/foods/get-food-image-result", content);
         }
     }
 }

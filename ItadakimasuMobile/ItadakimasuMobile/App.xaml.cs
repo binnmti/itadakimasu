@@ -1,4 +1,5 @@
 ﻿using ItadakimasuMobile.Services;
+using ItadakimasuMobile.Utils;
 using Xamarin.Forms;
 
 namespace ItadakimasuMobile

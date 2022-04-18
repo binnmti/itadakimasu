@@ -9,9 +9,9 @@ namespace ItadakimasuMobile.Utils
     public class UserSecretsManager
     {
         private static UserSecretsManager _instance;
-        private readonly JObject _secrets;
+        private JObject _secrets;
         private const string Namespace = "ItadakimasuMobile";
-        private const string UserSecretsFileName = "secrets.json"; 
+        private const string UserSecretsFileName = "secrets.json";
 
         private UserSecretsManager()
         {

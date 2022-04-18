@@ -26,9 +26,21 @@ public static class ImageSharpAdapter
     public static (double, double) GetGps(string fs)
     {
         using var image = Image.Load(fs);
+        return GetGps(image);
+    }
+
+    public static (double, double) GetGps(Stream stream)
+    {
+        using var image = Image.Load(stream);
+        return GetGps(image);
+    }
+
+    private static (double, double) GetGps(Image image)
+    {
+        if (image.Metadata.ExifProfile == null) return (0, 0);
         var latiude = image.Metadata.ExifProfile.GetValue(ExifTag.GPSLatitude);
         var longitude = image.Metadata.ExifProfile.GetValue(ExifTag.GPSLongitude);
-        if(latiude != null && longitude != null)
+        if (latiude != null && longitude != null)
         {
             return (GetDecimalNumber(latiude.Value), GetDecimalNumber(longitude.Value));
         }
@@ -37,6 +49,7 @@ public static class ImageSharpAdapter
             return (0, 0);
         }
     }
+
 
     private static double GetDecimalNumber(Rational[] rationals)
         => rationals[0].Numerator + ((double)rationals[1].Numerator / 60) + (rationals[2].Numerator / (double)rationals[2].Denominator / 3600);
