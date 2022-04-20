@@ -22,16 +22,38 @@ namespace Itadakimasu.Controllers
             ConnectionStrings = connectionStrings.Value;
         }
 
-        [HttpGet("get-food-name")]
-        public string GetFoodName(string imageUrl)
+        //[HttpGet("get-food-name")]
+        //public string GetFoodName(string imageUrl)
+        //{
+        //    var httpClient = _httpClientFactory.CreateClient();
+        //    var customVisionWarpper = new CustomVisionWarpper(httpClient, ConnectionStrings.CustomVisionTrainingKey, ConnectionStrings.CustomVisionpPredictionKey, ConnectionStrings.CustomVisionProjectId);
+
+        //    //TODO:第一引数は戻し方なので再設計
+        //    var result = customVisionWarpper.TestIteration("", imageUrl);
+        //    return result;
+        //}
+
+        [HttpPost("get-food-name")]
+        public async Task<string> GetFoodName()
         {
+            using var stream = new MemoryStream();
+            await Request.Body.CopyToAsync(stream);
+            stream.Seek(0, SeekOrigin.Begin);
             var httpClient = _httpClientFactory.CreateClient();
             var customVisionWarpper = new CustomVisionWarpper(httpClient, ConnectionStrings.CustomVisionTrainingKey, ConnectionStrings.CustomVisionpPredictionKey, ConnectionStrings.CustomVisionProjectId);
-
-            //TODO:第一引数は戻し方なので再設計
-            var result = customVisionWarpper.TestIteration("", imageUrl);
-            return result;
+            return customVisionWarpper.TestIteration("", stream);
         }
+
+        [HttpPost("get-food-gps")]
+        public async Task<(double, double)> GetFoodGps()
+        {
+            using var stream = new MemoryStream();
+            await Request.Body.CopyToAsync(stream);
+            stream.Seek(0, SeekOrigin.Begin);
+            return ImageSharpAdapter.GetGps(stream);
+        }
+
+
 
         [HttpPost("get-food-image-result")]
         public async Task<FoodImageResult> GetFoodImageResult()

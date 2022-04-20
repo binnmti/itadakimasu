@@ -31,6 +31,7 @@ namespace UtilityTestProject
             var content = new ByteArrayContent(data);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
             var result = await HttpClient.PostAsync("https://localhost:7162/api/foods/get-food-image-result", content);
+            var str = await result.Content.ReadAsStringAsync();
         }
     }
 }
