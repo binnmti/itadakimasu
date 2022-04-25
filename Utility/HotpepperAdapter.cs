@@ -21,7 +21,7 @@ public class HotpepperAdapter
         var str = await HttpClient.GetStringAsync($"{HotpepperUrl}key={HotpepperKey}&lat={lat}&lng={lng}");
         using var stream = new MemoryStream(Encoding.UTF8.GetBytes(str));
         var xml = new XmlSerializer(typeof(results)).Deserialize(stream) as results;
-        return xml.shop.Select(x => new Shop(x.name, x.address, (double)x.lat, (double)x.lng)).ToList();
+        return xml?.shop?.Select(x => new Shop(x.name, x.address, (double)x.lat, (double)x.lng)).ToList() ?? new List<Shop>();
     }
 }
 

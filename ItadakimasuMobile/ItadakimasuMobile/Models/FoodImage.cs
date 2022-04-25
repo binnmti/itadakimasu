@@ -16,7 +16,6 @@ namespace ItadakimasuMobile.Models
         public string Address { get; set; }
         public double Lat { get; set; }
         public double Lng { get; set; }
-
     }
 }
 

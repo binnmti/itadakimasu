@@ -35,23 +35,22 @@ namespace ItadakimasuMobile.Views
             var stream = await DependencyService.Get<IPhotoPickerService>().GetImageStreamAsync();
             if (stream != null)
             {
+                FoodImageResult foodImageResult;
                 using (var ms = new MemoryStream())
                 {
                     stream.CopyTo(ms);
                     var content = new ByteArrayContent(ms.ToArray());
                     content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-                    var result = await httpClient.PostAsync("https://localhost:7162/api/foods/get-food-image-result", content);
+                    var result = await httpClient.PostAsync("https://itadakimasu.azurewebsites.net/api/foods/get-food-image-result", content);
                     var json = await result.Content.ReadAsStringAsync();
-                    var a = JsonConvert.DeserializeObject<FoodImageResult>(json);
-
+                    foodImageResult = JsonConvert.DeserializeObject<FoodImageResult>(json);
                 }
+                stream.Seek(0, SeekOrigin.Begin);
 
-
-
-                //_viewModel.FoodImage = stream;
-                //(_viewModel.Lat, _viewModel.Lng) = await ImageSharpAdapter.GetGpsAsync(stream);
-                //var hotpepper = new HotpepperAdapter(hotpepperApiKey, httpClient);
-                //var result = await hotpepper.GetResultAsync(_viewModel.Lat.ToString(), _viewModel.Lng.ToString());
+                _viewModel.FoodImage = stream;
+                _viewModel.FoodName = foodImageResult.FoodName;
+                _viewModel.Lat = foodImageResult.Lat;
+                _viewModel.Lng = foodImageResult.Lng;
             }
 
             (sender as Button).IsEnabled = true;

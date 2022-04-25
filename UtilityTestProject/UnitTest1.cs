@@ -26,10 +26,11 @@ namespace UtilityTestProject
         [TestMethod]
         public async Task TestMethod1()
         {
-            var filePath = @"C:\Users\BinMatsui\OneDrive\デスクトップ\bing0200.jpg";
+            var filePath = @"C:\Users\BinMatsui\OneDrive\デスクトップ\PXL_20220424_054909222.jpg";
             var data = File.ReadAllBytes(filePath);
             var content = new ByteArrayContent(data);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            //https://itadakimasu.azurewebsites.net/api/foods/get-food-image-result
             var result = await HttpClient.PostAsync("https://localhost:7162/api/foods/get-food-image-result", content);
             var str = await result.Content.ReadAsStringAsync();
         }
