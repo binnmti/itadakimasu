@@ -31,26 +31,13 @@ namespace ItadakimasuMobile.Views
         {
             (sender as Button).IsEnabled = false;
 
-            var httpClient = new HttpClient();
             var stream = await DependencyService.Get<IPhotoPickerService>().GetImageStreamAsync();
             if (stream != null)
             {
-                FoodImageResult foodImageResult;
-                using (var ms = new MemoryStream())
-                {
-                    stream.CopyTo(ms);
-                    var content = new ByteArrayContent(ms.ToArray());
-                    content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-                    var result = await httpClient.PostAsync("https://itadakimasu.azurewebsites.net/api/foods/get-food-image-result", content);
-                    var json = await result.Content.ReadAsStringAsync();
-                    foodImageResult = JsonConvert.DeserializeObject<FoodImageResult>(json);
-                }
+                FoodImage.Source = ImageSource.FromStream(() => stream);
                 stream.Seek(0, SeekOrigin.Begin);
 
-                _viewModel.FoodImage = stream;
-                _viewModel.FoodName = foodImageResult.FoodName;
-                _viewModel.Lat = foodImageResult.Lat;
-                _viewModel.Lng = foodImageResult.Lng;
+                await _viewModel.SetStreamAsync(stream);
             }
 
             (sender as Button).IsEnabled = true;

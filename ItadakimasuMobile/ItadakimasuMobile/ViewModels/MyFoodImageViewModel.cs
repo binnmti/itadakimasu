@@ -1,13 +1,43 @@
-﻿using System.IO;
-using Xamarin.Forms;
+﻿using ItadakimasuMobile.Models;
+using Newtonsoft.Json;
+using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace ItadakimasuMobile.ViewModels
 {
     public class MyFoodImageViewModel : BaseViewModel
     {
+        public HttpClient HttpClient { get; } = new HttpClient();
+
         public MyFoodImageViewModel()
         {
             Title = "MyFoodImage";
+            //AuthenticateCommand = new Command(() => { });
+        }
+
+        public async Task SetStreamAsync(Stream stream)
+        {
+            if (stream == null) return;
+
+            HttpResponseMessage message;
+            using (var ms = new MemoryStream())
+            {
+                stream.CopyTo(ms);
+                stream.Seek(0, SeekOrigin.Begin);
+                var content = new ByteArrayContent(ms.ToArray());
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                message = await HttpClient.PostAsync("https://itadakimasu.azurewebsites.net/api/foods/get-food-image-result", content);
+            }
+            if (!message.IsSuccessStatusCode) return;
+
+            var json = await message.Content.ReadAsStringAsync();
+            var foodImageResult = JsonConvert.DeserializeObject<FoodImageResult>(json);
+            FoodImage = stream;
+            FoodName = foodImageResult.FoodName;
+            Lat = foodImageResult.Lat;
+            Lng = foodImageResult.Lng;
         }
 
         private Stream foodImage;
@@ -20,7 +50,6 @@ namespace ItadakimasuMobile.ViewModels
                 SetProperty(ref foodImage, value);
             }
         }
-
 
         private string foodName;
         public string FoodName
