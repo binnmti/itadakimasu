@@ -53,8 +53,6 @@ namespace Itadakimasu.Controllers
             return ImageSharpAdapter.GetGps(stream);
         }
 
-
-
         [HttpPost("get-food-image-result")]
         public async Task<FoodImageResult> GetFoodImageResult()
         {
@@ -64,7 +62,7 @@ namespace Itadakimasu.Controllers
             var httpClient = _httpClientFactory.CreateClient();
             var customVisionWarpper = new CustomVisionWarpper(httpClient, ConnectionStrings.CustomVisionTrainingKey, ConnectionStrings.CustomVisionpPredictionKey, ConnectionStrings.CustomVisionProjectId);
             var (lat, lng) = ImageSharpAdapter.GetGps(stream);
-            var hotpepper = new HotpepperAdapter(ConnectionStrings.HotpepperKey, httpClient);
+            var hotpepper = new HotpepperAdapter(ConnectionStrings.HotpepperApiKey, httpClient);
             var shops = await hotpepper.GetResultAsync(lat, lng);
             stream.Seek(0, SeekOrigin.Begin);
             //TODO:第一引数は戻し方なので再設計

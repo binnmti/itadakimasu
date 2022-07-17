@@ -5,6 +5,6 @@
         public string CustomVisionTrainingKey { get; set; } = "";
         public string CustomVisionpPredictionKey { get; set; } = "";
         public string CustomVisionProjectId { get; set; } = "";
-        public string HotpepperKey { get; set; } = "";
+        public string HotpepperApiKey { get; set; } = "";
     }
 }

@@ -12,7 +12,7 @@ using Utility;
 namespace UtilityTestProject
 {
     [TestClass]
-    public class UnitTest1
+    public class UnitTest1             
     {
         IConfiguration Configuration { get; set; }
 
@@ -24,14 +24,28 @@ namespace UtilityTestProject
         private static readonly HttpClient HttpClient = new();
 
         [TestMethod]
+        public async Task ImageSharpAdapterTest()
+        {
+            var filePath = @"C:\Users\BinMatsui\OneDrive\画像\カメラ ロール\WIN_20220319_23_26_45_Pro.jpg";
+            var stream = File.OpenRead(filePath);
+            var (lat, lng) = ImageSharpAdapter.GetGps(stream);
+
+            var key = Configuration.GetConnectionString("HotpepperApiKey");
+            var hotpepper = new HotpepperAdapter(key, HttpClient);
+            var shops = await hotpepper.GetResultAsync(lat, lng);
+
+        }
+
+        [TestMethod]
         public async Task TestMethod1()
         {
-            var filePath = @"C:\Users\BinMatsui\OneDrive\デスクトップ\PXL_20220424_054909222.jpg";
+            var filePath = @"C:\Users\BinMatsui\OneDrive\画像\カメラ ロール\WIN_20220319_23_26_45_Pro.jpg";
             var data = File.ReadAllBytes(filePath);
             var content = new ByteArrayContent(data);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-            //https://itadakimasu.azurewebsites.net/api/foods/get-food-image-result
-            var result = await HttpClient.PostAsync("https://localhost:7162/api/foods/get-food-image-result", content);
+
+            //var result = await HttpClient.PostAsync("https://localhost:7162/api/foods/get-food-image-result", content);
+            var result = await HttpClient.PostAsync("https://itadakimasu.azurewebsites.net/api/foods/get-food-image-result", content);
             var str = await result.Content.ReadAsStringAsync();
         }
     }

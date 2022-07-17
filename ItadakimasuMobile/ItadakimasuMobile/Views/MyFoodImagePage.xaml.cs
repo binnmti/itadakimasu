@@ -42,5 +42,10 @@ namespace ItadakimasuMobile.Views
 
             (sender as Button).IsEnabled = true;
         }
+
+        void MyPickerSelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -16,6 +16,8 @@
         <Label Text="{Binding Lng}" FontSize="Small"/>
         <Label Text="Memo:" FontSize="Medium" />
         <Label Text="{Binding Memo}" FontSize="Small"/>
+        <Picker x:Name="MyPicker" SelectedIndexChanged="MyPickerSelectedIndexChanged" ItemsSource="{Binding Shops}">
+        </Picker>
         <Image x:Name="FoodImage" />
     </StackLayout>
 

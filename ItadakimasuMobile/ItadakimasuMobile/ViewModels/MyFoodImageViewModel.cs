@@ -1,6 +1,8 @@
 ﻿using ItadakimasuMobile.Models;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -28,7 +30,8 @@ namespace ItadakimasuMobile.ViewModels
                 stream.Seek(0, SeekOrigin.Begin);
                 var content = new ByteArrayContent(ms.ToArray());
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-                message = await HttpClient.PostAsync("https://itadakimasu.azurewebsites.net/api/foods/get-food-image-result", content);
+                message = await HttpClient.PostAsync("https://localhost:7162/api/foods/get-food-image-result", content);
+                //message = await HttpClient.PostAsync("https://itadakimasu.azurewebsites.net/api/foods/get-food-image-result", content);
             }
             if (!message.IsSuccessStatusCode) return;
 
@@ -38,6 +41,10 @@ namespace ItadakimasuMobile.ViewModels
             FoodName = foodImageResult.FoodName;
             Lat = foodImageResult.Lat;
             Lng = foodImageResult.Lng;
+            if (foodImageResult.Shops.Count > 0)
+            {
+                Shops = foodImageResult.Shops.Select(x => x.FoodName).ToList();
+            }
         }
 
         private Stream foodImage;
@@ -77,6 +84,13 @@ namespace ItadakimasuMobile.ViewModels
         {
             get => lng;
             set => SetProperty(ref lng, value);
+        }
+
+        private List<string> shops;
+        public List<string> Shops
+        {
+            get => shops;
+            set => SetProperty(ref shops, value);
         }
 
         private string memo;
