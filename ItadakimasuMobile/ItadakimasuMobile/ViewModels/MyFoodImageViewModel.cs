@@ -30,8 +30,7 @@ namespace ItadakimasuMobile.ViewModels
                 stream.Seek(0, SeekOrigin.Begin);
                 var content = new ByteArrayContent(ms.ToArray());
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-                message = await HttpClient.PostAsync("https://localhost:7162/api/foods/get-food-image-result", content);
-                //message = await HttpClient.PostAsync("https://itadakimasu.azurewebsites.net/api/foods/get-food-image-result", content);
+                message = await HttpClient.PostAsync("https://itadakimasu.azurewebsites.net/api/foods/get-food-image-result", content);
             }
             if (!message.IsSuccessStatusCode) return;
 
