@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itadakimasu", "Itadakimasu\Itadakimasu.csproj", "{6A992EC2-E69D-456B-9E24-586095E94D79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItadakimasuWeb", "Itadakimasu\ItadakimasuWeb.csproj", "{6A992EC2-E69D-456B-9E24-586095E94D79}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoodNameGenerator", "FoodNameGenerator\FoodNameGenerator.csproj", "{F9C99D78-FB3B-4987-A47A-2C4123DD9120}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoodImageGenerator", "FoodNameGenerator\FoodImageGenerator.csproj", "{F9C99D78-FB3B-4987-A47A-2C4123DD9120}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{7A310158-1C6F-4BF0-929D-ABA9FCA77D64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Itadakimasu", "Models\Itadakimasu.csproj", "{7A310158-1C6F-4BF0-929D-ABA9FCA77D64}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility", "Utility\Utility.csproj", "{67B2C950-5E30-4B40-9D3D-A795D28EE2B3}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItadakimasuMobile", "ItadakimasuMobile\ItadakimasuMobile\ItadakimasuMobile.csproj", "{A4D7F88A-96B8-4F16-AAF2-DE7AFA6F3047}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityTestProject", "UtilityTestProject\UtilityTestProject.csproj", "{2656245B-243C-4DB3-AE30-BC878818785C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Schedule", "Schedule", "{4E9A72FF-F8EB-40CB-A296-2F47CBE1F01F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -134,6 +136,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F9C99D78-FB3B-4987-A47A-2C4123DD9120} = {4E9A72FF-F8EB-40CB-A296-2F47CBE1F01F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1DB1DC61-6DA4-4219-BD82-3AD0EFBCFB85}

@@ -15,17 +15,17 @@ public class HotpepperAdapter
         HttpClient = httpClient;
     }
 
-    public async Task<List<Shop>> GetResultAsync(double lat, double lng)
+    public async Task<List<HotpepperShop>> GetResultAsync(double lat, double lng)
     {
-        if (lat == 0 && lng == 0) return new List<Shop>();
+        if (lat == 0 && lng == 0) return new List<HotpepperShop>();
         var str = await HttpClient.GetStringAsync($"{HotpepperUrl}key={HotpepperKey}&lat={lat}&lng={lng}");
         using var stream = new MemoryStream(Encoding.UTF8.GetBytes(str));
         var xml = new XmlSerializer(typeof(results)).Deserialize(stream) as results;
-        return xml?.shop?.Select(x => new Shop(x.name, x.address, (double)x.lat, (double)x.lng)).ToList() ?? new List<Shop>();
+        return xml?.shop?.Select(x => new HotpepperShop(x.name, x.address, (double)x.lat, (double)x.lng)).ToList() ?? new List<HotpepperShop>();
     }
 }
 
-public record Shop(string Name, string Address, double Lat, double Lng);
+public record HotpepperShop(string Name, string Address, double Lat, double Lng);
 
 // メモ: 生成されたコードは、少なくとも .NET Framework 4.5または .NET Core/Standard 2.0 が必要な可能性があります。
 /// <remarks/>

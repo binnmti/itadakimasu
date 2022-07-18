@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Itadakimasu.Migrations
+namespace ItadakimasuWeb.Migrations
 {
     public partial class NewUser : Migration
     {

@@ -1,4 +1,4 @@
-namespace Itadakimasu.Models
+namespace ItadakimasuWeb.Models
 {
     public class ErrorViewModel
     {

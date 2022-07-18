@@ -1,1 +1,1 @@
-dotnet FoodNameGenerator.dll
+dotnet FoodImageGenerator.dll

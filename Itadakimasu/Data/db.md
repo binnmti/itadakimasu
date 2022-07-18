@@ -2,10 +2,10 @@ enable-migrations
 add-migration InitialCreate
 
 update-database
-    "DefaultConnection": "(localdb)\\mssqllocaldb;Initial Catalog=Itadakimasu;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "DefaultConnection": "(localdb)\\mssqllocaldb;Initial Catalog=ItadakimasuWeb;Trusted_Connection=True;MultipleActiveResultSets=true",
 
 ----
-cd Itadakimasu
+cd ItadakimasuWeb
 
 dotnet ef migrations add NewUser
 dotnet ef migrations add ImageFirst

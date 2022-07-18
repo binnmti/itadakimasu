@@ -1,21 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Itadakimasu.Data;
+using ItadakimasuWeb.Data;
 using Utility;
 using Microsoft.Extensions.Options;
-using Models;
-using ModelsShop = Models.Shop;
+using Itadakimasu;
 
-namespace Itadakimasu.Controllers
+namespace ItadakimasuWeb.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class FoodsController : ControllerBase
     {
-        private readonly ItadakimasuContext _context;
+        private readonly ItadakimasuWebContext _context;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ConnectionStrings ConnectionStrings;
 
-        public FoodsController(ItadakimasuContext context, IHttpClientFactory httpClientFactory, IOptions<ConnectionStrings> connectionStrings)
+        public FoodsController(ItadakimasuWebContext context, IHttpClientFactory httpClientFactory, IOptions<ConnectionStrings> connectionStrings)
         {
             _context = context;
             _httpClientFactory = httpClientFactory;
@@ -67,7 +66,7 @@ namespace Itadakimasu.Controllers
             stream.Seek(0, SeekOrigin.Begin);
             //TODO:第一引数は戻し方なので再設計
             var foodName = customVisionWarpper.TestIteration("", stream);
-            return new FoodImageResult(foodName, lat, lng, shops.Select(x => new ModelsShop(x.Name, x.Address, x.Lat, x.Lng)).ToList());
+            return new FoodImageResult(foodName, lat, lng, shops.Select(x => new Shop(x.Name, x.Address, x.Lat, x.Lng)).ToList());
         }
     }
 }

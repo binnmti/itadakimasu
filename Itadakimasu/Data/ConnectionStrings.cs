@@ -1,4 +1,4 @@
-﻿namespace Itadakimasu.Data
+﻿namespace ItadakimasuWeb.Data
 {
     public class ConnectionStrings
     {

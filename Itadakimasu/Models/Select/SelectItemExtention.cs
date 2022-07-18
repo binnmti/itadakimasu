@@ -1,4 +1,4 @@
-﻿namespace Itadakimasu.Models.Select;
+﻿namespace ItadakimasuWeb.Models.Select;
 public static class SelectItemExtention
 {
     public static string SaveCookie(this ISelectItem selectItem, string key, IRequestCookieCollection getCookies, IResponseCookies setCookies)

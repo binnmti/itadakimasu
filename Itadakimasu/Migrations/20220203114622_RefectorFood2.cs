@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Itadakimasu.Migrations
+namespace ItadakimasuWeb.Migrations
 {
     public partial class RefectorFood2 : Migration
     {

@@ -1,10 +1,10 @@
-﻿using Itadakimasu.Models;
-using Itadakimasu.Models.Select;
+﻿using Itadakimasu;
+using ItadakimasuWeb.Models;
+using ItadakimasuWeb.Models.Select;
 using Microsoft.AspNetCore.Mvc;
-using Models;
 using System.Diagnostics;
 
-namespace Itadakimasu.Controllers
+namespace ItadakimasuWeb.Controllers
 {
     public class HomeController : Controller
     {

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Itadakimasu.Data;
-using Models;
+using ItadakimasuWeb.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -8,18 +7,19 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
+using Itadakimasu;
 
-namespace Itadakimasu.Controllers
+namespace ItadakimasuWeb.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class FoodImagesController : ControllerBase
     {
-        private readonly ItadakimasuContext _context;
+        private readonly ItadakimasuWebContext _context;
         private SignInManager<IdentityUser> SignInManager { get; }
         private UserManager<IdentityUser> UserManager { get; }
 
-        public FoodImagesController(ItadakimasuContext context, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
+        public FoodImagesController(ItadakimasuWebContext context, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
         {
             _context = context;
             SignInManager = signInManager;

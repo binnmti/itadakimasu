@@ -1,7 +1,7 @@
-﻿using Itadakimasu.Controllers;
-using Models;
+﻿using Itadakimasu;
+using ItadakimasuWeb.Controllers;
 
-namespace Itadakimasu.Models
+namespace ItadakimasuWeb.Models
 {
     public record ViewFood(string Name, int FoodImageCount, string BlobUrl);
 

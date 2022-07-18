@@ -1,6 +1,6 @@
-﻿using Models;
+﻿using Itadakimasu;
 
-namespace Itadakimasu.Models
+namespace ItadakimasuWeb.Models
 {
     public record ViewFoodImage(bool Checked, long Id, string Name, string FoodName, string XY, string Size, string BlobUrl, string BlobSUrl, string BaseUrl, int StatusNumber, string TestResult, long PrevId, long NextId);
 

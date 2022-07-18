@@ -1,4 +1,4 @@
-﻿namespace Itadakimasu.Models.Select;
+﻿namespace ItadakimasuWeb.Models.Select;
 
 public class SelectViewerCount : ISelectItem
 {

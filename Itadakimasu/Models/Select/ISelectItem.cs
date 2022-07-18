@@ -1,4 +1,4 @@
-﻿namespace Itadakimasu.Models.Select;
+﻿namespace ItadakimasuWeb.Models.Select;
 public interface ISelectItem
 {
     public string Title { get; }

@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Itadakimasu;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Models;
 
-namespace Itadakimasu.Data
+namespace ItadakimasuWeb.Data
 {
-    public class ItadakimasuContext : IdentityDbContext<IdentityUser>
+    public class ItadakimasuWebContext : IdentityDbContext<IdentityUser>
     {
-        public ItadakimasuContext(
+        public ItadakimasuWebContext(
             DbContextOptions options) : base(options)
         {
         }
