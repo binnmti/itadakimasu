@@ -1,12 +1,7 @@
-﻿using ItadakimasuMobile.Models;
-using ItadakimasuMobile.Services;
-using ItadakimasuMobile.Utils;
+﻿using ItadakimasuMobile.Services;
 using ItadakimasuMobile.ViewModels;
-using Newtonsoft.Json;
 using System;
 using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using Xamarin.Forms;
 
 namespace ItadakimasuMobile.Views
@@ -36,16 +31,10 @@ namespace ItadakimasuMobile.Views
             {
                 FoodImage.Source = ImageSource.FromStream(() => stream);
                 stream.Seek(0, SeekOrigin.Begin);
-
                 await _viewModel.SetStreamAsync(stream);
             }
 
             (sender as Button).IsEnabled = true;
-        }
-
-        void MyPickerSelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

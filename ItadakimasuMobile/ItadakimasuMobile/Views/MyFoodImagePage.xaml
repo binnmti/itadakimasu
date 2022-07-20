@@ -9,16 +9,18 @@
                    HorizontalOptions="Center" />
         <Button Text="写真選択" Clicked="OnPickPhotoButtonClicked" />
         <Label Text="FoodName:" FontSize="Medium" />
-        <Label Text="{Binding FoodName}" FontSize="Small"/>
-        <Label Text="Lat:" FontSize="Medium" />
-        <Label Text="{Binding Lat}" FontSize="Small"/>
-        <Label Text="Lng:" FontSize="Medium" />
-        <Label Text="{Binding Lng}" FontSize="Small"/>
-        <Label Text="Memo:" FontSize="Medium" />
-        <Label Text="{Binding Memo}" FontSize="Small"/>
-        <Picker x:Name="MyPicker" SelectedIndexChanged="MyPickerSelectedIndexChanged" ItemsSource="{Binding Shops}">
-        </Picker>
-        <Image x:Name="FoodImage" />
+        <ScrollView x:Name="ScrollView1" Orientation="Both">
+            <StackLayout Spacing="10" Padding="10">
+                <Label Text="{Binding FoodName}" FontSize="Small"/>
+                <Label Text="Lat:" FontSize="Medium" />
+                <Label Text="{Binding Lat}" FontSize="Small"/>
+                <Label Text="Lng:" FontSize="Medium" />
+                <Label Text="{Binding Lng}" FontSize="Small"/>
+                <Label Text="Memo:" FontSize="Medium" />
+                <Label Text="{Binding Memo}" FontSize="Small"/>
+                <Picker Title="店" ItemsSource="{Binding Shops}" ItemDisplayBinding="{Binding Name}" />
+                <Image x:Name="FoodImage" />
+            </StackLayout>
+        </ScrollView>
     </StackLayout>
-
 </ContentPage>

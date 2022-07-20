@@ -12,7 +12,7 @@ namespace ItadakimasuMobile.Models
 
     public class Shop
     {
-        public string FoodName { get; set; }
+        public string Name { get; set; }
         public string Address { get; set; }
         public double Lat { get; set; }
         public double Lng { get; set; }

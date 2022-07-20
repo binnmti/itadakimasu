@@ -1,6 +1,7 @@
 ﻿using ItadakimasuMobile.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -16,7 +17,6 @@ namespace ItadakimasuMobile.ViewModels
         public MyFoodImageViewModel()
         {
             Title = "MyFoodImage";
-            //AuthenticateCommand = new Command(() => { });
         }
 
         public async Task SetStreamAsync(Stream stream)
@@ -42,7 +42,7 @@ namespace ItadakimasuMobile.ViewModels
             Lng = foodImageResult.Lng;
             if (foodImageResult.Shops.Count > 0)
             {
-                Shops = foodImageResult.Shops.Select(x => x.FoodName).ToList();
+                Shops = new ObservableCollection<Shop>(foodImageResult.Shops);
             }
         }
 
@@ -85,8 +85,8 @@ namespace ItadakimasuMobile.ViewModels
             set => SetProperty(ref lng, value);
         }
 
-        private List<string> shops;
-        public List<string> Shops
+        private ObservableCollection<Shop> shops;
+        public ObservableCollection<Shop> Shops
         {
             get => shops;
             set => SetProperty(ref shops, value);
