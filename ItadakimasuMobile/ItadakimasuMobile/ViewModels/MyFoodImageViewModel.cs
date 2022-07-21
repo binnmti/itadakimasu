@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace ItadakimasuMobile.ViewModels
 {
@@ -22,6 +23,8 @@ namespace ItadakimasuMobile.ViewModels
         public async Task SetStreamAsync(Stream stream)
         {
             if (stream == null) return;
+            var streamImage = ImageSource.FromStream(() => stream);
+            FoodImage = streamImage;
 
             HttpResponseMessage message;
             using (var ms = new MemoryStream())
@@ -36,7 +39,6 @@ namespace ItadakimasuMobile.ViewModels
 
             var json = await message.Content.ReadAsStringAsync();
             var foodImageResult = JsonConvert.DeserializeObject<FoodImageResult>(json);
-            FoodImage = stream;
             FoodName = foodImageResult.FoodName;
             Lat = foodImageResult.Lat;
             Lng = foodImageResult.Lng;
@@ -46,8 +48,8 @@ namespace ItadakimasuMobile.ViewModels
             }
         }
 
-        private Stream foodImage;
-        public Stream FoodImage
+        private ImageSource foodImage;
+        public ImageSource FoodImage
         {
             get => foodImage;
             set

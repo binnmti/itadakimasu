@@ -29,8 +29,8 @@ namespace ItadakimasuMobile.Views
             var stream = await DependencyService.Get<IPhotoPickerService>().GetImageStreamAsync();
             if (stream != null)
             {
-                FoodImage.Source = ImageSource.FromStream(() => stream);
-                stream.Seek(0, SeekOrigin.Begin);
+                //FoodImage.Source = ImageSource.FromStream(() => stream);
+                //stream.Seek(0, SeekOrigin.Begin);
                 await _viewModel.SetStreamAsync(stream);
             }
 

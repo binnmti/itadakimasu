@@ -19,7 +19,8 @@
                 <Label Text="Memo:" FontSize="Medium" />
                 <Label Text="{Binding Memo}" FontSize="Small"/>
                 <Picker Title="店" ItemsSource="{Binding Shops}" ItemDisplayBinding="{Binding Name}" />
-                <Image x:Name="FoodImage" />
+                <Image Source="{Binding FoodImage}" />
+                <!--<Image x:Name="FoodImage" Aspect="AspectFill" />-->
             </StackLayout>
         </ScrollView>
     </StackLayout>
