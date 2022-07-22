@@ -23,8 +23,8 @@ namespace ItadakimasuMobile.ViewModels
         public async Task SetStreamAsync(Stream stream)
         {
             if (stream == null) return;
-            var streamImage = ImageSource.FromStream(() => stream);
-            FoodImage = streamImage;
+
+            FoodImage = ImageSource.FromStream(() => stream);
 
             HttpResponseMessage message;
             using (var ms = new MemoryStream())
@@ -52,11 +52,7 @@ namespace ItadakimasuMobile.ViewModels
         public ImageSource FoodImage
         {
             get => foodImage;
-            set
-            {
-                foodImage = value;
-                SetProperty(ref foodImage, value);
-            }
+            set => SetProperty(ref foodImage, value);
         }
 
         private string foodName;

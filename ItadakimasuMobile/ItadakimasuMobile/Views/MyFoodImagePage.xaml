@@ -2,15 +2,21 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ItadakimasuMobile.Views.MyFoodImagePage"
-             Title="{Binding Title}">
-    <StackLayout Spacing="20" Padding="15">
-        <Label Text="Photo Picker"
+             Title="{Binding Title}" Background="Red" x:Name="Top">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="400" ></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Image x:Name="FoodImage" Source="{Binding FoodImage}"  Aspect="AspectFit" Grid.Row="0"  />
+        <ScrollView Grid.Row="1">
+            <StackLayout>
+                <Label Text="Photo Picker"
                    FontAttributes="Bold"
                    HorizontalOptions="Center" />
-        <Button Text="写真選択" Clicked="OnPickPhotoButtonClicked" />
-        <Label Text="FoodName:" FontSize="Medium" />
-        <ScrollView x:Name="ScrollView1" Orientation="Both">
-            <StackLayout Spacing="10" Padding="10">
+                <Button Text="写真選択" Clicked="OnPickPhotoButtonClicked" />
+                <Label Text="FoodName:" FontSize="Medium" />
                 <Label Text="{Binding FoodName}" FontSize="Small"/>
                 <Label Text="Lat:" FontSize="Medium" />
                 <Label Text="{Binding Lat}" FontSize="Small"/>
@@ -19,9 +25,19 @@
                 <Label Text="Memo:" FontSize="Medium" />
                 <Label Text="{Binding Memo}" FontSize="Small"/>
                 <Picker Title="店" ItemsSource="{Binding Shops}" ItemDisplayBinding="{Binding Name}" />
-                <Image Source="{Binding FoodImage}" />
-                <!--<Image x:Name="FoodImage" Aspect="AspectFill" />-->
+
             </StackLayout>
         </ScrollView>
-    </StackLayout>
+    </Grid>
+    
+    <!--<StackLayout Spacing="20" Padding="15" Background="Blue">
+
+        <Grid HorizontalOptions="FillAndExpand" HeightRequest="200">
+            <Image x:Name="FoodImage" Aspect="AspectFit" />
+        </Grid>
+        
+        
+        --><!--<Image x:Name="FoodImage" Aspect="AspectFit" WidthRequest="{Binding Source={x:Reference Top}, Path=WidthRequest }" HeightRequest="{Binding Source={x:Reference Top}, Path=WidthRequest }" />-->
+        <!--<Image Source="{Binding FoodImage}" Aspect="AspectFill" />--><!--
+    </StackLayout>-->
 </ContentPage>

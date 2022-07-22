@@ -31,6 +31,7 @@ namespace ItadakimasuMobile.Views
             {
                 //FoodImage.Source = ImageSource.FromStream(() => stream);
                 //stream.Seek(0, SeekOrigin.Begin);
+
                 await _viewModel.SetStreamAsync(stream);
             }
 
