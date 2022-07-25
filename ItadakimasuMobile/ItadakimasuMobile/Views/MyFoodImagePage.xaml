@@ -4,7 +4,25 @@
              x:Class="ItadakimasuMobile.Views.MyFoodImagePage"
              Title="{Binding Title}" Background="Red" x:Name="Top">
 
-    <Grid>
+    <StackLayout>
+        <Image Source="{Binding FoodImage}" Aspect="AspectFit" VerticalOptions="FillAndExpand" />
+        <Button Text="写真選択" Clicked="OnPickPhotoButtonClicked" VerticalOptions="Start" />
+        <StackLayout Orientation="Horizontal">
+            <Label Text="料理名:" FontSize="Medium"  />
+            <Label Text="{Binding FoodName}" FontSize="Small"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="場所:" FontSize="Medium" />
+            <Label Text="{Binding Lat}" FontSize="Small"/>
+            <Label Text="," FontSize="Small" />
+            <Label Text="{Binding Lng}" FontSize="Small"/>
+        </StackLayout>
+        <Picker Title="店:" ItemsSource="{Binding Shops}" ItemDisplayBinding="{Binding Name}" />
+        <Label Text="メモ:" FontSize="Medium" />
+        <Label Text="{Binding Memo}" FontSize="Small"/>
+    </StackLayout>
+
+    <!--<Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="400" ></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -28,16 +46,5 @@
 
             </StackLayout>
         </ScrollView>
-    </Grid>
-    
-    <!--<StackLayout Spacing="20" Padding="15" Background="Blue">
-
-        <Grid HorizontalOptions="FillAndExpand" HeightRequest="200">
-            <Image x:Name="FoodImage" Aspect="AspectFit" />
-        </Grid>
-        
-        
-        --><!--<Image x:Name="FoodImage" Aspect="AspectFit" WidthRequest="{Binding Source={x:Reference Top}, Path=WidthRequest }" HeightRequest="{Binding Source={x:Reference Top}, Path=WidthRequest }" />-->
-        <!--<Image Source="{Binding FoodImage}" Aspect="AspectFill" />--><!--
-    </StackLayout>-->
+    </Grid>-->
 </ContentPage>

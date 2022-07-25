@@ -25,7 +25,6 @@ namespace ItadakimasuMobile.ViewModels
             if (stream == null) return;
 
             FoodImage = ImageSource.FromStream(() => stream);
-
             HttpResponseMessage message;
             using (var ms = new MemoryStream())
             {
@@ -42,10 +41,11 @@ namespace ItadakimasuMobile.ViewModels
             FoodName = foodImageResult.FoodName;
             Lat = foodImageResult.Lat;
             Lng = foodImageResult.Lng;
-            if (foodImageResult.Shops.Count > 0)
-            {
-                Shops = new ObservableCollection<Shop>(foodImageResult.Shops);
-            }
+            Shops = new ObservableCollection<Shop>(foodImageResult.Shops);
+            //if (foodImageResult.Shops.Count > 0)
+            //{
+            //    Shops = new ObservableCollection<Shop>(foodImageResult.Shops);
+            //}
         }
 
         private ImageSource foodImage;

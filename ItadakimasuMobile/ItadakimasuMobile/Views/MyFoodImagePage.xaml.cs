@@ -1,7 +1,6 @@
 ﻿using ItadakimasuMobile.Services;
 using ItadakimasuMobile.ViewModels;
 using System;
-using System.IO;
 using Xamarin.Forms;
 
 namespace ItadakimasuMobile.Views
@@ -27,13 +26,7 @@ namespace ItadakimasuMobile.Views
             (sender as Button).IsEnabled = false;
 
             var stream = await DependencyService.Get<IPhotoPickerService>().GetImageStreamAsync();
-            if (stream != null)
-            {
-                //FoodImage.Source = ImageSource.FromStream(() => stream);
-                //stream.Seek(0, SeekOrigin.Begin);
-
-                await _viewModel.SetStreamAsync(stream);
-            }
+            await _viewModel.SetStreamAsync(stream);
 
             (sender as Button).IsEnabled = true;
         }
