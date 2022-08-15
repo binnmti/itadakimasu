@@ -6,7 +6,10 @@
 
     <StackLayout>
         <Image Source="{Binding FoodImage}" Aspect="AspectFit" VerticalOptions="FillAndExpand" />
-        <Button Text="写真選択" Clicked="OnPickPhotoButtonClicked" VerticalOptions="Start" />
+        <StackLayout Orientation="Horizontal">
+            <Button Text="写真選択" Clicked="OnSelectPhotoButtonClicked" VerticalOptions="Start" />
+            <Button Text="写真撮影"  Clicked="OnTakePhotoButtonClicked" HorizontalOptions="Center"/>
+        </StackLayout>
         <StackLayout Orientation="Horizontal">
             <Label Text="料理名:" FontSize="Medium"  />
             <Label Text="{Binding FoodName}" FontSize="Small"/>
