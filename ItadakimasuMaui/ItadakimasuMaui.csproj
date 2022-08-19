@@ -49,19 +49,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="MyFoodImagePage.xaml.cs">
+	  <Compile Update="Views\MyFoodImagePage.xaml.cs">
 	    <DependentUpon>MyFoodImagePage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="MyFoodImagePage.xaml">
+	  <MauiXaml Update="Views\MyFoodImagePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Views\" />
 	</ItemGroup>
 
 </Project>

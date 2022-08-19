@@ -1,4 +1,4 @@
-﻿namespace ItadakimasuMaui
+﻿namespace ItadakimasuMaui.Views
 {
     public partial class MainPage : ContentPage
     {

@@ -31,11 +31,14 @@ public class MyFoodImageViewModel : BaseViewModel
         if (!message.IsSuccessStatusCode) return;
 
         var json = await message.Content.ReadAsStringAsync();
-        var foodImageResult = JsonSerializer.Deserialize<FoodImageResult>(json);
+        var foodImageResult = JsonSerializer.Deserialize<FoodImageResult>(json, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        });
         FoodName = foodImageResult.FoodName;
         Lat = foodImageResult.Lat;
         Lng = foodImageResult.Lng;
-        Shops = new ObservableCollection<Shop>(foodImageResult.Shops);
+        Shops = new ObservableCollection<Shop>(foodImageResult.Shops ?? new List<Shop>());
     }
 
     private ImageSource foodImage;

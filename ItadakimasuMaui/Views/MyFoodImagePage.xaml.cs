@@ -1,7 +1,7 @@
 using ItadakimasuMaui.Services;
 using ItadakimasuMaui.ViewModels;
 
-namespace ItadakimasuMaui;
+namespace ItadakimasuMaui.Views;
 
 public partial class MyFoodImagePage : ContentPage
 {
@@ -23,7 +23,8 @@ public partial class MyFoodImagePage : ContentPage
     {
         (sender as Button).IsEnabled = false;
 
-        var stream = await DependencyService.Get<IPhotoPickerService>().GetImageStreamAsync();
+        var photo = new PhotoPickerService();
+        var stream = await photo.GetImageStreamAsync();
         await _viewModel.SetStreamAsync(stream);
 
         (sender as Button).IsEnabled = true;
